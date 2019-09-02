@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /groups/{groupId} {
+      function isInGroup() {
+        return groupId == request.auth.uid
+      }
+      allow read, create, update: if isInGroup();
+
+      match /maps/{mapId} {
+        function isPublicMap() {
+          return get(/databases/$(database)/documents/groups/$(groupId)/maps/$(mapId)).data.public == true;
+        }
+        allow read: if isInGroup() || resource.data.public == true;
+        // If you create a map, you must set yourself as the owner.
+        allow create, update: if isInGroup();
+
+        match /observations/{reportId} {
+          allow read: if isInGroup() || isPublicMap();
+          allow create, update: if isInGroup();
+        }
+      }
+    }
+  }
+}
