@@ -1,8 +1,24 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import firebase from "firebase/app";
+
+// Add the Firebase services that you want to use
+import "firebase/auth";
+import "firebase/firestore";
+
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+
+firebase.initializeApp({
+  apiKey: "AIzaSyCmZDMJqOuHxSAeIXbgBEBnieoVdaoEBCM",
+  authDomain: "mapeo-webmaps.firebaseapp.com",
+  databaseURL: "https://mapeo-webmaps.firebaseio.com",
+  projectId: "mapeo-webmaps",
+  storageBucket: "mapeo-webmaps.appspot.com",
+  messagingSenderId: "826232651428",
+  appId: "1:826232651428:web:dba2488c5655222e"
+});
 
 ReactDOM.render(<App />, document.getElementById("root"));
 
