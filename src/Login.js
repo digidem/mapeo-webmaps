@@ -129,12 +129,12 @@ export default function SignIn({ location }) {
           </Button>
           <Grid container>
             <Grid item xs>
-              <RouterLink to="/reset-password" variant="body2">
+              <RouterLink to="../reset-password" variant="body2">
                 Forgot password?
               </RouterLink>
             </Grid>
             <Grid item>
-              <RouterLink to="/signup" variant="body2">
+              <RouterLink to="../signup" variant="body2">
                 {"Don't have an account? Sign Up"}
               </RouterLink>
             </Grid>

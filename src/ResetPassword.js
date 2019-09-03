@@ -112,7 +112,7 @@ export default function ResetPassword({ location }) {
         )}
         <Grid container justify="flex-end">
           <Grid item>
-            <RouterLink to="/login" variant="body2">
+            <RouterLink to="../login" variant="body2">
               Return to login
             </RouterLink>
           </Grid>

@@ -4,5 +4,5 @@ import Home from "./Home";
 
 it("renders welcome message", () => {
   const { getByText } = render(<Home />);
-  expect(getByText("Learn React")).toBeInTheDocument();
+  expect(getByText("Logout")).toBeInTheDocument();
 });
