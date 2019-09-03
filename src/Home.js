@@ -1,7 +1,8 @@
 import React from "react";
 import firebase from "firebase/app";
 import Button from "@material-ui/core/Button";
-import logo from "./logo.svg";
+import Typography from "@material-ui/core/Typography";
+import logo from "./logo.png";
 import "./Home.css";
 
 function Home() {
@@ -9,9 +10,9 @@ function Home() {
     <div className="Home">
       <header className="Home-header">
         <img src={logo} className="Home-logo" alt="logo" />
-        <p>
-          Edit <code>src/Home.js</code> and save to reload.
-        </p>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Welcome to Mapeo Maps.
+        </Typography>
         <Button
           variant="contained"
           color="primary"
