@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@firebase/testing": "^0.12.3",
+    "@testing-library/user-event": "^7.0.0",
     "firebase-tools": "^7.3.0",
     "tape": "^4.11.0",
     "tape-promise": "^4.0.0"

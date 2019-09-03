@@ -75,8 +75,10 @@ export default function SignIn({ location }) {
       .auth()
       .setPersistence(persistence)
       .then(() => firebase.auth().signInWithEmailAndPassword(email, password))
-      .catch(setError)
-      .finally(() => setLoading(false));
+      .catch(e => {
+        setError(e);
+        setLoading(false);
+      });
   };
 
   return (
@@ -115,6 +117,7 @@ export default function SignIn({ location }) {
             onChange={e => setRemember(e.target.checked)}
           />
           <Button
+            data-testid="submit-button"
             type="submit"
             disabled={loading || authorizing}
             fullWidth
