@@ -55,8 +55,10 @@ const useStyles = makeStyles({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "column",
-    minHeight: "15em",
-    color: "#666666"
+    minHeight: "20em",
+    color: "#666666",
+    width: "100%",
+    boxSizing: "border-box"
   },
   text: {
     maxWidth: "20em"

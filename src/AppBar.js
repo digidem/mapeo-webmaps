@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function AppBar() {
+export default function AppBar({ onLogoutClick }) {
   const classes = useStyles();
 
   return (
@@ -20,7 +20,9 @@ export default function AppBar() {
         <Typography variant="h6" className={classes.title}>
           Mapeo Maps
         </Typography>
-        <Button color="inherit">Logout</Button>
+        <Button color="inherit" onClick={onLogoutClick}>
+          Logout
+        </Button>
       </Toolbar>
     </MuiAppBar>
   );
