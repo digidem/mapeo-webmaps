@@ -6,3 +6,5 @@ export default {
 };
 
 export const initial = () => <DropArea />;
+
+export const dragging = () => <DropArea isDragging />;
