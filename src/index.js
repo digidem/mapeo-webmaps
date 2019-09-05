@@ -5,6 +5,7 @@ import firebase from "firebase/app";
 // Add the Firebase services that you want to use
 import "firebase/auth";
 import "firebase/firestore";
+import "firebase/storage";
 
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
@@ -18,6 +19,9 @@ firebase.initializeApp({
   messagingSenderId: "826232651428",
   appId: "1:826232651428:web:dba2488c5655222e"
 });
+
+// For some reason, if we don't call this here, writes fail silently in the app
+firebase.firestore();
 
 ReactDOM.render(<App />, document.getElementById("root"));
 
