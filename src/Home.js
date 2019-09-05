@@ -70,9 +70,7 @@ export default function Home({ location, initializing }) {
 
   const handleShare = useCallback(
     id => {
-      const { projectId } = firebase.firestore().app.options;
-      const key = `groups/${user.uid}/maps/${id}/observations`;
-      const url = `https://firestore.googleapis.com/v1beta1/projects/${projectId}/databases/(default)/documents/${key}`;
+      const url = `https://maps.mapeo.world/public/${user.uid}/maps/${id}`;
       window.open(url);
     },
     [user.uid]
