@@ -43,7 +43,7 @@ export const initial = () => {
     return () => {
       clearInterval(timer);
     };
-  }, []);
+  }, [completed]);
 
   return (
     <UploadProgress
