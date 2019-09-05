@@ -122,6 +122,7 @@ export default function useCreateMap() {
     if (!pointsFC || !pointsFC.features || !pointsFC.features.length)
       return setError(new Error("No data found in file"));
     metadata.title = metadata.title || "My Map";
+    metadata.public = true;
 
     const points = [];
     for (var f of pointsFC.features) {
