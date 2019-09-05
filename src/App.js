@@ -5,22 +5,13 @@ import { navigate } from "@reach/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Router } from "@reach/router";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import CircularProgress from "@material-ui/core/CircularProgress";
 
 import Home from "./Home";
 import Login from "./Login";
 import Signup from "./Signup";
 import ResetPassword from "./ResetPassword";
 import AppBar from "./AppBar";
-
-const LoadingScreen = () => {
-  const classes = useStyles();
-  return (
-    <div className={classes.loading}>
-      <CircularProgress className={classes.progress} />
-    </div>
-  );
-};
+import LoadingScreen from "./LoadingScreen";
 
 const Authorized = ({ location }) => {
   const [user, initializing] = useAuthState(firebase.auth());
@@ -66,11 +57,5 @@ const useStyles = makeStyles({
     minHeight: "100vh",
     display: "flex",
     flexDirection: "column"
-  },
-  loading: {
-    flexGrow: 1,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center"
   }
 });

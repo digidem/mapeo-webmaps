@@ -64,9 +64,9 @@ const useStyles = makeStyles(theme => {
       flexDirection: "column",
       minHeight: "20em",
       color: "#666666",
-      width: "100%",
       boxSizing: "border-box",
-      backgroundClip: "padding-box"
+      backgroundClip: "padding-box",
+      margin: "1em"
     },
     containerHighlighted: {
       borderColor: theme.palette.primary.light,
