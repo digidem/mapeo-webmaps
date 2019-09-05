@@ -39,7 +39,7 @@ export default function AppBar({ onLogoutClick }) {
     <MuiAppBar position="static" color="default" className={classes.root}>
       <Toolbar className={classes.toolbar}>
         <Typography variant="h6" className={classes.title}>
-          My Maps
+          My Mapeo Maps
         </Typography>
         <div className={classes.buttonContainer}>
           <IconButton color="inherit">
