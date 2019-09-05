@@ -162,6 +162,44 @@ test("Anonymous user update", async function(t) {
   t.end();
 });
 
+test("Anonymous user delete", async function(t) {
+  const fixture = {
+    "groups/1": { foo: "bar", public: true },
+    "groups/1/maps/1": { foo: "bar", public: true },
+    "groups/1/maps/2": { qux: "baz" },
+    "groups/1/maps/1/observations/1": {},
+    "groups/1/maps/2/observations/1": {}
+  };
+  const db = await getDb(null, fixture);
+
+  // Maps
+  await assertFails(t)(
+    db.doc("groups/1/maps/1").delete(),
+    "Cannot update public record"
+  );
+  await assertFails(t)(
+    db.doc("groups/1/maps/2").delete(),
+    "Cannot update non-public record"
+  );
+
+  // Groups
+  await assertFails(t)(
+    db.doc("groups/1").delete(),
+    "Cannot update single group record"
+  );
+
+  // Observations
+  await assertFails(t)(
+    db.doc("groups/1/maps/1/observations/1").delete(),
+    "Cannot update observations of public map"
+  );
+  await assertFails(t)(
+    db.doc("groups/1/maps/2/observations/1").delete(),
+    "Cannot update observations of non-public map"
+  );
+  t.end();
+});
+
 test("Anonymous user create", async function(t) {
   const db = await getDb(null, {
     "groups/1": {},
@@ -312,6 +350,54 @@ test("Logged-in user update", async function(t) {
   );
   await assertFails(t)(
     db.doc("groups/2/maps/1/observations/1").set({}),
+    "Cannot update other's observation"
+  );
+  t.end();
+});
+
+test("Logged-in user delete", async function(t) {
+  const fixture = {
+    "groups/1": { foo: "bar", public: true },
+    "groups/1/maps/1": { foo: "bar", public: true },
+    "groups/1/maps/2": { qux: "baz" },
+    "groups/1/maps/1/observations/1": {},
+    "groups/1/maps/2/observations/1": {},
+    "groups/2/maps/1": { foo: "bar2", public: true },
+    "groups/2/maps/2": { qux: "baz2" }
+  };
+  const db = await getDb({ uid: "1" }, fixture);
+
+  // Maps
+  await assertSucceeds(t)(
+    db.doc("groups/1/maps/1").delete(),
+    "Can update public record"
+  );
+  await assertSucceeds(t)(
+    db.doc("groups/1/maps/2").delete(),
+    "Can update non-public record"
+  );
+  await assertFails(t)(
+    db.doc("groups/2/maps/1").delete(),
+    "Cannot update other's record"
+  );
+
+  // Groups
+  await assertSucceeds(t)(
+    db.doc("groups/1").delete(),
+    "Can update own group record"
+  );
+  await assertFails(t)(
+    db.doc("groups/2").delete(),
+    "Cannot update other's group record"
+  );
+
+  // Observations
+  await assertSucceeds(t)(
+    db.doc("groups/1/maps/1/observations/1").delete(),
+    "Can update own observation"
+  );
+  await assertFails(t)(
+    db.doc("groups/2/maps/1/observations/1").delete(),
     "Cannot update other's observation"
   );
   t.end();

@@ -5,7 +5,7 @@ service cloud.firestore {
       function isInGroup() {
         return groupId == request.auth.uid
       }
-      allow read, create, update: if isInGroup();
+      allow read, write: if isInGroup();
 
       match /maps/{mapId} {
         function isPublicMap() {
@@ -13,11 +13,11 @@ service cloud.firestore {
         }
         allow read: if isInGroup() || resource.data.public == true;
         // If you create a map, you must set yourself as the owner.
-        allow create, update: if isInGroup();
+        allow write: if isInGroup();
 
         match /observations/{reportId} {
           allow read: if isInGroup() || isPublicMap();
-          allow create, update: if isInGroup();
+          allow write: if isInGroup();
         }
       }
     }
