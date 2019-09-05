@@ -201,7 +201,15 @@ export default function useCreateMap() {
 
   const value = useMemo(
     () => [
-      { currentFile, progress, totalFiles, error, done, id, loading },
+      {
+        currentFile,
+        completed: progress,
+        totalFiles,
+        error,
+        done,
+        id,
+        loading
+      },
       createMap,
       retry
     ],

@@ -7,8 +7,8 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles({
-  container: {
-    margin: "1em"
+  root: {
+    margin: 12
   },
   description: {
     // display: "-webkit-box",
@@ -22,7 +22,7 @@ export default function MapItem({ id, title, description, onShare, onDelete }) {
   const classes = useStyles();
 
   return (
-    <Card className={classes.container}>
+    <Card className={classes.root}>
       <CardContent>
         <Typography gutterBottom variant="h5" component="h2">
           {title}

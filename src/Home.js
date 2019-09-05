@@ -1,17 +1,20 @@
 import React, { useCallback } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { useDropzone } from "react-dropzone";
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
 import JSZip from "jszip";
 import path from "path";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import firebase from "firebase/app";
+import BalanceText from "react-balance-text";
 
-import DropArea from "./DropArea";
 import MapItem from "./MapItem";
 import LoadingScreen from "./LoadingScreen";
 import useCreateMap from "./hooks/useCreateMap";
+import Typography from "@material-ui/core/Typography";
+import UploadProgress from "./UploadProgress";
 
 // Unzips a File and returns an array of objects containing the file data (as an
 // arraybuffer or string), filename, date
@@ -36,6 +39,35 @@ async function unzip(zipfile) {
   return Promise.all(filePromises);
 }
 
+const AddMapButton = ({ onChange, disabled }) => {
+  const classes = useStyles();
+  return (
+    <>
+      <input
+        type="file"
+        accept=".mapeomap"
+        style={{ display: "none" }}
+        tabIndex={-1}
+        id="contained-button-file"
+        onChange={onChange}
+      />
+      <label htmlFor="contained-button-file">
+        <Fab
+          disabled={disabled}
+          color="primary"
+          variant="extended"
+          aria-label="add map"
+          component="span"
+          classes={{ root: classes.fab, disabled: classes.fabDisabled }}
+        >
+          <AddIcon />
+          Add Map
+        </Fab>
+      </label>
+    </>
+  );
+};
+
 export default function Home({ location, initializing }) {
   const classes = useStyles();
   const [progress, createMap] = useCreateMap();
@@ -47,8 +79,9 @@ export default function Home({ location, initializing }) {
 
   if (progress.error) console.log(progress.error);
 
-  const onDrop = useCallback(
-    async acceptedFiles => {
+  const handleDrop = useCallback(
+    async e => {
+      const acceptedFiles = e.target.files;
       if (!acceptedFiles.length || !acceptedFiles[0].name.match(/.mapeomap$/))
         return console.log("invalid file", acceptedFiles[0]);
       const files = await unzip(acceptedFiles[0]);
@@ -76,16 +109,15 @@ export default function Home({ location, initializing }) {
     [user.uid]
   );
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    multiple: false,
-    noClick: true
-  });
-
   if (loading || initializing) return <LoadingScreen />;
 
   return (
-    <div {...getRootProps()} className={classes.root}>
+    <div className={classes.root}>
+      <AddMapButton
+        key={progress.id}
+        onChange={handleDrop}
+        disabled={progress.loading}
+      />
       <Container maxWidth="md" className={classes.container}>
         {maps
           .filter(map => map.id !== progress.id || progress.done)
@@ -97,11 +129,19 @@ export default function Home({ location, initializing }) {
               onShare={handleShare}
             />
           ))}
-        <div>
-          {progress.currentFile}/{progress.totalFiles} {progress.progress}%
-          done: {progress.done ? "yes" : "no"}
-        </div>
-        <DropArea inputProps={getInputProps()} isDragActive={isDragActive} />
+        {progress.loading && <UploadProgress {...progress} />}
+        {!progress.loading && !maps.length && (
+          <Typography
+            variant="body1"
+            color="textSecondary"
+            className={classes.text}
+            component={BalanceText}
+          >
+            Click "ADD MAP" to create a map from a{" "}
+            <span className={classes.mono}>.mapeomap</span> file exported from
+            Mapeo
+          </Typography>
+        )}
       </Container>
     </div>
   );
@@ -111,13 +151,15 @@ const useStyles = makeStyles({
   root: {
     flexGrow: 1,
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
+    position: "relative"
   },
   container: {
     flex: 1,
     display: "flex",
     flexDirection: "column",
-    padding: "1em",
+    padding: 24,
+    paddingTop: 36,
     alignItems: "stretch"
   },
   loading: {
@@ -129,5 +171,23 @@ const useStyles = makeStyles({
   image: {
     width: 400,
     display: "block"
+  },
+  fab: {
+    position: "absolute",
+    top: -24,
+    zIndex: 2,
+    left: 24
+  },
+  fabDisabled: {
+    backgroundColor: "#cccccc !important"
+  },
+  text: {
+    maxWidth: "20em",
+    alignSelf: "center",
+    paddingTop: 24
+  },
+  mono: {
+    fontFamily: "monospace",
+    fontSize: "1.3em"
   }
 });
