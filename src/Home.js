@@ -13,6 +13,12 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import firebase from "firebase/app";
 import BalanceText from "react-balance-text";
 import { TransitionGroup } from "react-transition-group";
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 import MapItem from "./MapItem";
 import LoadingScreen from "./LoadingScreen";
@@ -68,9 +74,37 @@ const AddMapButton = ({ disabled, inputProps }) => {
   );
 };
 
+const ConfirmDialog = ({ open, onCancel, confirm }) => (
+  <Dialog
+    open={open}
+    onClose={onCancel}
+    aria-labelledby="alert-dialog-title"
+    aria-describedby="alert-dialog-description"
+  >
+    <DialogTitle id="alert-dialog-title">
+      {confirm && confirm.title}
+    </DialogTitle>
+    <DialogContent>
+      <DialogContentText id="alert-dialog-description">
+        {confirm && confirm.content}
+      </DialogContentText>
+    </DialogContent>
+    <DialogActions>
+      <Button onClick={onCancel} color="primary">
+        No, cancel
+      </Button>
+      <Button onClick={confirm && confirm.action} color="primary" autoFocus>
+        Yes
+      </Button>
+    </DialogActions>
+  </Dialog>
+);
+
 export default function Home({ location, initializing }) {
   const classes = useStyles();
   const [editing, setEditing] = useState();
+  const [confirm, setConfirm] = useState();
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const [progress, createMap] = useCreateMap();
   const [user] = useAuthState(firebase.auth());
   const [maps = [], loading] = useCollectionData(
@@ -92,11 +126,21 @@ export default function Home({ location, initializing }) {
 
   const handleDelete = useCallback(
     id => {
-      firebase
-        .firestore()
-        .collection(`groups/${user.uid}/maps`)
-        .doc(id)
-        .delete();
+      const confirm = {
+        title: "Delete this map?",
+        content:
+          "If you delete this map, links to it will no longer work and it will no longer be available on the internet",
+        action: () => {
+          firebase
+            .firestore()
+            .collection(`groups/${user.uid}/maps`)
+            .doc(id)
+            .delete()
+            .then(() => setConfirmOpen(false));
+        }
+      };
+      setConfirm(confirm);
+      setConfirmOpen(true);
     },
     [user.uid]
   );
@@ -152,6 +196,11 @@ export default function Home({ location, initializing }) {
         open={!!editing}
         id={editing}
         onClose={() => setEditing(false)}
+      />
+      <ConfirmDialog
+        open={confirmOpen}
+        confirm={confirm}
+        onCancel={() => setConfirmOpen(false)}
       />
     </div>
   );
