@@ -10,12 +10,47 @@ import firebase from "firebase/app";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { navigate } from "@reach/router";
 import BalanceText from "react-balance-text";
+import { defineMessages, useIntl } from "react-intl";
 
 import RouterLink from "./RouterLink";
 import { TextField } from "./Fields";
 
+const msgs = defineMessages({
+  email: {
+    id: "email_label",
+    defaultMessage: "Email Address"
+  },
+  initialTitle: {
+    id: "password_reset_title",
+    defaultMessage: "Password Reset"
+  },
+  successTitle: {
+    id: "password_reset_success_title",
+    defaultMessage: "Email sent!"
+  },
+  initialDescription: {
+    id: "password_reset_desc",
+    defaultMessage:
+      "To reset your password, enter the email address you use to sign in"
+  },
+  successDescription: {
+    id: "password_reset_success_desc",
+    defaultMessage:
+      "Check your {email} inbox for instructions from us on how to reset your password."
+  },
+  resetButton: {
+    id: "password_reset_button",
+    defaultMessage: "Get reset link"
+  },
+  login_link: {
+    id: "return_to_login",
+    defaultMessage: "Return to login"
+  }
+});
+
 export default function ResetPassword({ location }) {
   const classes = useStyles();
+  const { formatMessage } = useIntl();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState();
@@ -45,18 +80,19 @@ export default function ResetPassword({ location }) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5" gutterBottom>
-          {resetSent ? "Email sent!" : "Password Reset"}
+          {resetSent
+            ? formatMessage(msgs.successTitle)
+            : formatMessage(msgs.initialTitle)}
         </Typography>
         <Typography component={BalanceText} variant="body2" align="center">
           {resetSent ? (
             <>
-              Check your <strong>{email}</strong> inbox for instructions from us
-              on how to reset your password.
+              {formatMessage(msgs.successDescription, { email })}
               <br />
               <br />
             </>
           ) : (
-            "To reset your password, enter the email address you use to sign in"
+            formatMessage(msgs.initialDescription)
           )}
         </Typography>
         {!resetSent && (
@@ -64,7 +100,7 @@ export default function ResetPassword({ location }) {
             <TextField
               required
               id="email"
-              label="Email Address"
+              label={formatMessage(msgs.email)}
               name="email"
               autoComplete="email"
               autoFocus
@@ -82,14 +118,14 @@ export default function ResetPassword({ location }) {
               className={classes.submit}
               disabled={loading || authorizing}
             >
-              Get reset link
+              {formatMessage(msgs.resetButton)}
             </Button>
           </form>
         )}
         <Grid container justify="flex-end">
           <Grid item>
             <RouterLink to="../login" variant="body2">
-              Return to login
+              {formatMessage(msgs.login_link)}
             </RouterLink>
           </Grid>
         </Grid>

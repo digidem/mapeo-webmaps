@@ -9,6 +9,26 @@ import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import { defineMessages, useIntl } from "react-intl";
+
+const msgs = defineMessages({
+  publicLink: {
+    id: "public_link_tooltip",
+    defaultMessage: "Public link to Map"
+  },
+  edit: {
+    id: "edit_tooltip",
+    defaultMessage: "Edit Map details"
+  },
+  replaceData: {
+    id: "upload_new_data",
+    defaultMessage: "Upload new data"
+  },
+  deleteMap: {
+    id: "delete_map",
+    defaultMessage: "Delete Map"
+  }
+});
 
 export default function MapItem({
   id,
@@ -19,6 +39,7 @@ export default function MapItem({
   shareUrl
 }) {
   const classes = useStyles();
+  const { formatMessage } = useIntl();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   function handleClick(event) {
@@ -35,12 +56,12 @@ export default function MapItem({
         <Typography variant="h5" component="h2" className={classes.title}>
           {title}
         </Typography>
-        <Tooltip title="Public link to Map" placement="top">
+        <Tooltip title={formatMessage(msgs.publicLink)} placement="top">
           <IconButton component="a" href={shareUrl} target="_blank">
             <LinkIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Edit details" placement="top">
+        <Tooltip title={formatMessage(msgs.edit)} placement="top">
           <IconButton onClick={() => onEdit(id)}>
             <EditIcon />
           </IconButton>
@@ -60,8 +81,10 @@ export default function MapItem({
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem>Upload new data</MenuItem>
-        <MenuItem onClick={() => onDelete(id)}>Delete Map</MenuItem>
+        <MenuItem>{formatMessage(msgs.replaceData)}</MenuItem>
+        <MenuItem onClick={() => onDelete(id)}>
+          {formatMessage(msgs.deleteMap)}
+        </MenuItem>
       </Menu>
       <Typography
         variant="body2"

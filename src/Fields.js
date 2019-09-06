@@ -4,6 +4,14 @@ import IconButton from "@material-ui/core/IconButton";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import { defineMessages, useIntl } from "react-intl";
+
+const msgs = defineMessages({
+  password: {
+    id: "password_label",
+    defaultMessage: "Password"
+  }
+});
 
 export const TextField = React.memo(({ onValueChange, ...props }) => (
   <MuiTextField
@@ -17,6 +25,7 @@ export const TextField = React.memo(({ onValueChange, ...props }) => (
 
 export const PasswordField = React.memo(props => {
   const [showPassword, setShowPassword] = useState(false);
+  const { formatMessage } = useIntl();
 
   const handleClickShowPassword = useCallback(() => {
     setShowPassword(current => !current);
@@ -29,7 +38,7 @@ export const PasswordField = React.memo(props => {
   return (
     <TextField
       name="password"
-      label="Password"
+      label={formatMessage(msgs.password)}
       type={showPassword ? "text" : "password"}
       id="password"
       autoComplete="current-password"

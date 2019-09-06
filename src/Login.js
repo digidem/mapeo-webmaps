@@ -11,9 +11,49 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import firebase from "firebase/app";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { defineMessages, useIntl } from "react-intl";
 
 import RouterLink from "./RouterLink";
 import { TextField, PasswordField } from "./Fields";
+
+const msgs = defineMessages({
+  email: {
+    id: "email_label",
+    defaultMessage: "Email popAddress"
+  },
+  remember: {
+    id: "login_remember",
+    defaultMessage: "Remember Me"
+  },
+  login: {
+    id: "login_button",
+    defaultMessage: "Login"
+  },
+  forgot: {
+    id: "forgot_password_link",
+    defaultMessage: "Forgot password?"
+  },
+  signup: {
+    id: "signup_link",
+    defaultMessage: "Don't have an account? Sign Up"
+  },
+  "auth/invalid-email": {
+    id: "auth/invalid-email",
+    defaultMessage: "Email address is invalid"
+  },
+  "auth/user-disabled": {
+    id: "auth/user-disabled",
+    defaultMessage: "User account is disabled"
+  },
+  "auth/user-not-found": {
+    id: "auth/user-not-found",
+    defaultMessage: "User account not found"
+  },
+  "auth/wrong-password": {
+    id: "auth/wrong-password",
+    defaultMessage: "Incorrect password"
+  }
+});
 
 const errorTypes = {
   "auth/invalid-email": "email",
@@ -24,6 +64,7 @@ const errorTypes = {
 
 export default function SignIn({ location }) {
   const classes = useStyles();
+  const { formatMessage } = useIntl();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
@@ -63,31 +104,31 @@ export default function SignIn({ location }) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Login
+          {formatMessage(msgs.login)}
         </Typography>
         <form className={classes.form} noValidate onSubmit={login}>
           <TextField
             required
             id="email"
-            label="Email Address"
+            label={formatMessage(msgs.email)}
             name="email"
             autoComplete="email"
             autoFocus
-            error={isEmailError}
-            helperText={isEmailError && error.message}
+            error={!!isEmailError}
+            helperText={isEmailError && formatMessage(msgs[error.code])}
             value={email}
             onValueChange={setEmail}
           />
           <PasswordField
             required
-            error={isPasswordError}
-            helperText={isPasswordError && error.message}
+            error={!!isPasswordError}
+            helperText={isPasswordError && formatMessage(msgs[error.code])}
             value={password}
             onValueChange={setPassword}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
+            label={formatMessage(msgs.remember)}
             checked={remember}
             onChange={e => setRemember(e.target.checked)}
           />
@@ -101,17 +142,17 @@ export default function SignIn({ location }) {
             color="primary"
             className={classes.submit}
           >
-            Login
+            {formatMessage(msgs.login)}
           </Button>
           <Grid container>
             <Grid item xs>
               <RouterLink to="../reset-password" variant="body2">
-                Forgot password?
+                {formatMessage(msgs.forgot)}
               </RouterLink>
             </Grid>
             <Grid item>
               <RouterLink to="../signup" variant="body2">
-                {"Don't have an account? Sign Up"}
+                {formatMessage(msgs.signup)}
               </RouterLink>
             </Grid>
           </Grid>

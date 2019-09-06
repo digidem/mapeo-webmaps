@@ -15,6 +15,34 @@ import { Typography, IconButton, TextField } from "@material-ui/core";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import firebase from "firebase/app";
+import { defineMessages, useIntl } from "react-intl";
+
+const msgs = defineMessages({
+  title: {
+    id: "edit_dialog_title",
+    defaultMessage: "Edit Map Details"
+  },
+  save: {
+    id: "save_button",
+    defaultMessage: "Save"
+  },
+  cancel: {
+    id: "cancel_button",
+    defaultMessage: "Cancel"
+  },
+  title_label: {
+    id: "title_label",
+    defaultMessage: "Map Title"
+  },
+  description_label: {
+    id: "description_label",
+    defaultMessage: "Map Description"
+  },
+  style_label: {
+    id: "mapstyle_label",
+    defaultMessage: "Map Style"
+  }
+});
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -24,6 +52,7 @@ const defaultMapStyle = "mapbox://styles/mapbox/outdoors-v11";
 
 export default function EditDialog({ open, id, onClose }) {
   const classes = useStyles();
+  const { formatMessage } = useIntl();
   const theme = useTheme();
   const smallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [user] = useAuthState(firebase.auth());
@@ -61,7 +90,7 @@ export default function EditDialog({ open, id, onClose }) {
       });
   };
 
-  const dialogTitle = "Edit map details";
+  const dialogTitle = formatMessage(msgs.title);
 
   return (
     <Dialog
@@ -88,7 +117,7 @@ export default function EditDialog({ open, id, onClose }) {
                 {dialogTitle}
               </Typography>
               <Button disabled={saving} color="inherit" onClick={handleClose}>
-                Cancel
+                {formatMessage(msgs.cancel)}
               </Button>
               <Button
                 disabled={saving || loading}
@@ -97,7 +126,7 @@ export default function EditDialog({ open, id, onClose }) {
                 onClick={handleSave}
                 type="submit"
               >
-                save
+                {formatMessage(msgs.save)}
               </Button>
             </Toolbar>
           </AppBar>
@@ -112,7 +141,7 @@ export default function EditDialog({ open, id, onClose }) {
 
         <DialogContent className={classes.content}>
           <TextField
-            label="Map title"
+            label={formatMessage(msgs.title_label)}
             value={
               value === undefined
                 ? ""
@@ -126,7 +155,7 @@ export default function EditDialog({ open, id, onClose }) {
             margin="normal"
           />
           <TextField
-            label="Map description"
+            label={formatMessage(msgs.description_label)}
             value={
               value === undefined
                 ? ""
@@ -141,7 +170,7 @@ export default function EditDialog({ open, id, onClose }) {
             onChange={e => setDescription(e.target.value)}
           />
           <TextField
-            label="Map Style"
+            label={formatMessage(msgs.style_label)}
             value={
               value === undefined
                 ? ""
@@ -170,7 +199,7 @@ export default function EditDialog({ open, id, onClose }) {
         {!smallScreen && (
           <DialogActions>
             <Button disabled={saving} onClick={handleClose}>
-              Cancel
+              {formatMessage(msgs.cancel)}
             </Button>
             <Button
               disabled={saving || loading}
@@ -179,7 +208,7 @@ export default function EditDialog({ open, id, onClose }) {
               variant="contained"
               type="submit"
             >
-              Save
+              {formatMessage(msgs.save)}
             </Button>
           </DialogActions>
         )}

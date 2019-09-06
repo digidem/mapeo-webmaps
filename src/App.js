@@ -5,6 +5,7 @@ import { navigate } from "@reach/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Router } from "@reach/router";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import { IntlProvider } from "react-intl";
 
 import Home from "./Home";
 import Login from "./Login";
@@ -12,6 +13,10 @@ import Signup from "./Signup";
 import ResetPassword from "./ResetPassword";
 import AppBar from "./AppBar";
 import LoadingScreen from "./LoadingScreen";
+
+const translations = {
+  es: require("./translations/es.json")
+};
 
 const Authorized = ({ location }) => {
   const [user, initializing] = useAuthState(firebase.auth());
@@ -38,8 +43,10 @@ const Authorized = ({ location }) => {
   );
 };
 
+const lang = navigator.language ? navigator.language.split("-")[0] : "en";
+
 const App = () => (
-  <>
+  <IntlProvider locale={lang} messages={translations[lang]} defaultLocale="en">
     <CssBaseline />
     <Router>
       <Login path="/auth/login" />
@@ -47,7 +54,7 @@ const App = () => (
       <ResetPassword path="/auth/reset-password" />
       <Authorized path="/*" />
     </Router>
-  </>
+  </IntlProvider>
 );
 
 export default App;

@@ -9,9 +9,38 @@ import Container from "@material-ui/core/Container";
 import firebase from "firebase/app";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { navigate } from "@reach/router";
+import { defineMessages, useIntl } from "react-intl";
 
 import RouterLink from "./RouterLink";
 import { TextField, PasswordField } from "./Fields";
+
+const msgs = defineMessages({
+  email: {
+    id: "email_label",
+    defaultMessage: "Email Address"
+  },
+  signup: {
+    id: "signup_button",
+    defaultMessage: "Signup"
+  },
+  have_account: {
+    id: "have_account_link",
+    defaultMessage: "Already have an account? Sign in"
+  },
+  "auth/email-already-in-use": {
+    id: "auth/email-already-in-use",
+    defaultMessage:
+      "Email is already in use (you probably already have an account)"
+  },
+  "auth/invalid-email": {
+    id: "auth/invalid-email",
+    defaultMessage: "Email address is invalid"
+  },
+  "auth/weak-password": {
+    id: "auth/weak-password",
+    defaultMessage: "Password needs to be longer"
+  }
+});
 
 const errorTypes = {
   "auth/email-already-in-use": "email",
@@ -21,9 +50,10 @@ const errorTypes = {
 
 export default function SignUp({ location }) {
   const classes = useStyles();
+  const { formatMessage } = useIntl();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState();
   const [loading, setLoading] = useState(false);
   const [user, authorizing] = useAuthState(firebase.auth());
 
@@ -52,25 +82,25 @@ export default function SignUp({ location }) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          {formatMessage(msgs.signup)}
         </Typography>
         <form className={classes.form} noValidate onSubmit={signup}>
           <TextField
             required
             id="email"
-            label="Email Address"
+            label={formatMessage(msgs.email)}
             name="email"
             autoComplete="email"
             autoFocus
-            error={isEmailError}
-            helperText={isEmailError && error.message}
+            error={!!isEmailError}
+            helperText={isEmailError && formatMessage(msgs[error.code])}
             value={email}
             onValueChange={setEmail}
           />
           <PasswordField
             required
-            error={isPasswordError}
-            helperText={isPasswordError && error.message}
+            error={!!isPasswordError}
+            helperText={isPasswordError && formatMessage(msgs[error.code])}
             value={password}
             onValueChange={setPassword}
           />
@@ -83,12 +113,12 @@ export default function SignUp({ location }) {
             className={classes.submit}
             disabled={loading || authorizing}
           >
-            Sign Up
+            {formatMessage(msgs.signup)}
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
               <RouterLink to="../login" variant="body2">
-                Already have an account? Sign in
+                {formatMessage(msgs.have_account)}
               </RouterLink>
             </Grid>
           </Grid>

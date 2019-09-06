@@ -6,6 +6,14 @@ import {
   LinearProgress,
   Typography
 } from "@material-ui/core";
+import { defineMessages, useIntl } from "react-intl";
+
+const msgs = defineMessages({
+  uploading: {
+    id: "file_uploading",
+    defaultMessage: "Uploading file {currentFile} of {totalFiles}"
+  }
+});
 
 export default function UploadProgress({
   completed = 0,
@@ -13,12 +21,13 @@ export default function UploadProgress({
   totalFiles
 }) {
   const classes = useStyles();
+  const { formatMessage } = useIntl();
   return (
     <Card className={classes.root}>
       <CardContent>
         <Typography variant="h5">{Math.ceil(completed)}%</Typography>
         <Typography color="textSecondary" gutterBottom>
-          Uploading file {currentFile} of {totalFiles}
+          {formatMessage(msgs.uploading, { currentFile, totalFiles })}
         </Typography>
         <LinearProgress
           variant={completed ? "determinate" : "indeterminate"}

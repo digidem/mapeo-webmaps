@@ -19,6 +19,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import { defineMessages, useIntl } from "react-intl";
 
 import MapItem from "./MapItem";
 import LoadingScreen from "./LoadingScreen";
@@ -26,6 +27,35 @@ import useCreateMap from "./hooks/useCreateMap";
 import Typography from "@material-ui/core/Typography";
 import UploadProgress from "./UploadProgress";
 import EditDialog from "./EditDialog";
+
+const msgs = defineMessages({
+  empty: {
+    id: "empty_state",
+    defaultMessage:
+      'Click "ADD MAP" to publicly share a map from a .mapeomap file exported from Mapeo'
+  },
+  confirmDeleteTitle: {
+    id: "confirm_delete_title",
+    defaultMessage: "Delete this map?"
+  },
+  confirmDeleteDesc: {
+    id: "confirm_delete_desc",
+    defaultMessage:
+      "If you delete this map, links to it will no longer work and it will no longer be available on the internet"
+  },
+  addMap: {
+    id: "add_map_button",
+    defaultMessage: "Add Map"
+  },
+  confirmCancel: {
+    id: "confirm_cancel",
+    defaultMessage: "No, Cancel"
+  },
+  confirmConfirm: {
+    id: "confirm_confirm",
+    defaultMessage: "Yes"
+  }
+});
 
 // Unzips a File and returns an array of objects containing the file data (as an
 // arraybuffer or string), filename, date
@@ -52,6 +82,7 @@ async function unzip(zipfile) {
 
 const AddMapButton = ({ disabled, inputProps }) => {
   const classes = useStyles();
+  const { formatMessage } = useIntl();
   return (
     <>
       <input {...inputProps} id="contained-button-file" accept=".mapeomap" />
@@ -66,7 +97,7 @@ const AddMapButton = ({ disabled, inputProps }) => {
             classes={{ root: classes.fab, disabled: classes.fabDisabled }}
           >
             <AddIcon />
-            Add Map
+            {formatMessage(msgs.addMap)}
           </Fab>
         </Zoom>
       </label>
@@ -74,34 +105,38 @@ const AddMapButton = ({ disabled, inputProps }) => {
   );
 };
 
-const ConfirmDialog = ({ open, onCancel, confirm }) => (
-  <Dialog
-    open={open}
-    onClose={onCancel}
-    aria-labelledby="alert-dialog-title"
-    aria-describedby="alert-dialog-description"
-  >
-    <DialogTitle id="alert-dialog-title">
-      {confirm && confirm.title}
-    </DialogTitle>
-    <DialogContent>
-      <DialogContentText id="alert-dialog-description">
-        {confirm && confirm.content}
-      </DialogContentText>
-    </DialogContent>
-    <DialogActions>
-      <Button onClick={onCancel} color="primary">
-        No, cancel
-      </Button>
-      <Button onClick={confirm && confirm.action} color="primary" autoFocus>
-        Yes
-      </Button>
-    </DialogActions>
-  </Dialog>
-);
+const ConfirmDialog = ({ open, onCancel, confirm }) => {
+  const { formatMessage } = useIntl();
+  return (
+    <Dialog
+      open={open}
+      onClose={onCancel}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">
+        {confirm && confirm.title}
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+          {confirm && confirm.content}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onCancel} color="primary">
+          {formatMessage(msgs.confirmCancel)}
+        </Button>
+        <Button onClick={confirm && confirm.action} color="primary" autoFocus>
+          {formatMessage(msgs.confirmConfirm)}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
 
 export default function Home({ location, initializing }) {
   const classes = useStyles();
+  const { formatMessage } = useIntl();
   const [editing, setEditing] = useState();
   const [confirm, setConfirm] = useState();
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -130,9 +165,8 @@ export default function Home({ location, initializing }) {
   const handleDelete = useCallback(
     id => {
       const confirm = {
-        title: "Delete this map?",
-        content:
-          "If you delete this map, links to it will no longer work and it will no longer be available on the internet",
+        title: formatMessage(msgs.confirmDeleteTitle),
+        content: formatMessage(msgs.confirmDeleteDesc),
         action: () => {
           firebase
             .firestore()
@@ -145,7 +179,7 @@ export default function Home({ location, initializing }) {
       setConfirm(confirm);
       setConfirmOpen(true);
     },
-    [user.uid]
+    [formatMessage, user.uid]
   );
 
   const shareUrlBase = `https://maps.mapeo.world/public/${user.uid}/maps/`;
@@ -189,9 +223,7 @@ export default function Home({ location, initializing }) {
             component={BalanceText}
             align="center"
           >
-            Click "ADD MAP" to publicly share a map from a{" "}
-            <span className={classes.mono}>.mapeomap</span> file exported from
-            Mapeo
+            {formatMessage(msgs.empty)}
           </Typography>
         )}
       </Container>

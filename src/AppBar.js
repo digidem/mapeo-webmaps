@@ -6,22 +6,35 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import ShareIcon from "@material-ui/icons/Share";
+import { defineMessages, useIntl } from "react-intl";
+
+const msgs = defineMessages({
+  title: {
+    id: "app_title",
+    defaultMessage: "My Mapeo Maps"
+  },
+  logout: {
+    id: "logout_button",
+    defaultMessage: "Logout"
+  }
+});
 
 export default function AppBar({ onLogoutClick }) {
   const classes = useStyles();
+  const { formatMessage } = useIntl();
 
   return (
     <MuiAppBar position="static" color="default" className={classes.root}>
       <Toolbar className={classes.toolbar}>
         <Typography variant="h6" className={classes.title}>
-          My Mapeo Maps
+          {formatMessage(msgs.title)}
         </Typography>
         <div className={classes.buttonContainer}>
           <IconButton color="inherit">
             <ShareIcon />
           </IconButton>
           <Button color="inherit" onClick={onLogoutClick} variant="outlined">
-            Logout
+            {formatMessage(msgs.logout)}
           </Button>
         </div>
       </Toolbar>

@@ -19,6 +19,7 @@
     "react-dom": "^16.9.0",
     "react-dropzone": "^10.1.8",
     "react-firebase-hooks": "^2.1.0",
+    "react-intl": "^3.2.0",
     "react-scripts": "3.1.1",
     "react-transition-group": "^4.3.0",
     "use-subscription": "^1.0.0"
@@ -31,6 +32,7 @@
     "@storybook/addons": "^5.2.0-rc.4",
     "@storybook/react": "^5.2.0-rc.4",
     "@testing-library/user-event": "^7.0.0",
+    "extract-react-intl-messages": "^2.3.3",
     "firebase-tools": "^7.3.0",
     "tape": "^4.11.0",
     "tape-promise": "^4.0.0"
@@ -43,7 +45,8 @@
     "eject": "react-scripts eject",
     "deploy": "yarn build && firebase deploy",
     "storybook": "start-storybook -p 9009 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public",
+    "extract-messages": "NODE_ENV=production extract-messages -l=es -o src/translations -d en 'src/**/!(*.test|*.stories).js'"
   },
   "keywords": [
     "firebase",
