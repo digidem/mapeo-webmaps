@@ -102,6 +102,7 @@ export default function SignUp({ location }) {
           <Button
             type="submit"
             fullWidth
+            size="large"
             variant="contained"
             color="primary"
             className={classes.submit}

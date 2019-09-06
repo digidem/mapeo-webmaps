@@ -121,6 +121,7 @@ export default function SignIn({ location }) {
             type="submit"
             disabled={loading || authorizing}
             fullWidth
+            size="large"
             variant="contained"
             color="primary"
             className={classes.submit}

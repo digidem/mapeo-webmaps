@@ -101,6 +101,7 @@ export default function ResetPassword({ location }) {
             <Button
               type="submit"
               fullWidth
+              size="large"
               variant="contained"
               color="primary"
               className={classes.submit}
