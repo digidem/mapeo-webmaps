@@ -134,8 +134,9 @@ export default function Home({ location, initializing }) {
             color="textSecondary"
             className={classes.text}
             component={BalanceText}
+            align="center"
           >
-            Click "ADD MAP" to create a map from a{" "}
+            Click "ADD MAP" to publicly share a map from a{" "}
             <span className={classes.mono}>.mapeomap</span> file exported from
             Mapeo
           </Typography>
@@ -180,7 +181,7 @@ const useStyles = makeStyles({
     backgroundColor: "#cccccc !important"
   },
   text: {
-    maxWidth: "20em",
+    maxWidth: "30em",
     alignSelf: "center",
     paddingTop: 24
   },
