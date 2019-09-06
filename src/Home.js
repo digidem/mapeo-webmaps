@@ -140,7 +140,7 @@ export default function Home({ location, initializing }) {
   const [editing, setEditing] = useState();
   const [confirm, setConfirm] = useState();
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const [progress, createMap] = useCreateMap();
+  const [progress, createMap, retry] = useCreateMap();
   const [user] = useAuthState(firebase.auth());
   const [maps = [], loading] = useCollectionData(
     firebase
@@ -199,7 +199,7 @@ export default function Home({ location, initializing }) {
         <TransitionGroup>
           {progress.loading && (
             <Grow in>
-              <UploadProgress {...progress} />
+              <UploadProgress {...progress} retry={retry} />
             </Grow>
           )}
           {maps

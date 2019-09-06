@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React from "react";
 import UploadProgress from "./UploadProgress";
+import { action } from "@storybook/addon-actions";
 
 export default {
   title: "UploadProgress",
@@ -50,6 +51,18 @@ export const initial = () => {
       completed={completed}
       currentFile={currentFile}
       totalFiles={15}
+    />
+  );
+};
+
+export const error = () => {
+  return (
+    <UploadProgress
+      completed={30}
+      currentFile={2}
+      totalFiles={15}
+      error={true}
+      retry={action("retry")}
     />
   );
 };
