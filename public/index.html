@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta name="description" content="Share maps from Mapeo with the world" />
-    <link rel="apple-touch-icon" href="logo192.png" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -15,10 +15,64 @@
     <!--
       For material-ui https://material-ui.com/getting-started/installation/
     -->
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-    />
+    <style>
+      /* roboto-300 - latin */
+      @font-face {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 300;
+        font-display: swap;
+        src: url("./fonts/roboto-v20-latin-300.eot"); /* IE9 Compat Modes */
+        src: local("Roboto Light"), local("Roboto-Light"),
+          url("./fonts/roboto-v20-latin-300.woff2") format("woff2"),
+          /* Super Modern Browsers */ url("./fonts/roboto-v20-latin-300.woff")
+            format("woff"),
+          /* Modern Browsers */ url("./fonts/roboto-v20-latin-300.ttf")
+            format("truetype"); /* Safari, Android, iOS */
+      }
+      /* roboto-regular - latin */
+      @font-face {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url("./fonts/roboto-v20-latin-regular.eot"); /* IE9 Compat Modes */
+        src: local("Roboto"), local("Roboto-Regular"),
+          url("./fonts/roboto-v20-latin-regular.woff2") format("woff2"),
+          /* Super Modern Browsers */
+            url("./fonts/roboto-v20-latin-regular.woff") format("woff"),
+          /* Modern Browsers */ url("./fonts/roboto-v20-latin-regular.ttf")
+            format("truetype"); /* Safari, Android, iOS */
+      }
+      /* roboto-500 - latin */
+      @font-face {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 500;
+        font-display: swap;
+        src: url("./fonts/roboto-v20-latin-500.eot"); /* IE9 Compat Modes */
+        src: local("Roboto Medium"), local("Roboto-Medium"),
+          url("./fonts/roboto-v20-latin-500.woff2") format("woff2"),
+          /* Super Modern Browsers */ url("./fonts/roboto-v20-latin-500.woff")
+            format("woff"),
+          /* Modern Browsers */ url("./fonts/roboto-v20-latin-500.ttf")
+            format("truetype"); /* Safari, Android, iOS */
+      }
+      /* roboto-700 - latin */
+      @font-face {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap;
+        src: url("./fonts/roboto-v20-latin-700.eot"); /* IE9 Compat Modes */
+        src: local("Roboto Bold"), local("Roboto-Bold"),
+          url("./fonts/roboto-v20-latin-700.woff2") format("woff2"),
+          /* Super Modern Browsers */ url("./fonts/roboto-v20-latin-700.woff")
+            format("woff"),
+          /* Modern Browsers */ url("./fonts/roboto-v20-latin-700.ttf")
+            format("truetype"); /* Safari, Android, iOS */
+      }
+    </style>
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
