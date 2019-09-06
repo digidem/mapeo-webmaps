@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useDropzone } from "react-dropzone";
@@ -19,6 +19,7 @@ import LoadingScreen from "./LoadingScreen";
 import useCreateMap from "./hooks/useCreateMap";
 import Typography from "@material-ui/core/Typography";
 import UploadProgress from "./UploadProgress";
+import EditDialog from "./EditDialog";
 
 // Unzips a File and returns an array of objects containing the file data (as an
 // arraybuffer or string), filename, date
@@ -69,6 +70,7 @@ const AddMapButton = ({ disabled, inputProps }) => {
 
 export default function Home({ location, initializing }) {
   const classes = useStyles();
+  const [editing, setEditing] = useState();
   const [progress, createMap] = useCreateMap();
   const [user] = useAuthState(firebase.auth());
   const [maps = [], loading] = useCollectionData(
@@ -126,6 +128,7 @@ export default function Home({ location, initializing }) {
                 <MapItem
                   {...map}
                   onDelete={handleDelete}
+                  onEdit={id => setEditing(id)}
                   shareUrl={shareUrlBase + map.id}
                 />
               </Grow>
@@ -145,6 +148,11 @@ export default function Home({ location, initializing }) {
           </Typography>
         )}
       </Container>
+      <EditDialog
+        open={!!editing}
+        id={editing}
+        onClose={() => setEditing(false)}
+      />
     </div>
   );
 }
