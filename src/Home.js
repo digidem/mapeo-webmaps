@@ -1,7 +1,9 @@
 import React, { useCallback } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import { useDropzone } from "react-dropzone";
 import Fab from "@material-ui/core/Fab";
+import Zoom from "@material-ui/core/Zoom";
 import AddIcon from "@material-ui/icons/Add";
 import JSZip from "jszip";
 import path from "path";
@@ -39,30 +41,25 @@ async function unzip(zipfile) {
   return Promise.all(filePromises);
 }
 
-const AddMapButton = ({ onChange, disabled }) => {
+const AddMapButton = ({ disabled, inputProps }) => {
   const classes = useStyles();
   return (
     <>
-      <input
-        type="file"
-        accept=".mapeomap"
-        style={{ display: "none" }}
-        tabIndex={-1}
-        id="contained-button-file"
-        onChange={onChange}
-      />
+      <input {...inputProps} id="contained-button-file" accept=".mapeomap" />
       <label htmlFor="contained-button-file">
-        <Fab
-          disabled={disabled}
-          color="primary"
-          variant="extended"
-          aria-label="add map"
-          component="span"
-          classes={{ root: classes.fab, disabled: classes.fabDisabled }}
-        >
-          <AddIcon />
-          Add Map
-        </Fab>
+        <Zoom in key={1}>
+          <Fab
+            disabled={disabled}
+            color="primary"
+            variant="extended"
+            aria-label="add map"
+            component="span"
+            classes={{ root: classes.fab, disabled: classes.fabDisabled }}
+          >
+            <AddIcon />
+            Add Map
+          </Fab>
+        </Zoom>
       </label>
     </>
   );
@@ -79,9 +76,8 @@ export default function Home({ location, initializing }) {
 
   if (progress.error) console.log(progress.error);
 
-  const handleDrop = useCallback(
-    async e => {
-      const acceptedFiles = e.target.files;
+  const onDrop = useCallback(
+    async acceptedFiles => {
       if (!acceptedFiles.length || !acceptedFiles[0].name.match(/.mapeomap$/))
         return console.log("invalid file", acceptedFiles[0]);
       const files = await unzip(acceptedFiles[0]);
@@ -109,15 +105,17 @@ export default function Home({ location, initializing }) {
     [user.uid]
   );
 
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    multiple: false,
+    noClick: true
+  });
+
   if (loading || initializing) return <LoadingScreen />;
 
   return (
-    <div className={classes.root}>
-      <AddMapButton
-        key={progress.id}
-        onChange={handleDrop}
-        disabled={progress.loading}
-      />
+    <div {...getRootProps()} className={classes.root}>
+      <AddMapButton disabled={progress.loading} inputProps={getInputProps()} />
       <Container maxWidth="md" className={classes.container}>
         {maps
           .filter(map => map.id !== progress.id || progress.done)
