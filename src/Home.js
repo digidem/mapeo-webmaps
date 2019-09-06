@@ -5,12 +5,14 @@ import { useDropzone } from "react-dropzone";
 import Fab from "@material-ui/core/Fab";
 import Zoom from "@material-ui/core/Zoom";
 import AddIcon from "@material-ui/icons/Add";
+import Grow from "@material-ui/core/Grow";
 import JSZip from "jszip";
 import path from "path";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import firebase from "firebase/app";
 import BalanceText from "react-balance-text";
+import { TransitionGroup } from "react-transition-group";
 
 import MapItem from "./MapItem";
 import LoadingScreen from "./LoadingScreen";
@@ -111,17 +113,24 @@ export default function Home({ location, initializing }) {
     <div {...getRootProps()} className={classes.root}>
       <AddMapButton disabled={progress.loading} inputProps={getInputProps()} />
       <Container maxWidth="md" className={classes.container}>
-        {progress.loading && <UploadProgress {...progress} />}
-        {maps
-          .filter(map => map.id !== progress.id || progress.done)
-          .map(map => (
-            <MapItem
-              key={map.id}
-              {...map}
-              onDelete={handleDelete}
-              shareUrl={shareUrlBase + map.id}
-            />
-          ))}
+        <TransitionGroup>
+          {progress.loading && (
+            <Grow in>
+              <UploadProgress {...progress} />
+            </Grow>
+          )}
+          {maps
+            .filter(map => map.id !== progress.id || progress.done)
+            .map(map => (
+              <Grow in key={map.id}>
+                <MapItem
+                  {...map}
+                  onDelete={handleDelete}
+                  shareUrl={shareUrlBase + map.id}
+                />
+              </Grow>
+            ))}
+        </TransitionGroup>
         {!progress.loading && !maps.length && (
           <Typography
             variant="body1"
