@@ -30,7 +30,14 @@ const useStyles = makeStyles({
   }
 });
 
-export default function MapItem({ id, title, description, onShare, onDelete }) {
+export default function MapItem({
+  id,
+  title,
+  description,
+  onShare,
+  onDelete,
+  shareUrl
+}) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -49,7 +56,7 @@ export default function MapItem({ id, title, description, onShare, onDelete }) {
           {title}
         </Typography>
         <Tooltip title="Public link to Map" placement="top">
-          <IconButton onClick={() => onShare(id)}>
+          <IconButton component="a" href={shareUrl} target="_blank">
             <LinkIcon />
           </IconButton>
         </Tooltip>

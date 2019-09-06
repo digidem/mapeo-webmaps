@@ -97,13 +97,7 @@ export default function Home({ location, initializing }) {
     [user.uid]
   );
 
-  const handleShare = useCallback(
-    id => {
-      const url = `https://maps.mapeo.world/public/${user.uid}/maps/${id}`;
-      window.open(url);
-    },
-    [user.uid]
-  );
+  const shareUrlBase = `https://maps.mapeo.world/public/${user.uid}/maps/`;
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
@@ -125,7 +119,7 @@ export default function Home({ location, initializing }) {
               key={map.id}
               {...map}
               onDelete={handleDelete}
-              onShare={handleShare}
+              shareUrl={shareUrlBase + map.id}
             />
           ))}
         {!progress.loading && !maps.length && (
