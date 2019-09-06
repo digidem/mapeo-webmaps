@@ -21,7 +21,7 @@ export default function UploadProgress({
           Uploading file {currentFile} of {totalFiles}
         </Typography>
         <LinearProgress
-          variant="determinate"
+          variant={completed ? "determinate" : "indeterminate"}
           value={completed}
           className={classes.progress}
         ></LinearProgress>
