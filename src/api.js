@@ -18,6 +18,9 @@ export function createMap(id, metadata, points) {
   }));
   const pointIds = pointsWithIds.map(p => p.properties._id);
 
+  // For new maps, set createdAt
+  if (!id) metadata.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+
   const db = firebase.firestore();
   // If id is set, this is a retry, so we replace the values, otherwise this
   // will create a new document

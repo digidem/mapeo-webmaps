@@ -108,7 +108,10 @@ export default function Home({ location, initializing }) {
   const [progress, createMap] = useCreateMap();
   const [user] = useAuthState(firebase.auth());
   const [maps = [], loading] = useCollectionData(
-    firebase.firestore().collection(`groups/${user.uid}/maps`),
+    firebase
+      .firestore()
+      .collection(`groups/${user.uid}/maps`)
+      .orderBy("createdAt", "desc"),
     { idField: "id" }
   );
 
