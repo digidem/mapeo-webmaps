@@ -52,7 +52,8 @@ export default function EditDialog({ open, id, onClose }) {
       .set({
         ...value,
         title: title || value.title,
-        description: description || value.description
+        description: description || value.description,
+        mapStyle: mapStyle || value.mapStyle
       })
       .then(() => {
         setSaving(false);
@@ -95,7 +96,6 @@ export default function EditDialog({ open, id, onClose }) {
                 variant="outlined"
                 onClick={handleSave}
                 type="submit"
-                autofocus
               >
                 save
               </Button>
@@ -178,7 +178,6 @@ export default function EditDialog({ open, id, onClose }) {
               color="primary"
               variant="contained"
               type="submit"
-              autofocus
             >
               Save
             </Button>
