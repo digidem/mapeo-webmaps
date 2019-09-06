@@ -1,49 +1,84 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import MenuIcon from "@material-ui/icons/MoreVert";
+import LinkIcon from "@material-ui/icons/Link";
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
 const useStyles = makeStyles({
   root: {
     margin: 12
   },
+  actions: {
+    display: "flex",
+    alignItems: "center",
+    minHeight: 48,
+    padding: 8,
+    paddingBottom: 0
+  },
+  title: {
+    flexGrow: 1,
+    marginLeft: 8
+  },
   description: {
-    // display: "-webkit-box",
-    // "-webkit-line-clamp": 3,
-    // "-webkit-box-orient": "vertical",
-    // overflow: "hidden"
+    padding: 16,
+    paddingTop: 0
   }
 });
 
 export default function MapItem({ id, title, description, onShare, onDelete }) {
   const classes = useStyles();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  function handleClick(event) {
+    setAnchorEl(event.currentTarget);
+  }
+
+  function handleClose() {
+    setAnchorEl(null);
+  }
 
   return (
     <Card className={classes.root}>
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="h2">
+      <div className={classes.actions}>
+        <Typography variant="h5" component="h2" className={classes.title}>
           {title}
         </Typography>
-        <Typography
-          variant="body2"
-          color="textSecondary"
-          component="p"
-          className={classes.description}
+        <Tooltip title="Public link to Map" placement="top">
+          <IconButton onClick={() => onShare(id)}>
+            <LinkIcon />
+          </IconButton>
+        </Tooltip>
+        <IconButton
+          aria-controls="simple-menu"
+          aria-haspopup="true"
+          onClick={handleClick}
         >
-          {description}
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small" color="primary" onClick={() => onShare(id)}>
-          Share
-        </Button>
-        <Button size="small" color="primary" onClick={() => onDelete(id)}>
-          Delete
-        </Button>
-      </CardActions>
+          <MenuIcon />
+        </IconButton>
+      </div>
+      <Menu
+        id="simple-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem>Upload new data</MenuItem>
+        <MenuItem onClick={() => onDelete(id)}>Delete Map</MenuItem>
+      </Menu>
+      <Typography
+        variant="body2"
+        color="textSecondary"
+        component="p"
+        className={classes.description}
+      >
+        {description}
+      </Typography>
     </Card>
   );
 }

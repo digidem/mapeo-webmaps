@@ -25,6 +25,7 @@
   "devDependencies": {
     "@firebase/testing": "^0.12.3",
     "@storybook/addon-actions": "^5.2.0-rc.4",
+    "@storybook/addon-knobs": "^5.2.0-rc.6",
     "@storybook/addon-links": "^5.2.0-rc.4",
     "@storybook/addons": "^5.2.0-rc.4",
     "@storybook/react": "^5.2.0-rc.4",
