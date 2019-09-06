@@ -117,6 +117,7 @@ export default function Home({ location, initializing }) {
     <div {...getRootProps()} className={classes.root}>
       <AddMapButton disabled={progress.loading} inputProps={getInputProps()} />
       <Container maxWidth="md" className={classes.container}>
+        {progress.loading && <UploadProgress {...progress} />}
         {maps
           .filter(map => map.id !== progress.id || progress.done)
           .map(map => (
@@ -127,7 +128,6 @@ export default function Home({ location, initializing }) {
               onShare={handleShare}
             />
           ))}
-        {progress.loading && <UploadProgress {...progress} />}
         {!progress.loading && !maps.length && (
           <Typography
             variant="body1"
