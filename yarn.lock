@@ -11557,7 +11557,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.3"
 
-prop-types@15.7.2, prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@15.7.2, prop-types@^15.5.0, prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -13299,6 +13299,13 @@ store2@^2.7.1:
   version "2.9.0"
   resolved "https://registry.yarnpkg.com/store2/-/store2-2.9.0.tgz#9987e3cf491b8163fd6197c42bab7d71c58c179b"
   integrity sha512-JmK+95jLX2zAP75DVAJ1HAziQ6f+f495h4P9ez2qbmxazN6fE7doWlitqx9hj2YohH3kOi6RVksJe1UH0sJfPw==
+
+storybook-addon-intl@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/storybook-addon-intl/-/storybook-addon-intl-2.4.1.tgz#870d990defde87615e490aa4ca18abec3ac19f2c"
+  integrity sha512-07CofbUQcx8axTWd2/x0CNyaNJzRFW+/idHg2W3fnimy9w56A088kJwQzefjVFVSJELFDL2kjG19pP3MJ2A0ng==
+  dependencies:
+    prop-types "^15.5.0"
 
 stream-browserify@^2.0.1:
   version "2.0.2"

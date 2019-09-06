@@ -34,6 +34,7 @@
     "@testing-library/user-event": "^7.0.0",
     "extract-react-intl-messages": "^2.3.3",
     "firebase-tools": "^7.3.0",
+    "storybook-addon-intl": "^2.4.1",
     "tape": "^4.11.0",
     "tape-promise": "^4.0.0"
   },
