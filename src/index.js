@@ -21,7 +21,8 @@ firebase.initializeApp({
 });
 
 // For some reason, if we don't call this here, writes fail silently in the app
-firebase.firestore();
+// Enables offline persistence
+firebase.firestore().enablePersistence();
 
 ReactDOM.render(<App />, document.getElementById("root"));
 
