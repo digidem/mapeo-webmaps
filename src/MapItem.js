@@ -10,27 +10,6 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 
-const useStyles = makeStyles({
-  root: {
-    margin: 12
-  },
-  actions: {
-    display: "flex",
-    alignItems: "center",
-    minHeight: 48,
-    padding: 8,
-    paddingBottom: 0
-  },
-  title: {
-    flexGrow: 1,
-    marginLeft: 8
-  },
-  description: {
-    padding: 16,
-    paddingTop: 0
-  }
-});
-
 export default function MapItem({
   id,
   title,
@@ -95,3 +74,24 @@ export default function MapItem({
     </Card>
   );
 }
+
+const useStyles = makeStyles({
+  root: {
+    margin: 12
+  },
+  actions: {
+    display: "flex",
+    alignItems: "center",
+    minHeight: 48,
+    padding: 8,
+    paddingBottom: 0
+  },
+  title: {
+    flexGrow: 1,
+    marginLeft: 8
+  },
+  description: {
+    padding: 16,
+    paddingTop: 0
+  }
+});

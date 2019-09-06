@@ -7,6 +7,28 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import ShareIcon from "@material-ui/icons/Share";
 
+export default function AppBar({ onLogoutClick }) {
+  const classes = useStyles();
+
+  return (
+    <MuiAppBar position="static" color="default" className={classes.root}>
+      <Toolbar className={classes.toolbar}>
+        <Typography variant="h6" className={classes.title}>
+          My Mapeo Maps
+        </Typography>
+        <div className={classes.buttonContainer}>
+          <IconButton color="inherit">
+            <ShareIcon />
+          </IconButton>
+          <Button color="inherit" onClick={onLogoutClick} variant="outlined">
+            Logout
+          </Button>
+        </div>
+      </Toolbar>
+    </MuiAppBar>
+  );
+}
+
 const useStyles = makeStyles(theme => ({
   root: {
     zIndex: 1
@@ -31,25 +53,3 @@ const useStyles = makeStyles(theme => ({
     }
   }
 }));
-
-export default function AppBar({ onLogoutClick }) {
-  const classes = useStyles();
-
-  return (
-    <MuiAppBar position="static" color="default" className={classes.root}>
-      <Toolbar className={classes.toolbar}>
-        <Typography variant="h6" className={classes.title}>
-          My Mapeo Maps
-        </Typography>
-        <div className={classes.buttonContainer}>
-          <IconButton color="inherit">
-            <ShareIcon />
-          </IconButton>
-          <Button color="inherit" onClick={onLogoutClick} variant="outlined">
-            Logout
-          </Button>
-        </div>
-      </Toolbar>
-    </MuiAppBar>
-  );
-}
