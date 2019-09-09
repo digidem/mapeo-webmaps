@@ -7,6 +7,7 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import ShareIcon from "@material-ui/icons/Share";
 import { defineMessages, useIntl } from "react-intl";
+import { Tooltip } from "@material-ui/core";
 
 const msgs = defineMessages({
   title: {
@@ -16,6 +17,10 @@ const msgs = defineMessages({
   logout: {
     id: "logout_button",
     defaultMessage: "Logout"
+  },
+  share: {
+    id: "share_all",
+    defaultMessage: "Public link to all maps"
   }
 });
 
@@ -30,9 +35,11 @@ export default function AppBar({ onLogoutClick }) {
           {formatMessage(msgs.title)}
         </Typography>
         <div className={classes.buttonContainer}>
-          <IconButton color="inherit">
-            <ShareIcon />
-          </IconButton>
+          <Tooltip title={formatMessage(msgs.share)}>
+            <IconButton disabled color="inherit">
+              <ShareIcon />
+            </IconButton>
+          </Tooltip>
           <Button color="inherit" onClick={onLogoutClick} variant="outlined">
             {formatMessage(msgs.logout)}
           </Button>

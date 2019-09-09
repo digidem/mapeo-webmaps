@@ -81,7 +81,7 @@ export default function MapItem({
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem>{formatMessage(msgs.replaceData)}</MenuItem>
+        <MenuItem disabled>{formatMessage(msgs.replaceData)}</MenuItem>
         <MenuItem onClick={() => onDelete(id)}>
           {formatMessage(msgs.deleteMap)}
         </MenuItem>
