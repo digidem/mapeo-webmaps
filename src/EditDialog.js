@@ -9,6 +9,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import AppBar from "@material-ui/core/AppBar";
 import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
+import Fade from "@material-ui/core/Fade";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
 import { Typography, IconButton, TextField } from "@material-ui/core";
@@ -45,7 +46,13 @@ const msgs = defineMessages({
 });
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
+  const theme = useTheme();
+  const smallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  return smallScreen ? (
+    <Slide direction="up" ref={ref} {...props} />
+  ) : (
+    <Fade ref={ref} {...props} />
+  );
 });
 
 const defaultMapStyle = "mapbox://styles/mapbox/outdoors-v11";
