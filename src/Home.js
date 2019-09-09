@@ -182,7 +182,7 @@ export default function Home({ location, initializing }) {
     [formatMessage, user.uid]
   );
 
-  const shareUrlBase = `https://maps.mapeo.world/public/${user.uid}/maps/`;
+  const shareUrlBase = `https://maps-public.mapeo.world/groups/${user.uid}/maps/`;
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
