@@ -21,28 +21,36 @@ import { defineMessages, useIntl } from "react-intl";
 const msgs = defineMessages({
   title: {
     id: "edit_dialog_title",
-    defaultMessage: "Edit Map Details"
+    defaultMessage: "Edit Map Details",
   },
   save: {
     id: "save_button",
-    defaultMessage: "Save"
+    defaultMessage: "Save",
   },
   cancel: {
     id: "cancel_button",
-    defaultMessage: "Cancel"
+    defaultMessage: "Cancel",
   },
   title_label: {
     id: "title_label",
-    defaultMessage: "Map Title"
+    defaultMessage: "Map Title",
   },
   description_label: {
     id: "description_label",
-    defaultMessage: "Map Description"
+    defaultMessage: "Map Description",
+  },
+  terms_label: {
+    id: "terms_label",
+    defaultMessage: "Terms & Limitations",
+  },
+  terms_hint: {
+    id: "terms_hint",
+    defaultMessage: "Add terms & limitations about how this data can be used",
   },
   style_label: {
     id: "mapstyle_label",
-    defaultMessage: "Map Style"
-  }
+    defaultMessage: "Map Style",
+  },
 });
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -69,12 +77,14 @@ export default function EditDialog({ open, id, onClose }) {
   const [saving, setSaving] = useState();
   const [title, setTitle] = useState();
   const [description, setDescription] = useState();
+  const [terms, setTerms] = useState();
   const [mapStyle, setMapStyle] = useState(defaultMapStyle);
 
   const handleClose = () => {
     setSaving(false);
     setTitle(undefined);
     setDescription(undefined);
+    setTerms(undefined);
     setMapStyle(defaultMapStyle);
     onClose();
   };
@@ -89,7 +99,8 @@ export default function EditDialog({ open, id, onClose }) {
         ...value,
         title: title || value.title,
         description: description || value.description,
-        mapStyle: mapStyle || value.mapStyle
+        mapStyle: mapStyle || value.mapStyle,
+        terms: terms,
       })
       .then(() => {
         setSaving(false);
@@ -177,6 +188,22 @@ export default function EditDialog({ open, id, onClose }) {
             onChange={e => setDescription(e.target.value)}
           />
           <TextField
+            label={formatMessage(msgs.terms_label)}
+            helperText={formatMessage(msgs.terms_hint)}
+            value={
+              value === undefined
+                ? ""
+                : terms === undefined
+                ? value.terms
+                : terms
+            }
+            fullWidth
+            multiline
+            variant="outlined"
+            margin="normal"
+            onChange={e => setTerms(e.target.value)}
+          />
+          <TextField
             label={formatMessage(msgs.style_label)}
             value={
               value === undefined
@@ -226,15 +253,15 @@ export default function EditDialog({ open, id, onClose }) {
 
 const useStyles = makeStyles(theme => ({
   appBar: {
-    position: "relative"
+    position: "relative",
   },
   title: {
     marginLeft: theme.spacing(2),
-    flex: 1
+    flex: 1,
   },
   content: {
     display: "flex",
     flexDirection: "column",
-    paddingTop: 0
-  }
+    paddingTop: 0,
+  },
 }));
