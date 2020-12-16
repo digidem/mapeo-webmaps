@@ -13,7 +13,7 @@ function getImagesFromFiles(files) {
         name.startsWith("images") &&
         VALID_EXTS.indexOf(path.extname(name).toLowerCase()) >= 0
     )
-    .map(file => {
+    .map((file) => {
       file.hashedName = md5(file.data) + path.extname(file.name);
       return file;
     });
@@ -42,9 +42,9 @@ export default function useCreateMap() {
   const [totalFiles, setTotalFiles] = useState(0);
   const [currentFile, setCurrentFile] = useState(0);
   const [progress, setProgress] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [missing, setMissing] = useState(new Set());
+  const [state, setState] = useState("idle");
   const [error, setError] = useState();
-  const [done, setDone] = useState(false);
   const [id, setId] = useState();
 
   useEffect(
@@ -60,7 +60,7 @@ export default function useCreateMap() {
     []
   );
 
-  const retry = useCallback(async id => {
+  const retry = useCallback(async (id) => {
     let error;
     if (!metadataRef.current || !pointsRef.current || !uploadsRef.current)
       return;
@@ -72,18 +72,17 @@ export default function useCreateMap() {
     setId(createMapPromise.id);
     setTotalFiles(uploadsRef.current.size);
     setError(null);
-    setDone(false);
-    setLoading(true);
+    setState("loading");
 
     const failedFiles = Array.from(uploadsRef.current.values())
-      .filter(upload => !upload.error)
-      .map(upload => upload.file);
+      .filter((upload) => !upload.error)
+      .map((upload) => upload.file);
     setCurrentFile(uploadsRef.current.size - failedFiles.length);
 
     // Upload files one-by-one (Promises in serial)
     for (var file of failedFiles) {
       if (cancelRef.current) return; // bail if component is unmounted
-      setCurrentFile(c => c + 1);
+      setCurrentFile((c) => c + 1);
       try {
         await upload(file);
       } catch (e) {
@@ -94,10 +93,14 @@ export default function useCreateMap() {
 
     try {
       await createMapPromise;
-      if (error) return setError(error);
-      setDone(true);
-      setLoading(false);
+      if (error) {
+        setState("error");
+        setError(error);
+      } else {
+        setState("done");
+      }
     } catch (e) {
+      setState("error");
       setError(e);
     }
   }, []);
@@ -116,11 +119,13 @@ export default function useCreateMap() {
     setTotalFiles(images.length);
     setCurrentFile(0);
     setError(null);
-    setDone(false);
-    setLoading(true);
+    setState("loading");
 
-    if (!pointsFC || !pointsFC.features || !pointsFC.features.length)
-      return setError(new Error("No data found in file"));
+    if (!pointsFC || !pointsFC.features || !pointsFC.features.length) {
+      setState("error");
+      setError(new Error("No data found in file"));
+      return;
+    }
     metadata.title = metadata.title || "My Map";
     metadata.public = true;
 
@@ -128,13 +133,16 @@ export default function useCreateMap() {
     for (var f of pointsFC.features) {
       const image = images.find(
         // eslint-disable-next-line no-loop-func
-        file => path.basename(file.name) === f.properties.image
+        (file) => path.basename(file.name) === f.properties.image
       );
-      if (!image && f.properties.image)
-        return setError(new Error("Missing image " + f.properties.image));
+      if (!image && f.properties.image) {
+        
+        setError(new Error("Missing image " + f.properties.image));
+        return;
+      }
       points.push({
         ...f,
-        properties: { ...f.properties, image: image ? image.hashedName : null }
+        properties: { ...f.properties, image: image ? image.hashedName : null },
       });
     }
 
@@ -149,7 +157,7 @@ export default function useCreateMap() {
     // Upload files one-by-one (Promises in serial)
     for (var file of images) {
       if (cancelRef.current) return; // bail if component is unmounted
-      setCurrentFile(c => c + 1);
+      setCurrentFile((c) => c + 1);
       try {
         await upload(file);
       } catch (e) {
@@ -176,11 +184,11 @@ export default function useCreateMap() {
     return new Promise((resolve, reject) => {
       const uploadTask = api.uploadImage(file.hashedName, file.data);
       upload.cancel = () => uploadTask.cancel();
-      uploadTask.on("progress", bytesTransferred => {
+      uploadTask.on("progress", (bytesTransferred) => {
         upload.bytesTransferred = bytesTransferred;
         updateProgress();
       });
-      uploadTask.on("error", e => {
+      uploadTask.on("error", (e) => {
         upload.error = e;
         reject(e);
       });
@@ -208,10 +216,10 @@ export default function useCreateMap() {
         error,
         done,
         id,
-        loading
+        loading,
       },
       createMap,
-      retry
+      retry,
     ],
     [
       createMap,
@@ -222,7 +230,7 @@ export default function useCreateMap() {
       totalFiles,
       id,
       retry,
-      loading
+      loading,
     ]
   );
 
