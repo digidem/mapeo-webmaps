@@ -22,12 +22,15 @@
     "react-transition-group": "^4.3.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.10",
     "@firebase/rules-unit-testing": "^1.1.6",
-    "@storybook/addon-actions": "^5.2.0-rc.4",
-    "@storybook/addon-knobs": "^5.2.0-rc.6",
-    "@storybook/addon-links": "^5.2.0-rc.4",
-    "@storybook/addons": "^5.2.0-rc.4",
-    "@storybook/react": "^5.2.0-rc.4",
+    "@storybook/addon-actions": "^6.1.11",
+    "@storybook/addon-essentials": "^6.1.11",
+    "@storybook/addon-knobs": "^6.1.11",
+    "@storybook/addon-links": "^6.1.11",
+    "@storybook/addons": "^6.1.11",
+    "@storybook/preset-create-react-app": "^3.1.5",
+    "@storybook/react": "^6.1.11",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.6.0",
@@ -60,7 +63,10 @@
   "author": "Digital Democracy",
   "license": "MPL-2.0",
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "import/no-anonymous-default-export": false
+    }
   },
   "browserslist": {
     "production": [
