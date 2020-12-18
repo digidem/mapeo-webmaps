@@ -1,0 +1,134 @@
+{
+  "add_map_button": {
+    "message": "Agregar Mapa"
+  },
+  "app_title": {
+    "message": "Mis Mapas de Mapeo"
+  },
+  "auth/email-already-in-use": {
+    "message": "Correo ya registrado"
+  },
+  "auth/invalid-email": {
+    "message": "Correo electronico inválido"
+  },
+  "auth/user-disabled": {
+    "message": "Cuenta deshabilitada"
+  },
+  "auth/user-not-found": {
+    "message": "Usuario / correo no encontrado"
+  },
+  "auth/weak-password": {
+    "message": "Tu contraseña debe ser más largo"
+  },
+  "auth/wrong-password": {
+    "message": "Contraseña incorecta"
+  },
+  "cancel_button": {
+    "message": "Cancelar"
+  },
+  "confirm_cancel": {
+    "message": "No, Cancelar"
+  },
+  "confirm_confirm": {
+    "message": "Sí, confirmo"
+  },
+  "confirm_delete_desc": {
+    "message": "Si borras a este mapa, los vínculos ya compartido no van a funcionar y ya no va estar disponible en el internet"
+  },
+  "confirm_delete_title": {
+    "message": "¿Borrar este mapa?"
+  },
+  "delete_map": {
+    "message": "Borrar Mapa"
+  },
+  "description_label": {
+    "message": "Descripción del mapa"
+  },
+  "edit_dialog_title": {
+    "message": "Editar detalles del mapa"
+  },
+  "edit_tooltip": {
+    "message": "Editar detalles del mapa"
+  },
+  "email_label": {
+    "message": "Correo Electrónico"
+  },
+  "empty_state": {
+    "message": "Haga un clic en \"AGREGAR MAPA\" para compartir con el public un archivo .mapeomap exportado desde Mapeo"
+  },
+  "file_uploading": {
+    "message": "Subiendo archivo {currentFile} de {totalFiles} archivos"
+  },
+  "forgot_password_link": {
+    "message": "¿Olvidaste tu contraseña?"
+  },
+  "have_account_link": {
+    "message": "¿Ya tienes cuenta? Ingresar"
+  },
+  "login_button": {
+    "message": "Ingresar"
+  },
+  "login_remember": {
+    "message": "Recordarme"
+  },
+  "logout_button": {
+    "message": "Salir"
+  },
+  "mapstyle_label": {
+    "message": "Estilo de mapa"
+  },
+  "password_label": {
+    "message": "Contraseña"
+  },
+  "password_reset_button": {
+    "message": "Enviar vínculo para resetear"
+  },
+  "password_reset_desc": {
+    "message": "Para resetear tu contraseña, ingresar el correo de tu cuenta"
+  },
+  "password_reset_success_desc": {
+    "message": "Revisa a tu correo electrónico {email} para leer como resetear tu contraseña"
+  },
+  "password_reset_success_title": {
+    "message": "¡Correo enviado!"
+  },
+  "password_reset_title": {
+    "message": "Resetear Contraseña"
+  },
+  "public_link_tooltip": {
+    "message": "Vínculo público del Mapa"
+  },
+  "return_to_login": {
+    "message": "Regresar a ingreso"
+  },
+  "save_button": {
+    "message": "Guardar"
+  },
+  "share_all": {
+    "message": "Vínculo público a todos tus mapas"
+  },
+  "signup_button": {
+    "message": "Crear Cuenta"
+  },
+  "signup_link": {
+    "message": "¿No tienes cuenta? Crear una"
+  },
+  "terms_hint": {
+    "message": "Agregar terminos y limitaciones del uso de estos datos"
+  },
+  "terms_label": {
+    "message": "Terminos y Limitaciones"
+  },
+  "title_label": {
+    "message": "Título de Mapa"
+  },
+  "upload_error_desc": {
+    "message": "Encontramos una problema al subir tus datos. Haga un clic en el botón para reintentar."
+  },
+  "upload_error_title": {
+    "message": "Error al subir datos"
+  },
+  "upload_new_data": {
+    "message": "Subir nueva data"
+  }
+}
