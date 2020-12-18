@@ -12,15 +12,14 @@
     "js-md5": "^0.7.3",
     "json-stable-stringify": "^1.0.1",
     "jszip": "^3.2.2",
-    "react": "^16.9.0",
+    "react": "^17.0.1",
     "react-balance-text": "^2.0.1",
-    "react-dom": "^16.9.0",
-    "react-dropzone": "^10.1.8",
+    "react-dom": "^17.0.1",
+    "react-dropzone": "^11.2.4",
     "react-firebase-hooks": "^2.1.0",
-    "react-intl": "^3.2.0",
-    "react-scripts": "3.1.1",
-    "react-transition-group": "^4.3.0",
-    "use-subscription": "^1.5.1"
+    "react-intl": "^5.10.9",
+    "react-scripts": "^4.0.1",
+    "react-transition-group": "^4.3.0"
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "^1.1.6",
