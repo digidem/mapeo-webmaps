@@ -1,5 +1,5 @@
 import React from "react";
-import { render, act } from "@testing-library/react";
+import { render, act } from "./test-utils";
 import firebase from "firebase/app";
 import * as reachRouter from "@reach/router";
 import userEvent from "@testing-library/user-event";
@@ -13,13 +13,13 @@ reachRouter.navigate = jest.fn();
 
 firebase.auth = () => ({
   setPersistence,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
 });
 firebase.auth.Auth = {
   Persistence: {
     LOCAL: "LOCAL",
-    NONE: "NONE"
-  }
+    NONE: "NONE",
+  },
 };
 jest.mock("react-firebase-hooks/auth");
 
@@ -38,7 +38,7 @@ describe("Initial load", () => {
     render(<Login location={{ state: { from: "/foo" } }} />);
     expect(reachRouter.navigate).toHaveBeenCalledTimes(1);
     expect(reachRouter.navigate).toHaveBeenCalledWith("/foo", {
-      replace: true
+      replace: true,
     });
   });
 
@@ -68,7 +68,7 @@ describe("Form filling", () => {
     userEvent.type(getByLabelText(/Email Address/), "bob@example.com");
     userEvent.type(getByLabelText(/Password/), "password");
     userEvent.click(getByTestId("submit-button"));
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       process.nextTick(() => {
         expect(signInWithEmailAndPassword).toHaveBeenCalledWith(
           "bob@example.com",
@@ -83,7 +83,7 @@ describe("Form filling", () => {
     authHooks.useAuthState.mockReturnValue([null, false]);
     const { getByTestId } = render(<Login location={{}} />);
     userEvent.click(getByTestId("submit-button"));
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       process.nextTick(() => {
         expect(setPersistence).toHaveBeenCalledWith("NONE");
         resolve();
@@ -94,9 +94,9 @@ describe("Form filling", () => {
   it("Clicking 'Remember me' sets auth persistence to LOCAL", () => {
     authHooks.useAuthState.mockReturnValue([null, false]);
     const { getByLabelText, getByTestId } = render(<Login location={{}} />);
-    userEvent.click(getByLabelText(/Remember me/));
+    userEvent.click(getByLabelText(/Remember Me/));
     userEvent.click(getByTestId("submit-button"));
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       process.nextTick(() => {
         expect(setPersistence).toHaveBeenCalledWith("LOCAL");
         resolve();

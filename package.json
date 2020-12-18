@@ -41,11 +41,12 @@
     "tape-promise": "^4.0.0"
   },
   "scripts": {
-    "test": "firebase emulators:exec --only firestore 'tape \"test/**/*.test.js\"'",
+    "test": "CI=true run-s test:*",
+    "test:frontend": "react-scripts test",
+    "test:firestore": "firebase emulators:exec --only firestore 'tape \"test/**/*.test.js\"'",
     "start": "react-scripts start",
     "start:emulators": "firebase emulators:start",
     "build": "react-scripts build",
-    "test:frontend": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "yarn build && firebase deploy",
     "storybook": "start-storybook -p 9009 -s public",
