@@ -10,19 +10,29 @@ import "firebase/storage";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
+const PROJECT_ID = "mapeo-webmaps";
+
 firebase.initializeApp({
   apiKey: "AIzaSyCmZDMJqOuHxSAeIXbgBEBnieoVdaoEBCM",
-  authDomain: "mapeo-webmaps.firebaseapp.com",
-  databaseURL: "https://mapeo-webmaps.firebaseio.com",
-  projectId: "mapeo-webmaps",
-  storageBucket: "mapeo-webmaps.appspot.com",
+  authDomain: `${PROJECT_ID}.firebaseapp.com`,
+  databaseURL: `https://${PROJECT_ID}.firebaseio.com`,
+  projectId: PROJECT_ID,
+  storageBucket: `${PROJECT_ID}.appspot.com`,
   messagingSenderId: "826232651428",
-  appId: "1:826232651428:web:dba2488c5655222e"
+  appId: "1:826232651428:web:dba2488c5655222e",
 });
+
+const db = firebase.firestore();
+
+// Use emulated firestore and auth when running locally (detected from a non-80 port in the URL)
+if (window.location.port && window.location.port !== "80") {
+  db.useEmulator("localhost", 8080);
+  firebase.auth().useEmulator("http://localhost:9099/");
+}
 
 // For some reason, if we don't call this here, writes fail silently in the app
 // Enables offline persistence
-firebase.firestore().enablePersistence();
+db.enablePersistence();
 
 ReactDOM.render(<App />, document.getElementById("root"));
 

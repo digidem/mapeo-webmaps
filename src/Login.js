@@ -19,47 +19,47 @@ import { TextField, PasswordField } from "./Fields";
 const msgs = defineMessages({
   email: {
     id: "email_label",
-    defaultMessage: "Email popAddress"
+    defaultMessage: "Email Address",
   },
   remember: {
     id: "login_remember",
-    defaultMessage: "Remember Me"
+    defaultMessage: "Remember Me",
   },
   login: {
     id: "login_button",
-    defaultMessage: "Login"
+    defaultMessage: "Login",
   },
   forgot: {
     id: "forgot_password_link",
-    defaultMessage: "Forgot password?"
+    defaultMessage: "Forgot password?",
   },
   signup: {
     id: "signup_link",
-    defaultMessage: "Don't have an account? Sign Up"
+    defaultMessage: "Don't have an account? Sign Up",
   },
   "auth/invalid-email": {
     id: "auth/invalid-email",
-    defaultMessage: "Email address is invalid"
+    defaultMessage: "Email address is invalid",
   },
   "auth/user-disabled": {
     id: "auth/user-disabled",
-    defaultMessage: "User account is disabled"
+    defaultMessage: "User account is disabled",
   },
   "auth/user-not-found": {
     id: "auth/user-not-found",
-    defaultMessage: "User account not found"
+    defaultMessage: "User account not found",
   },
   "auth/wrong-password": {
     id: "auth/wrong-password",
-    defaultMessage: "Incorrect password"
-  }
+    defaultMessage: "Incorrect password",
+  },
 });
 
 const errorTypes = {
   "auth/invalid-email": "email",
   "auth/user-disabled": "email",
   "auth/user-not-found": "email",
-  "auth/wrong-password": "password"
+  "auth/wrong-password": "password",
 };
 
 export default function SignIn({ location }) {
@@ -81,7 +81,7 @@ export default function SignIn({ location }) {
   const isEmailError = error && errorTypes[error.code] === "email";
   const isPasswordError = error && errorTypes[error.code] === "password";
 
-  const login = e => {
+  const login = (e) => {
     e.preventDefault();
     if (loading) return;
     setLoading(true);
@@ -91,7 +91,7 @@ export default function SignIn({ location }) {
       .auth()
       .setPersistence(persistence)
       .then(() => firebase.auth().signInWithEmailAndPassword(email, password))
-      .catch(e => {
+      .catch((e) => {
         setError(e);
         setLoading(false);
       });
@@ -130,7 +130,7 @@ export default function SignIn({ location }) {
             control={<Checkbox value="remember" color="primary" />}
             label={formatMessage(msgs.remember)}
             checked={remember}
-            onChange={e => setRemember(e.target.checked)}
+            onChange={(e) => setRemember(e.target.checked)}
           />
           <Button
             data-testid="submit-button"
@@ -162,27 +162,27 @@ export default function SignIn({ location }) {
   );
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   "@global": {
     body: {
-      backgroundColor: theme.palette.common.white
-    }
+      backgroundColor: theme.palette.common.white,
+    },
   },
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
+    backgroundColor: theme.palette.secondary.main,
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
-  }
+    margin: theme.spacing(3, 0, 2),
+  },
 }));

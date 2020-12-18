@@ -1,6 +1,6 @@
 const tape = require("tape");
 const fs = require("fs");
-const firebase = require("@firebase/testing");
+const firebase = require("@firebase/rules-unit-testing");
 const _test = require("tape-promise").default;
 const test = _test(tape);
 
@@ -28,27 +28,24 @@ async function getDb(auth, data) {
   return testApp.firestore();
 }
 
-const assertFails = t => (get, msg) =>
+const assertFails = (t) => (get, msg) =>
   t.doesNotReject(firebase.assertFails(get), msg);
-const assertSucceeds = t => (get, msg) =>
+const assertSucceeds = (t) => (get, msg) =>
   t.doesNotReject(firebase.assertSucceeds(get), msg);
 
-test("Anonymous user read", async function(t) {
+test("Anonymous user read", async function (t) {
   const fixture = {
     "groups/1": { foo: "bar", public: true },
     "groups/1/maps/1": { foo: "bar", public: true },
     "groups/1/maps/2": { qux: "baz" },
     "groups/1/maps/1/observations/1": {},
-    "groups/1/maps/2/observations/1": {}
+    "groups/1/maps/2/observations/1": {},
   };
   const db = await getDb(null, fixture);
 
   // Maps
   await assertSucceeds(t)(
-    db
-      .collection("groups/1/maps")
-      .where("public", "==", true)
-      .get(),
+    db.collection("groups/1/maps").where("public", "==", true).get(),
     "Can read list of public maps"
   );
   await assertFails(t)(
@@ -86,13 +83,13 @@ test("Anonymous user read", async function(t) {
   t.end();
 });
 
-test("Anonymous user read", async function(t) {
+test("Anonymous user read", async function (t) {
   const fixture = {
     "groups/1": { foo: "bar", public: true },
     "groups/1/maps/1": { foo: "bar", public: true },
     "groups/1/maps/2": { qux: "baz" },
     "groups/1/maps/1/observations/1": {},
-    "groups/1/maps/2/observations/1": {}
+    "groups/1/maps/2/observations/1": {},
   };
   const db = await getDb(null, fixture);
 
@@ -124,13 +121,13 @@ test("Anonymous user read", async function(t) {
   t.end();
 });
 
-test("Anonymous user update", async function(t) {
+test("Anonymous user update", async function (t) {
   const fixture = {
     "groups/1": { foo: "bar", public: true },
     "groups/1/maps/1": { foo: "bar", public: true },
     "groups/1/maps/2": { qux: "baz" },
     "groups/1/maps/1/observations/1": {},
-    "groups/1/maps/2/observations/1": {}
+    "groups/1/maps/2/observations/1": {},
   };
   const db = await getDb(null, fixture);
 
@@ -162,13 +159,13 @@ test("Anonymous user update", async function(t) {
   t.end();
 });
 
-test("Anonymous user delete", async function(t) {
+test("Anonymous user delete", async function (t) {
   const fixture = {
     "groups/1": { foo: "bar", public: true },
     "groups/1/maps/1": { foo: "bar", public: true },
     "groups/1/maps/2": { qux: "baz" },
     "groups/1/maps/1/observations/1": {},
-    "groups/1/maps/2/observations/1": {}
+    "groups/1/maps/2/observations/1": {},
   };
   const db = await getDb(null, fixture);
 
@@ -200,10 +197,10 @@ test("Anonymous user delete", async function(t) {
   t.end();
 });
 
-test("Anonymous user create", async function(t) {
+test("Anonymous user create", async function (t) {
   const db = await getDb(null, {
     "groups/1": {},
-    "groups/1/maps/1": { public: true }
+    "groups/1/maps/1": { public: true },
   });
 
   // Maps
@@ -230,7 +227,7 @@ test("Anonymous user create", async function(t) {
   t.end();
 });
 
-test("Logged-in user read", async function(t) {
+test("Logged-in user read", async function (t) {
   const fixture = {
     "groups/1": { foo: "bar", public: true },
     "groups/1/maps/1": { foo: "bar", public: true },
@@ -240,7 +237,7 @@ test("Logged-in user read", async function(t) {
     "groups/2/maps/1": { foo: "bar2", public: true },
     "groups/2/maps/2": { qux: "baz2" },
     "groups/2/maps/1/observations/1": {},
-    "groups/2/maps/2/observations/1": {}
+    "groups/2/maps/2/observations/1": {},
   };
   const db = await getDb({ uid: "1" }, fixture);
 
@@ -250,10 +247,7 @@ test("Logged-in user read", async function(t) {
     "Can read list of all own maps"
   );
   await assertSucceeds(t)(
-    db
-      .collection("groups/2/maps")
-      .where("public", "==", true)
-      .get(),
+    db.collection("groups/2/maps").where("public", "==", true).get(),
     "Can read list of public maps"
   );
   await assertFails(t)(
@@ -307,7 +301,7 @@ test("Logged-in user read", async function(t) {
   t.end();
 });
 
-test("Logged-in user update", async function(t) {
+test("Logged-in user update", async function (t) {
   const fixture = {
     "groups/1": { foo: "bar", public: true },
     "groups/1/maps/1": { foo: "bar", public: true },
@@ -315,7 +309,7 @@ test("Logged-in user update", async function(t) {
     "groups/1/maps/1/observations/1": {},
     "groups/1/maps/2/observations/1": {},
     "groups/2/maps/1": { foo: "bar2", public: true },
-    "groups/2/maps/2": { qux: "baz2" }
+    "groups/2/maps/2": { qux: "baz2" },
   };
   const db = await getDb({ uid: "1" }, fixture);
 
@@ -355,7 +349,7 @@ test("Logged-in user update", async function(t) {
   t.end();
 });
 
-test("Logged-in user delete", async function(t) {
+test("Logged-in user delete", async function (t) {
   const fixture = {
     "groups/1": { foo: "bar", public: true },
     "groups/1/maps/1": { foo: "bar", public: true },
@@ -363,7 +357,7 @@ test("Logged-in user delete", async function(t) {
     "groups/1/maps/1/observations/1": {},
     "groups/1/maps/2/observations/1": {},
     "groups/2/maps/1": { foo: "bar2", public: true },
-    "groups/2/maps/2": { qux: "baz2" }
+    "groups/2/maps/2": { qux: "baz2" },
   };
   const db = await getDb({ uid: "1" }, fixture);
 
@@ -403,12 +397,12 @@ test("Logged-in user delete", async function(t) {
   t.end();
 });
 
-test("Logged-in user create", async function(t) {
+test("Logged-in user create", async function (t) {
   const db = await getDb(
     { uid: "1" },
     {
       "groups/1": {},
-      "groups/1/maps/1": { public: true }
+      "groups/1/maps/1": { public: true },
     }
   );
 
@@ -440,7 +434,9 @@ test("Logged-in user create", async function(t) {
   t.end();
 });
 
-test("cleanup", async t => {
-  await t.doesNotReject(Promise.all(firebase.apps().map(app => app.delete())));
+test("cleanup", async (t) => {
+  await t.doesNotReject(
+    Promise.all(firebase.apps().map((app) => app.delete()))
+  );
   t.end();
 });
