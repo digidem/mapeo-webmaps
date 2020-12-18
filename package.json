@@ -53,7 +53,7 @@
     "build:js": "react-scripts build",
     "build:translations": "formatjs compile-folder --format crowdin --ast messages src/translations",
     "build:storybook": "build-storybook -s public",
-    "deploy": "npm run build && firebase deploy",
+    "deploy": "npm run build && firebase deploy -P staging",
     "storybook": "start-storybook -p 9009 -s public",
     "extract-messages": "formatjs extract --format crowdin 'src/**/*.js' --out-file messages/en.json"
   },

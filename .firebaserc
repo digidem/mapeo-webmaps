@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "mapeo-webmaps"
+    "default": "mapeo-webmaps-staging",
+    "staging": "mapeo-webmaps-staging",
+    "production": "mapeo-webmaps"
   }
 }
