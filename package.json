@@ -33,13 +33,13 @@
     "@storybook/react": "^5.2.0-rc.4",
     "@testing-library/user-event": "^7.0.0",
     "extract-react-intl-messages": "^2.3.3",
-    "firebase-tools": "^7.3.0",
+    "firebase-tools": "^9.0.1",
     "storybook-addon-intl": "^2.4.1",
     "tape": "^4.11.0",
     "tape-promise": "^4.0.0"
   },
   "scripts": {
-    "test": "tape \"test/**/*.test.js\"",
+    "test": "firebase emulators:exec --only firestore 'tape \"test/**/*.test.js\"'",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test:frontend": "react-scripts test",
