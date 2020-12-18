@@ -1,3 +1,18 @@
+## Get started
+
+You will need [Node v12 or later](https://nodejs.org/en/) installed, then clone this repo and change into the folder you have cloned into:
+
+```sh
+git clone https://github.com/digidem/mapeo-webmaps.git
+cd mapeo-webmaps
+```
+
+Then install dependencies with `npm` (npm is installed with Node)
+
+```sh
+npm install
+```
+
 ## Start Dev server
 
 ### 1. Start the Firebase emulators

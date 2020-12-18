@@ -48,7 +48,7 @@
     "start:emulators": "firebase emulators:start",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
-    "deploy": "yarn build && firebase deploy",
+    "deploy": "npm run build && firebase deploy",
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public",
     "extract-messages": "NODE_ENV=production extract-messages -l=es -o src/translations -d en 'src/**/!(*.test|*.stories).js'"
