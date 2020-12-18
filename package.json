@@ -25,7 +25,7 @@
     "use-subscription": "^1.5.1"
   },
   "devDependencies": {
-    "@firebase/testing": "^0.12.3",
+    "@firebase/rules-unit-testing": "^1.1.6",
     "@storybook/addon-actions": "^5.2.0-rc.4",
     "@storybook/addon-knobs": "^5.2.0-rc.6",
     "@storybook/addon-links": "^5.2.0-rc.4",
@@ -33,6 +33,7 @@
     "@storybook/react": "^5.2.0-rc.4",
     "@testing-library/user-event": "^7.0.0",
     "extract-react-intl-messages": "^2.3.3",
+    "firebase-admin": "^9.4.2",
     "firebase-tools": "^9.0.1",
     "storybook-addon-intl": "^2.4.1",
     "tape": "^4.11.0",
