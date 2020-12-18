@@ -63,6 +63,8 @@ describe("Initial load", () => {
 
 describe("Form filling", () => {
   it("Calls firebase login with email and password", () => {
+    signInWithEmailAndPassword.mockResolvedValue();
+    setPersistence.mockResolvedValue();
     authHooks.useAuthState.mockReturnValue([null, false]);
     const { getByLabelText, getByTestId } = render(<Login location={{}} />);
     userEvent.type(getByLabelText(/Email Address/), "bob@example.com");
@@ -80,6 +82,8 @@ describe("Form filling", () => {
   });
 
   it("By default auth persistence is set to NONE", () => {
+    signInWithEmailAndPassword.mockResolvedValue();
+    setPersistence.mockResolvedValue();
     authHooks.useAuthState.mockReturnValue([null, false]);
     const { getByTestId } = render(<Login location={{}} />);
     userEvent.click(getByTestId("submit-button"));
@@ -92,6 +96,8 @@ describe("Form filling", () => {
   });
 
   it("Clicking 'Remember me' sets auth persistence to LOCAL", () => {
+    signInWithEmailAndPassword.mockResolvedValue();
+    setPersistence.mockResolvedValue();
     authHooks.useAuthState.mockReturnValue([null, false]);
     const { getByLabelText, getByTestId } = render(<Login location={{}} />);
     userEvent.click(getByLabelText(/Remember Me/));
@@ -105,6 +111,8 @@ describe("Form filling", () => {
   });
 
   it("During submit, button is disabled", () => {
+    signInWithEmailAndPassword.mockResolvedValue();
+    setPersistence.mockResolvedValue();
     authHooks.useAuthState.mockReturnValue([null, false]);
     const { getByTestId } = render(<Login location={{}} />);
     const button = getByTestId("submit-button");
@@ -113,6 +121,7 @@ describe("Form filling", () => {
   });
 
   it("After error, button is enabled", async () => {
+    signInWithEmailAndPassword.mockResolvedValue();
     authHooks.useAuthState.mockReturnValue([null, false]);
     let reject;
     setPersistence.mockImplementation(
