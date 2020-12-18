@@ -66,7 +66,7 @@
   "eslintConfig": {
     "extends": "react-app",
     "rules": {
-      "import/no-anonymous-default-export": false
+      "import/no-anonymous-default-export": 0
     }
   },
   "browserslist": {
