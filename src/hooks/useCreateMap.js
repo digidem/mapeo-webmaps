@@ -130,8 +130,10 @@ export default function useCreateMap() {
         // eslint-disable-next-line no-loop-func
         file => path.basename(file.name) === f.properties.image
       );
-      if (!image && f.properties.image)
-        return setError(new Error("Missing image " + f.properties.image));
+      if (!image && f.properties.image) {
+        console.log("Missing image " + f.properties.image)
+        // return setError(new Error("Missing image " + f.properties.image));
+      }
       points.push({
         ...f,
         properties: { ...f.properties, image: image ? image.hashedName : null }
