@@ -10,31 +10,43 @@ import "firebase/storage";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
-const PROJECT_ID = "mapeo-webmaps";
-
-firebase.initializeApp({
-  apiKey: "AIzaSyCmZDMJqOuHxSAeIXbgBEBnieoVdaoEBCM",
-  authDomain: `${PROJECT_ID}.firebaseapp.com`,
-  databaseURL: `https://${PROJECT_ID}.firebaseio.com`,
-  projectId: PROJECT_ID,
-  storageBucket: `${PROJECT_ID}.appspot.com`,
-  messagingSenderId: "826232651428",
-  appId: "1:826232651428:web:dba2488c5655222e",
-});
-
-const db = firebase.firestore();
-
-// Use emulated firestore and auth when running locally (detected from a non-80 port in the URL)
-if (window.location.port && window.location.port !== "80") {
-  db.useEmulator("localhost", 8080);
-  firebase.auth().useEmulator("http://localhost:9099/");
+if (process.env.NODE_ENV === "development") {
+  // Use staging credentials when running locally
+  init({
+    projectId: "mapeo-webmaps-staging",
+    appId: "1:354071501370:web:a92ea6497d55c4dd9ab303",
+    storageBucket: "mapeo-webmaps-staging.appspot.com",
+    locationId: "us-central",
+    apiKey: "AIzaSyAddUwtJxCTq3VImtID0S-5beOHiJtKTe4",
+    authDomain: "mapeo-webmaps-staging.firebaseapp.com",
+    messagingSenderId: "354071501370",
+    measurementId: "G-GLMDFRWPJD",
+  });
+} else {
+  // Get credentials according to environment (production, staging)
+  // https://firebase.google.com/docs/hosting/reserved-urls
+  fetch("/__/firebase/init.json").then(async (response) => {
+    init(await response.json());
+  });
 }
 
-// For some reason, if we don't call this here, writes fail silently in the app
-// Enables offline persistence
-db.enablePersistence();
+function init(firebaseConfig) {
+  firebase.initializeApp(firebaseConfig);
 
-ReactDOM.render(<App />, document.getElementById("root"));
+  const db = firebase.firestore();
+
+  if (process.env.NODE_ENV === "development") {
+    // Use emulated firestore and auth when running locally
+    db.useEmulator("localhost", 8080);
+    firebase.auth().useEmulator("http://localhost:9099/");
+  }
+
+  // For some reason, if we don't call this here, writes fail silently in the app
+  // Enables offline persistence
+  db.enablePersistence();
+
+  ReactDOM.render(<App />, document.getElementById("root"));
+}
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
