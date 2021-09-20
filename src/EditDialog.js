@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -63,7 +63,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   );
 });
 
-const defaultMapStyle = "mapbox://styles/mapbox/outdoors-v11";
+const DEFAULT_MAP_STYLE = "mapbox://styles/mapbox/outdoors-v11";
+const DEFAULT_TEXT_VALUE = "";
 
 export default function EditDialog({ open, id, onClose }) {
   const classes = useStyles();
@@ -75,21 +76,21 @@ export default function EditDialog({ open, id, onClose }) {
     firebase.firestore().doc(`groups/${user.uid}/maps/${id}`)
   );
   const [saving, setSaving] = useState();
-  const [title, setTitle] = useState();
-  const [description, setDescription] = useState();
-  const [terms, setTerms] = useState();
-  const [mapStyle, setMapStyle] = useState(defaultMapStyle);
+  const [title, setTitle] = useState(DEFAULT_TEXT_VALUE);
+  const [description, setDescription] = useState(DEFAULT_TEXT_VALUE);
+  const [terms, setTerms] = useState(DEFAULT_TEXT_VALUE);
+  const [mapStyle, setMapStyle] = useState(DEFAULT_MAP_STYLE);
 
   const handleClose = () => {
     setSaving(false);
-    setTitle(undefined);
-    setDescription(undefined);
-    setTerms(undefined);
-    setMapStyle(defaultMapStyle);
+    setTitle(DEFAULT_TEXT_VALUE);
+    setDescription(DEFAULT_TEXT_VALUE);
+    setTerms(DEFAULT_TEXT_VALUE);
+    setMapStyle(DEFAULT_MAP_STYLE);
     onClose();
   };
 
-  const handleSave = e => {
+  const handleSave = (e) => {
     e.preventDefault();
     setSaving(true);
     firebase
@@ -97,10 +98,10 @@ export default function EditDialog({ open, id, onClose }) {
       .doc(`groups/${user.uid}/maps/${id}`)
       .set({
         ...value,
-        title: title || value.title,
-        description: description || value.description,
-        mapStyle: mapStyle || value.mapStyle,
-        terms: terms,
+        description,
+        mapStyle,
+        terms,
+        title,
       })
       .then(() => {
         setSaving(false);
@@ -109,6 +110,26 @@ export default function EditDialog({ open, id, onClose }) {
   };
 
   const dialogTitle = formatMessage(msgs.title);
+
+  useEffect(() => {
+    if (value) {
+      if (value.title) {
+        setTitle(value.title);
+      }
+
+      if (value.description) {
+        setDescription(value.description);
+      }
+
+      if (value.terms) {
+        setTerms(value.terms);
+      }
+
+      if (value.mapStyle) {
+        setMapStyle(value.mapStyle);
+      }
+    }
+  }, [value]);
 
   return (
     <Dialog
@@ -160,58 +181,38 @@ export default function EditDialog({ open, id, onClose }) {
         <DialogContent className={classes.content}>
           <TextField
             label={formatMessage(msgs.title_label)}
-            value={
-              value === undefined
-                ? ""
-                : title === undefined
-                ? value.title
-                : title
-            }
+            value={title}
+            InputLabelProps={{ shrink: !!title }}
             fullWidth
             variant="outlined"
-            onChange={e => setTitle(e.target.value)}
+            onChange={(e) => setTitle(e.target.value)}
             margin="normal"
           />
           <TextField
             label={formatMessage(msgs.description_label)}
-            value={
-              value === undefined
-                ? ""
-                : description === undefined
-                ? value.description
-                : description
-            }
+            value={description}
+            InputLabelProps={{ shrink: !!description }}
             fullWidth
             multiline
             variant="outlined"
             margin="normal"
-            onChange={e => setDescription(e.target.value)}
+            onChange={(e) => setDescription(e.target.value)}
           />
           <TextField
             label={formatMessage(msgs.terms_label)}
             helperText={formatMessage(msgs.terms_hint)}
-            value={
-              value === undefined
-                ? ""
-                : terms === undefined
-                ? value.terms
-                : terms
-            }
+            value={terms}
+            InputLabelProps={{ shrink: !!terms }}
             fullWidth
             multiline
             variant="outlined"
             margin="normal"
-            onChange={e => setTerms(e.target.value)}
+            onChange={(e) => setTerms(e.target.value)}
           />
           <TextField
             label={formatMessage(msgs.style_label)}
-            value={
-              value === undefined
-                ? ""
-                : mapStyle === undefined
-                ? value.mapStyle
-                : mapStyle
-            }
+            value={mapStyle}
+            InputLabelProps={{ shrink: !!mapStyle }}
             helperText={
               <>
                 Enter a{" "}
@@ -227,7 +228,7 @@ export default function EditDialog({ open, id, onClose }) {
             fullWidth
             variant="outlined"
             margin="normal"
-            onChange={e => setMapStyle(e.target.value)}
+            onChange={(e) => setMapStyle(e.target.value)}
           />
         </DialogContent>
         {!smallScreen && (
@@ -251,7 +252,7 @@ export default function EditDialog({ open, id, onClose }) {
   );
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   appBar: {
     position: "relative",
   },
