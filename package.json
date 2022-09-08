@@ -11,7 +11,7 @@
     "firebase": "^8.2.1",
     "js-md5": "^0.7.3",
     "json-stable-stringify": "^1.0.1",
-    "jszip": "^3.2.2",
+    "jszip": "^3.7.0",
     "react": "^17.0.1",
     "react-balance-text": "^2.0.1",
     "react-dom": "^17.0.1",
