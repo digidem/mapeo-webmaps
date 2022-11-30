@@ -4,7 +4,9 @@
 
 ![](.github/screenshot.png)
 
-This is the repository for [Digital Democracy](digital-democracy.org/)'s [Mapeo Webmaps](https://maps.mapeo.app/) - a platform for Mapeo users to create and manage shares of maps via a public URL.
+This is the repository for [Digital Democracy](digital-democracy.org/)'s [Mapeo Webmaps](https://maps.mapeo.app/) - a platform for Mapeo users to create and manage shares of maps via a public URL. 
+
+It's notable to make the distinction between this repo and [Mapeo Webmaps Public](https://github.com/digidem/mapeo-webmaps-public) which is the repository for the web app displayed when viewing a publicly shared map.
 
 
 ## Installation
@@ -48,6 +50,7 @@ This will open a browser window for the app. Note that the emulator command abov
 - [Firebase](https://console.firebase.google.com/) as a backend and for authentication
 - [Material UI](https://mui.com/material-ui/) - Ready-to-use foundational React components
 - [Reach Router](https://reach.tech/router/) - a small, simple router for React.
+- [React-Intl](https://formatjs.io/docs/react-intl/) - for translations and internationalisaion.
 
 ### Related repositories and documentation
 
