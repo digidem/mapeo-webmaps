@@ -49,3 +49,5 @@ export const SplitLayout = ({
     </Box>
   );
 };
+
+export default SplitLayout
