@@ -33,3 +33,5 @@ export const theme = createTheme({
     orange: MAPEO_ORANGE,
   },
 });
+
+export default theme
