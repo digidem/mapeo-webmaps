@@ -79,3 +79,4 @@ node_modules/
 # Compiled translations
 /src/translations
 yarn.lock
+.vscode/settings.json
