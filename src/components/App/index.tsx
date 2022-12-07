@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
 
 import CssBaseline from "@mui/material/CssBaseline";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -12,12 +12,11 @@ import theme from '../../theme';
 import { IntlProvider } from 'react-intl';
 import { useEffect } from 'react';
 import HomeView from '../../views/Home';
-import { AuthorizedProps, translationsType } from './types';
+import { AuthorizedProps } from './types';
 
-const translations: translationsType = {
+const translations = {
   es: require("../../translations/es.json")
 };
-
 
 const Authorized = ({ location }: AuthorizedProps) => {
   const [user, initializing] = useAuthState(firebase.auth());
@@ -44,21 +43,21 @@ const lang = navigator.language ? navigator.language.split("-")[0] : "en";
 
 
 const App = () => (
-  // <IntlProvider locale={lang} messages={translations[lang]} defaultLocale="en">
-  <>
-    <CssBaseline />
-    <ThemeProvider theme={theme}>
-      <Router>
-        <Login path="/auth/login" />
-        <Authorized path="/*" />
-        {/* <Signup path="/auth/signup" /> */}
-        {/* <ResetPassword path="/auth/reset-password" /> */}
-        {/* <Authorized path="/*" /> */}
-      </Router>
+  <IntlProvider locale={lang} messages={translations} defaultLocale="en">
+    <>
+      <CssBaseline />
+      <ThemeProvider theme={theme}>
+        <Router>
+          <Login path="/auth/login" />
+          <Authorized path="/*" />
+          {/* <Signup path="/auth/signup" /> */}
+          {/* <ResetPassword path="/auth/reset-password" /> */}
+          {/* <Authorized path="/*" /> */}
+        </Router>
 
-    </ThemeProvider>
-  </>
-  // </IntlProvider>
+      </ThemeProvider>
+    </>
+  </IntlProvider>
 );
 
 export default App;
