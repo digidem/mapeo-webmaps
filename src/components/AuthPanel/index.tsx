@@ -2,7 +2,7 @@ import { Container, Link, Typography } from "@mui/material"
 import { Stack } from "@mui/system"
 import SplitLayout from "../../layouts/split"
 import { ChildType } from "../../types"
-
+import Illustration from "./Illustration"
 import { CenteredStack as Centered, Column, Image } from "./styles"
 
 const LeftColumn = Column
@@ -30,12 +30,26 @@ const AuthPanel = ({ children }: AuthPanelProps) => {
       </LeftColumn>
 
       <RightColumn>
-        <Container maxWidth="md">
-          <Stack spacing={1}>
+        <Container maxWidth="md" sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+          height: '70vh',
+        }}>
+          <Illustration />
+          <Stack sx={{
+            width: '60%',
+            position: 'relative',
+            top: '-2%',
+            left: '5%',
+          }}
+            spacing={1}>
             <Typography variant="h3" component="h2">
               Share your Mapeo maps publicly
             </Typography>
-            <Typography variant="h6" component="p">
+            <Typography variant="h6" component="p" sx={{
+            }}>
               Learn more about <Link href="https://docs.mapeo.app/" fontWeight={600} underline="hover">Webmaps and Mapeo</Link>
             </Typography>
           </Stack>
