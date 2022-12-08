@@ -1,17 +1,13 @@
-import { Typography } from "@mui/material";
 import { RouteComponentProps } from "@reach/router";
-import { SplitLayout } from "../../layouts/split";
+import { SignInForm } from "./SignInForm"
+import AuthPanel from "../../components/AuthPanel"
 
-export const LoginView = ({ }: RouteComponentProps) => {
+
+const LoginView = ({ }: RouteComponentProps) => {
   return (
-    <SplitLayout>
-      <Typography variant="h1" component="h2">
-        Left
-      </Typography>
-      <Typography variant="h1" component="h2">
-        Right
-      </Typography>
-    </SplitLayout>
+    <AuthPanel>
+      <SignInForm />
+    </AuthPanel>
   )
 }
 
