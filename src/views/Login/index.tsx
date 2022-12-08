@@ -1,18 +1,13 @@
-import { Typography } from "@mui/material"
-import SplitLayout from "../../layouts/split"
-import { LoginViewTypes } from "./types"
+import { SignInForm } from "./SignInForm"
+import AuthPanel from "../../components/AuthPanel"
+import { RouteType } from "../../types"
 
-const LoginView = ({ }: LoginViewTypes) => {
+
+const LoginView = ({ }: RouteType) => {
   return (
-    <SplitLayout>
-      <Typography variant="h1" component="h2">
-        Left
-      </Typography>
-      <Typography variant="h1" component="h2">
-        Right
-      </Typography>
-
-    </SplitLayout>
+    <AuthPanel>
+      <SignInForm />
+    </AuthPanel>
   )
 }
 
