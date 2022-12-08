@@ -9,4 +9,8 @@ export type firebaseConfigType = {
   measurementId: string
 }
 
-export type ChildType = React.ReactElement // Single child element
+export type ChildType = React.ReactNode // Single child element
+
+export type RouteType = {
+  path: string
+}
