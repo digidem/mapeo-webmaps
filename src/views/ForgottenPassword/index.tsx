@@ -14,7 +14,7 @@ import { emailRegex } from '../../helpers/regex'
 
 type SuccessfulReset = 'success' | 'untried' | 'emailNonexistant'
 
-export const ForgottenPasswordView = ({}: RouteComponentProps) => {
+export const ForgottenPasswordView = ({ }: RouteComponentProps) => {
   const { formatMessage } = useIntl()
   const [email, setEmail] = useState('')
   const [emailError, setEmailError] = useState(false)
