@@ -1,3 +1,5 @@
+import { Location } from "@reach/router"
+
 export type firebaseConfigType = {
   projectId: string
   appId: string
@@ -13,4 +15,10 @@ export type ChildType = React.ReactNode // Single child element
 
 export type RouteType = {
   path: string
+}
+
+export type LocationProps = {
+  state: {
+    from?: Location | string
+  }
 }
