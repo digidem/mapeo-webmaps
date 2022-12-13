@@ -1,7 +1,11 @@
 import { Container, Link, Typography } from "@mui/material"
 import { Stack } from "@mui/system"
+import { navigate, useLocation } from "@reach/router"
+import firebase from "firebase/app"
+import { useEffect } from "react"
+import { useAuthState } from "react-firebase-hooks/auth"
 import SplitLayout from "../../layouts/split"
-import { ChildType } from "../../types"
+import { ChildType, LocationProps } from "../../types"
 import Illustration from "./Illustration"
 import { CenteredStack as Centered, Column, Image } from "./styles"
 
@@ -13,6 +17,15 @@ type AuthPanelProps = {
 }
 
 const AuthPanel = ({ children }: AuthPanelProps) => {
+  const [user, authorizing] = useAuthState(firebase.auth())
+  const location = useLocation() as LocationProps
+
+  useEffect(() => {
+    const from = location?.state?.from || "/"
+    if (user) navigate(from, { replace: true })
+  }, [user, location])
+
+
   return (
     <SplitLayout>
       <LeftColumn>
