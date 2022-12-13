@@ -19,6 +19,6 @@ export type RouteType = {
 
 export type LocationProps = {
   state: {
-    from?: Location | string
+    from?: string
   }
 }

@@ -6,14 +6,13 @@ import { useIntl } from "react-intl"
 import { Stack, Typography, Link } from '@mui/material'
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
 import { useTheme } from "@mui/material"
-import { validatePassword, validateEmail, errorType } from '../../helpers/form'
+import { validatePassword, validateEmail, SignupErrorCodeType, SignupErrorType } from '../../helpers/form'
 
 import TextInput from '../../components/TextInput'
 import FormButton from '../../components/FormButton'
 
 import msgs from './messages'
 import IconBadge from "../../components/IconBadge"
-import { LocationProps } from "../../types";
 
 const errorTypes = {
   "auth/email-already-in-use": "email",
@@ -25,21 +24,14 @@ const errorTypes = {
 export const SignUpForm = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [user, authorizing] = useAuthState(firebase.auth())
-  const location = useLocation() as unknown as LocationProps;
+  const [, authorizing] = useAuthState(firebase.auth())
 
-  const [emailError, setEmailError] = useState<errorType | null | undefined>()
-  const [passwordError, setPasswordError] = useState<errorType | null | undefined>()
+  const [emailError, setEmailError] = useState<SignupErrorType>()
+  const [passwordError, setPasswordError] = useState<SignupErrorType>()
   const [loading, setLoading] = useState(false)
 
   const { formatMessage } = useIntl()
   const theme = useTheme()
-
-  useEffect(() => {
-    const from = location?.state?.from || "/"
-    if (user) navigate(from, { replace: true })
-  }, [user, location])
-
 
   const signup = (event: React.FormEvent<HTMLButtonElement | HTMLFormElement>) => {
     event.preventDefault()
@@ -47,7 +39,7 @@ export const SignUpForm = () => {
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .catch((error: errorType) => {
+      .catch((error: SignupErrorType) => {
         const isEmailError = error && errorTypes[error.code] === "email"
         const isPasswordError = error && errorTypes[error.code] === "password"
         if (isEmailError) {
@@ -84,12 +76,11 @@ export const SignUpForm = () => {
           {formatMessage(msgs.signup)}
         </Typography>
       </Stack>
-
       <TextInput
         required
         type="email"
         id="email"
-        label="Email address"
+        label={formatMessage(msgs['email'])}
         name="email"
         autoComplete="email"
         autoFocus
