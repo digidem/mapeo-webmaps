@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { BaseTextFieldProps, FormLabel, Stack, useTheme, TextFieldProps, TextField } from "@mui/material"
 import { StyledTextField } from "./styles"
 
@@ -15,10 +16,18 @@ const TextInput = ({ label, required, type, ...rest }: TextInputType) => {
     borderRadius: '5px',
   }
 
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const focusInput = () => {
+    if (inputRef.current) {
+      inputRef.current.focus()
+    }
+  }
+
   return (
-    <Stack spacing={1}>
+    <Stack spacing={1} onClick={focusInput}>
       <FormLabel sx={{ color: "inherit" }}>{label}{required && ' *'}</FormLabel>
-      <StyledTextField type={type || "text"} hiddenLabel variant="filled" size="small" sx={inputSx} {...rest} />
+      <StyledTextField inputRef={inputRef} type={type || "text"} hiddenLabel variant="filled" size="small" sx={inputSx} {...rest} />
     </Stack>
   )
 }
