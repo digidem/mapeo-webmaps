@@ -1,4 +1,6 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import firebase from "firebase/app"
+
 import { Button, Stack, Checkbox, FormControlLabel, Typography, Link, FormLabel } from '@mui/material'
 import EastIcon from '@mui/icons-material/East'
 import { useTheme } from "@mui/material"
@@ -6,19 +8,53 @@ import { useIntl } from "react-intl"
 import TextInput from '../../components/TextInput'
 
 import msgs from './messages'
+import { SigninErrorType, validateEmail } from "../../helpers/form";
+import { useAuthState } from "react-firebase-hooks/auth"
 
+const errorTypes = {
+  "auth/invalid-email": "email",
+  "auth/user-disabled": "email",
+  "auth/user-not-found": "email",
+  "auth/wrong-password": "password",
+};
 
 export const SignInForm = () => {
+  const [remember, setRemember] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [remember, setRemember] = useState(false)
-  const [error, setError] = useState()
+  const [passwordError, setPasswordError] = useState<SigninErrorType | null>()
+  const [emailError, setEmailError] = useState<SigninErrorType>()
   const [loading, setLoading] = useState(false)
+  const [, authorizing, authError] = useAuthState(firebase.auth());
+
+  if (authError) console.error(authError);
 
   const { formatMessage } = useIntl()
   const theme = useTheme()
 
-  const login = () => { console.log('do a login') }
+  const login = (event: React.FormEvent<HTMLButtonElement | HTMLFormElement>) => {
+    event.preventDefault();
+    if (loading) return;
+    setLoading(true);
+    const persistence =
+      firebase.auth.Auth.Persistence[remember ? "LOCAL" : "NONE"];
+    firebase
+      .auth()
+      .setPersistence(persistence)
+      .then(() => firebase.auth().signInWithEmailAndPassword(email, password))
+      .catch((error: SigninErrorType) => {
+        const isEmailError = error && errorTypes[error.code] === "email"
+        const isPasswordError = error && errorTypes[error.code] === "password"
+        if (isEmailError) {
+          setEmailError(error)
+          return
+        }
+        if (isPasswordError) {
+          setPasswordError(error)
+          return
+        }
+      });
+  };
 
   const handleToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRemember(event.target.checked)
@@ -29,8 +65,17 @@ export const SignInForm = () => {
   }
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (passwordError) {
+      setPasswordError(null)
+    }
     setPassword(event.target.value)
   }
+
+  useEffect(() => {
+    if (passwordError) {
+      console.log({ passwordError })
+    }
+  }, [passwordError])
 
   return (
     <Stack spacing={2} component="form" onSubmit={login}>
@@ -42,18 +87,21 @@ export const SignInForm = () => {
         name="email"
         autoComplete="email"
         autoFocus
-        // error={!!isEmailError}
-        // helperText={isEmailError && formatMessage(msgs[error.code])}
+        error={!!emailError}
+        helperText={emailError && formatMessage(msgs[emailError.code])}
         value={email}
         onChange={handleEmailChange}
+        onBlur={() => {
+          validateEmail(email, setEmailError)
+        }}
       />
       <TextInput
         required
         hiddenLabel
         type="password"
         label="Password"
-        // error={!!isPasswordError}
-        // helperText={isPasswordError && formatMessage(msgs[error.code])}
+        error={!!passwordError}
+        helperText={passwordError && formatMessage(msgs[passwordError.code])}
         value={password}
         onChange={handlePasswordChange}
       />
@@ -76,13 +124,14 @@ export const SignInForm = () => {
       <Button
         data-testid="submit-button"
         type="submit"
-        // disabled={loading || authorizing}
         fullWidth
         size="large"
         variant="contained"
         color="primary"
         sx={{ borderRadius: 5, display: 'flex', justifyContent: 'space-between', textTransform: 'none' }}
         endIcon={<EastIcon />}
+        disabled={loading || authorizing}
+        onSubmit={login}
       >
         {formatMessage(msgs['login'])}
       </Button>
