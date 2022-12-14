@@ -10,7 +10,7 @@
     "@mui/system": "^5.10.16",
     "@reach/router": "^1.2.1",
     "clsx": "^1.0.4",
-    "firebase": "^8.2.1",
+    "firebase": "^9.15.0",
     "js-md5": "^0.7.3",
     "json-stable-stringify": "^1.0.1",
     "jszip": "^3.2.2",
@@ -18,7 +18,7 @@
     "react-balance-text": "^2.0.1",
     "react-dom": "^17.0.1",
     "react-dropzone": "^11.2.4",
-    "react-firebase-hooks": "^2.1.0",
+    "react-firebase-hooks": "^5.1.1",
     "react-intl": "^5.10.9",
     "react-scripts": "^4.0.1",
     "react-transition-group": "^4.3.0"

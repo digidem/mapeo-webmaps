@@ -1,15 +1,11 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import firebase from "firebase/app";
-
-// Add the Firebase services that you want to use
-import "firebase/auth";
-import "firebase/firestore";
-import "firebase/storage";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import {getFirestore, connectFirestoreEmulator, enableIndexedDbPersistence} from "firebase/firestore";
+import { FirebaseOptions, initializeApp } from "firebase/app";
+import { getAuth, connectAuthEmulator } from "firebase/auth";
 
 import App from "./components/App";
 import * as serviceWorker from "./serviceWorker";
-import { firebaseConfigType } from "./types";
 
 if (process.env.NODE_ENV === "development") {
   // Use staging credentials when running locally
@@ -17,7 +13,6 @@ if (process.env.NODE_ENV === "development") {
     projectId: "mapeo-webmaps-staging",
     appId: "1:354071501370:web:a92ea6497d55c4dd9ab303",
     storageBucket: "mapeo-webmaps-staging.appspot.com",
-    locationId: "us-central",
     apiKey: "AIzaSyAddUwtJxCTq3VImtID0S-5beOHiJtKTe4",
     authDomain: "mapeo-webmaps-staging.firebaseapp.com",
     messagingSenderId: "354071501370",
@@ -31,20 +26,22 @@ if (process.env.NODE_ENV === "development") {
   });
 }
 
-function init(firebaseConfig: firebaseConfigType) {
-  firebase.initializeApp(firebaseConfig);
+function init(firebaseConfig:FirebaseOptions) {
+  const app = initializeApp(firebaseConfig)
 
-  const db = firebase.firestore();
+  const db = getFirestore(app)
+  const auth = getAuth();
+
 
   if (process.env.NODE_ENV === "development") {
     // Use emulated firestore and auth when running locally
-    db.useEmulator("localhost", 8080);
-    firebase.auth().useEmulator("http://localhost:9099/");
+    connectFirestoreEmulator(db,"localhost", 8080);
+    connectAuthEmulator(auth,"http://localhost:9099/");
   }
 
   // For some reason, if we don't call this here, writes fail silently in the app
   // Enables offline persistence
-  db.enablePersistence();
+  enableIndexedDbPersistence(db)
 
   ReactDOM.render(<App />, document.getElementById("root"));
 }

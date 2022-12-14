@@ -13,7 +13,7 @@
       "dom.iterable",
       "esnext"
     ],
-    "allowSyntheticDefaultImports": true,
+    "allowSyntheticDefaultImports": false,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
