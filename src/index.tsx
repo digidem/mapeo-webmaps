@@ -1,14 +1,15 @@
-import { initializeApp, FirebaseApp, FirebaseOptions } from "firebase/app";
-import * as ReactDOM from "react-dom";
-import { Auth, getAuth } from "firebase/auth";
+import { initializeApp, FirebaseApp, FirebaseOptions } from "firebase/app"
+import * as ReactDOM from "react-dom"
+import { Auth, getAuth } from "firebase/auth"
 import {
   enableIndexedDbPersistence,
   Firestore,
   getFirestore,
-} from "firebase/firestore";
+} from "firebase/firestore"
 
-import { App } from "./components/App";
-import * as serviceWorker from "./serviceWorker";
+import { App } from "./components/App"
+import * as serviceWorker from "./serviceWorker"
+
 
 const devConfig: FirebaseOptions = {
   projectId: "mapeo-webmaps-staging",
@@ -18,35 +19,35 @@ const devConfig: FirebaseOptions = {
   authDomain: "mapeo-webmaps-staging.firebaseapp.com",
   messagingSenderId: "354071501370",
   measurementId: "G-GLMDFRWPJD",
-};
+}
 
 const getConfig = () =>
   fetch("/__/firebase/init.json").then(async (response) =>
     response.json()
-  ) as FirebaseOptions;
+  ) as FirebaseOptions
 
-export let db: Firestore;
-export let auth: Auth;
+export let db: Firestore
+export let auth: Auth
 
-export let firebaseApp: FirebaseApp;
+export let firebaseApp: FirebaseApp
 
 async function init() {
   const config =
-    process.env.NODE_ENV === "development" ? devConfig : await getConfig();
-  firebaseApp = initializeApp(config);
-  db = getFirestore(firebaseApp);
-  auth = getAuth(firebaseApp);
+    process.env.NODE_ENV === "development" ? devConfig : await getConfig()
+  firebaseApp = initializeApp(config)
+  db = getFirestore(firebaseApp)
+  auth = getAuth(firebaseApp)
 
   // For some reason, if we don't call this here, writes fail silently in the app
   // Enables offline persistence
-  enableIndexedDbPersistence(db);
+  enableIndexedDbPersistence(db)
 
-  ReactDOM.render(<App />, document.getElementById("root"));
+  ReactDOM.render(<App />, document.getElementById("root"))
 }
 
-init();
+init()
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+serviceWorker.unregister()
