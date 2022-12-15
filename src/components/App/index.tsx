@@ -2,7 +2,8 @@ import { ThemeProvider } from '@mui/material';
 
 import CssBaseline from "@mui/material/CssBaseline";
 import { useAuthState } from "react-firebase-hooks/auth";
-import firebase from "firebase/app";
+import { getAuth } from "firebase/auth";
+
 
 import { Router, Link, navigate } from "@reach/router"
 
@@ -13,6 +14,7 @@ import { IntlProvider } from 'react-intl';
 import { useEffect } from 'react';
 import HomeView from '../../views/Home';
 import { AuthorizedProps, translationsType } from './types';
+import { firebaseApp } from '../../firebase-init';
 
 const translations: translationsType = {
   es: require("../../translations/es.json")
@@ -20,12 +22,12 @@ const translations: translationsType = {
 
 
 const Authorized = ({ location }: AuthorizedProps) => {
-  const [user, initializing] = useAuthState(firebase.auth());
+  const auth = getAuth(firebaseApp);
+  const [user, initializing] = useAuthState(auth);
   // Is the user authorized to see this page? An unauthorised user can see any
   // path in the publicPaths map
   const isAuthorized = user || location?.pathname.startsWith("/auth");
   useEffect(() => {
-    console.log({ loc: location?.pathname })
     if (isAuthorized || initializing) return;
     // Redirect unauthorized users to the login page, but keep state of where
     // they come from
