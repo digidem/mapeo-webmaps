@@ -1,10 +1,10 @@
 import { createTheme } from "@mui/system";
 
-const mapeoBlue = '#0066FF'
-const mapeoBlack = '#333333'
-const mapeoOrange = '#EA7913'
-const darkBlue = '#000033'
-const warningRed = '#D92222'
+const MAPEO_BLUE = '#0066FF'
+const MAPEO_BLACK = '#333333'
+const MAPEO_ORANGE = '#EA7913'
+const DARK_BLUE = '#000033'
+const WARNING_RED = '#D92222'
 
 const theme = createTheme({
   typography: {
@@ -23,14 +23,14 @@ const theme = createTheme({
   palette: {
     background: {
       light: '#F4F4FF',
-      dark: darkBlue,
+      dark: DARK_BLUE,
     },
-    primary: mapeoBlue,
+    primary: MAPEO_BLUE,
     error: {
-      main: warningRed
+      main: WARNING_RED
     },
-    black: mapeoBlack,
-    orange: mapeoOrange
+    black: MAPEO_BLACK,
+    orange: MAPEO_ORANGE
   }
 });
 
