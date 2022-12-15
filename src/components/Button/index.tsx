@@ -3,23 +3,26 @@ import { CircularProgress } from '@mui/material'
 import { LoadingButton } from './styles'
 
 
-type FormButtonPropTypes = {
+type ButtonPropTypes = {
   children: React.ReactNode
-  onSubmit: (event: React.FormEvent<HTMLButtonElement>) => void
+  icon?: React.ComponentType
+  onSubmit?: (event: React.FormEvent<HTMLButtonElement>) => void
+  onClick?: (event: React.FormEvent<HTMLButtonElement>) => void
   loading?: boolean
   disabled?: null | boolean | undefined
+  fullWidth?: boolean
 }
 
-const FormButton = ({ children, onSubmit, loading, disabled, ...rest }: FormButtonPropTypes) => (
+const Button = ({ children, onSubmit, loading, disabled, icon: Icon = EastIcon, fullWidth = true, ...rest }: ButtonPropTypes) => (
   <LoadingButton
     data-testid="submit-button"
     type="submit"
-    fullWidth
+    fullWidth={fullWidth}
     size="large"
     variant="contained"
     color="primary"
     sx={{ borderRadius: 5, display: 'flex', justifyContent: 'space-between', textTransform: 'none', fontWeight: 600 }}
-    endIcon={loading ? <CircularProgress sx={{ color: 'white' }} size="1em" /> : <EastIcon />}
+    endIcon={loading ? <CircularProgress sx={{ color: 'white' }} size="1em" /> : <Icon />}
     onSubmit={onSubmit}
     disabled={disabled || loading}
     {...rest}
@@ -28,4 +31,4 @@ const FormButton = ({ children, onSubmit, loading, disabled, ...rest }: FormButt
   </LoadingButton>
 )
 
-export default FormButton
+export default Button
