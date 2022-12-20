@@ -22,26 +22,6 @@ const translations: Translations = {
   en: require("../../translations/en.json"),
 };
 
-const Authorized = ({ location }: AuthorizedProps) => {
-  const auth = getAuth(firebaseApp);
-  const [user, initializing] = useAuthState(auth);
-
-  // Is the user authorized to see this page? An unauthorised user can see any
-  // path in the publicPaths map
-  const isAuthorized = user || location?.pathname.startsWith("/auth");
-  React.useEffect(() => {
-    if (isAuthorized || initializing) return;
-    // Redirect unauthorized users to the login page, but keep state of where
-    // they come from
-    navigate("/auth/login", {
-      replace: true,
-      state: { from: location?.pathname },
-    });
-  }, [isAuthorized, initializing, location]);
-
-  return <HomeView />;
-};
-
 const navLang = navigator.language.split("-")[0];
 
 const lang = isTranslation(navLang) ? navLang : "en";
@@ -65,3 +45,23 @@ export const App = () => (
     </ThemeProvider>
   </IntlProvider>
 );
+
+const Authorized = ({ location }: AuthorizedProps) => {
+  const auth = getAuth(firebaseApp);
+  const [user, initializing] = useAuthState(auth);
+
+  // Is the user authorized to see this page? An unauthorised user can see any
+  // path in the publicPaths map
+  const isAuthorized = user || location?.pathname.startsWith("/auth");
+  React.useEffect(() => {
+    if (isAuthorized || initializing) return;
+    // Redirect unauthorized users to the login page, but keep state of where
+    // they come from
+    navigate("/auth/login", {
+      replace: true,
+      state: { from: location?.pathname },
+    });
+  }, [isAuthorized, initializing, location]);
+
+  return <HomeView />;
+};
