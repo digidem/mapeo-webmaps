@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import SplitLayout from "../../layouts/split";
+import { SplitLayout } from "../../layouts/split";
 import { LoginViewTypes } from "./types";
 
 const LoginView = ({}: LoginViewTypes) => {

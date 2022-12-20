@@ -13,7 +13,7 @@ const defaultGridStyles = [
   },
 ];
 
-const SplitLayout = ({
+export const SplitLayout = ({
   children,
   grid = [5, 7],
   gridStyles = defaultGridStyles,
@@ -49,5 +49,3 @@ const SplitLayout = ({
     </Box>
   );
 };
-
-export default SplitLayout;

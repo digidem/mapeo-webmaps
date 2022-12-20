@@ -1,4 +1,4 @@
-type ChildType = React.ReactElement | Element;
+import { ReactNode } from "react";
 
 type GridStyleType = {
   backgroundColor: string;
@@ -6,7 +6,7 @@ type GridStyleType = {
 }[];
 
 export type SplitLayoutTypes = {
-  children: [ChildType, ChildType] | [ChildType];
+  children: [ReactNode, ReactNode] | [ReactNode];
   columns?: number;
   gridStyles?: GridStyleType;
   grid?: [number] | [number, number];

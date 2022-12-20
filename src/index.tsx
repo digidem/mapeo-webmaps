@@ -1,4 +1,4 @@
-import { initializeApp, FirebaseApp } from "firebase/app";
+import { initializeApp, FirebaseApp, FirebaseOptions } from "firebase/app";
 import * as ReactDOM from "react-dom";
 import { Auth, getAuth } from "firebase/auth";
 import {
@@ -7,10 +7,10 @@ import {
   getFirestore,
 } from "firebase/firestore";
 
-import App from "./components/App";
+import { App } from "./components/App";
 import * as serviceWorker from "./serviceWorker";
 
-const devConfig = {
+const devConfig: FirebaseOptions = {
   projectId: "mapeo-webmaps-staging",
   appId: "1:354071501370:web:a92ea6497d55c4dd9ab303",
   storageBucket: "mapeo-webmaps-staging.appspot.com",
@@ -21,7 +21,9 @@ const devConfig = {
 };
 
 const getConfig = () =>
-  fetch("/__/firebase/init.json").then(async (response) => response.json());
+  fetch("/__/firebase/init.json").then(async (response) =>
+    response.json()
+  ) as FirebaseOptions;
 
 export let db: Firestore;
 export let auth: Auth;
@@ -33,7 +35,7 @@ async function init() {
     process.env.NODE_ENV === "development" ? devConfig : await getConfig();
   firebaseApp = initializeApp(config);
   db = getFirestore(firebaseApp);
-  auth = getAuth();
+  auth = getAuth(firebaseApp);
 
   // For some reason, if we don't call this here, writes fail silently in the app
   // Enables offline persistence
