@@ -3,13 +3,12 @@ import { ThemeProvider } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getAuth } from "firebase/auth";
-import { Router, navigate } from "@reach/router";
+import { Router, navigate, RouteComponentProps } from "@reach/router";
 import { IntlConfig, IntlProvider } from "react-intl";
 
 import Login from "../../views/Login";
 import theme from "../../theme";
 import { HomeView } from "../../views/Home";
-import { AuthorizedProps } from "./types";
 import { firebaseApp } from "../../index";
 
 type Translations = {
@@ -46,7 +45,7 @@ export const App = () => (
   </IntlProvider>
 );
 
-const Authorized = ({ location }: AuthorizedProps) => {
+const Authorized = ({ location }: RouteComponentProps) => {
   const auth = getAuth(firebaseApp);
   const [user, initializing] = useAuthState(auth);
 
