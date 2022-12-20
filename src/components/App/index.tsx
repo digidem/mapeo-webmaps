@@ -14,7 +14,7 @@ import { IntlProvider } from 'react-intl';
 import { useEffect } from 'react';
 import HomeView from '../../views/Home';
 import { AuthorizedProps, translationsType } from './types';
-import { firebaseApp } from '../../firebase-init';
+import { firebaseApp } from '../../index';
 
 const translations: translationsType = {
   es: require("../../translations/es.json")
@@ -24,6 +24,7 @@ const translations: translationsType = {
 const Authorized = ({ location }: AuthorizedProps) => {
   const auth = getAuth(firebaseApp);
   const [user, initializing] = useAuthState(auth);
+
   // Is the user authorized to see this page? An unauthorised user can see any
   // path in the publicPaths map
   const isAuthorized = user || location?.pathname.startsWith("/auth");
