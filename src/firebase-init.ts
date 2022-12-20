@@ -10,9 +10,9 @@ const firebaseConfig = {
   authDomain: "mapeo-webmaps-staging.firebaseapp.com",
   messagingSenderId: "354071501370",
   measurementId: "G-GLMDFRWPJD",
-}
+};
 
-export const firebaseApp = initializeApp(firebaseConfig)
+export const firebaseApp = initializeApp(firebaseConfig);
 
-export const db = getFirestore(firebaseApp)
+export const db = getFirestore(firebaseApp);
 export const auth = getAuth();

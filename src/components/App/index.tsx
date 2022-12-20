@@ -1,25 +1,23 @@
-import { ThemeProvider } from '@mui/material';
+import { ThemeProvider } from "@mui/material";
 
 import CssBaseline from "@mui/material/CssBaseline";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getAuth } from "firebase/auth";
 
+import { Router, Link, navigate } from "@reach/router";
 
-import { Router, Link, navigate } from "@reach/router"
+import Login from "../../views/Login";
 
-import Login from '../../views/Login'
-
-import theme from '../../theme';
-import { IntlProvider } from 'react-intl';
-import { useEffect } from 'react';
-import HomeView from '../../views/Home';
-import { AuthorizedProps, translationsType } from './types';
-import { firebaseApp } from '../../index';
+import theme from "../../theme";
+import { IntlProvider } from "react-intl";
+import { useEffect } from "react";
+import HomeView from "../../views/Home";
+import { AuthorizedProps, translationsType } from "./types";
+import { firebaseApp } from "../../index";
 
 const translations: translationsType = {
-  es: require("../../translations/es.json")
+  es: require("../../translations/es.json"),
 };
-
 
 const Authorized = ({ location }: AuthorizedProps) => {
   const auth = getAuth(firebaseApp);
@@ -34,17 +32,14 @@ const Authorized = ({ location }: AuthorizedProps) => {
     // they come from
     navigate("/auth/login", {
       replace: true,
-      state: { from: location?.pathname }
+      state: { from: location?.pathname },
     });
   }, [isAuthorized, initializing, location]);
 
-  return (
-    <HomeView />
-  );
+  return <HomeView />;
 };
 
 const lang = navigator.language ? navigator.language.split("-")[0] : "en";
-
 
 const App = () => (
   // <IntlProvider locale={lang} messages={translations[lang]} defaultLocale="en">
@@ -58,11 +53,9 @@ const App = () => (
         {/* <ResetPassword path="/auth/reset-password" /> */}
         {/* <Authorized path="/*" /> */}
       </Router>
-
     </ThemeProvider>
   </>
   // </IntlProvider>
 );
 
 export default App;
-

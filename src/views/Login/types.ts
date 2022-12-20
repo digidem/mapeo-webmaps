@@ -1,3 +1,3 @@
 export type LoginViewTypes = {
-  path: string
-}
+  path: string;
+};

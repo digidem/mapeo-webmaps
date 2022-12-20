@@ -1,10 +1,10 @@
 export type translationsType = {
-  es: {}[]
-}
+  es: {}[];
+};
 
 export type AuthorizedProps = {
   location?: {
-    pathname: string
-  }
-  path: string
-}
+    pathname: string;
+  };
+  path: string;
+};

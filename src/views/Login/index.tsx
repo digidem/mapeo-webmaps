@@ -1,8 +1,8 @@
-import { Typography } from "@mui/material"
-import SplitLayout from "../../layouts/split"
-import { LoginViewTypes } from "./types"
+import { Typography } from "@mui/material";
+import SplitLayout from "../../layouts/split";
+import { LoginViewTypes } from "./types";
 
-const LoginView = ({ }: LoginViewTypes) => {
+const LoginView = ({}: LoginViewTypes) => {
   return (
     <SplitLayout>
       <Typography variant="h1" component="h2">
@@ -11,9 +11,8 @@ const LoginView = ({ }: LoginViewTypes) => {
       <Typography variant="h1" component="h2">
         Right
       </Typography>
-
     </SplitLayout>
-  )
-}
+  );
+};
 
-export default LoginView
+export default LoginView;
