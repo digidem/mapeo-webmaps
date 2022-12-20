@@ -1,8 +1,8 @@
 import { Typography } from "@mui/material";
+import { RouteComponentProps } from "@reach/router";
 import { SplitLayout } from "../../layouts/split";
-import { LoginViewTypes } from "./types";
 
-const LoginView = ({}: LoginViewTypes) => {
+export const LoginView = ({}: RouteComponentProps) => {
   return (
     <SplitLayout>
       <Typography variant="h1" component="h2">
@@ -14,5 +14,3 @@ const LoginView = ({}: LoginViewTypes) => {
     </SplitLayout>
   );
 };
-
-export default LoginView;

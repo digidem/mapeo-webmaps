@@ -6,8 +6,8 @@ import { getAuth } from "firebase/auth";
 import { Router, navigate, RouteComponentProps } from "@reach/router";
 import { IntlConfig, IntlProvider } from "react-intl";
 
-import Login from "../../views/Login";
-import theme from "../../theme";
+import { LoginView as Login } from "../../views/Login";
+import { theme } from "../../theme";
 import { HomeView } from "../../views/Home";
 import { firebaseApp } from "../../index";
 

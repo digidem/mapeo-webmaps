@@ -6,7 +6,7 @@ const MAPEO_ORANGE = "#EA7913";
 const DARK_BLUE = "#000033";
 const WARNING_RED = "#D92222";
 
-const theme = createTheme({
+export const theme = createTheme({
   typography: {
     fontFamily: [
       "Rubik",
@@ -33,5 +33,3 @@ const theme = createTheme({
     orange: MAPEO_ORANGE,
   },
 });
-
-export default theme;
