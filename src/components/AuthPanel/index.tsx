@@ -1,7 +1,7 @@
 import { Container, Link, Typography } from "@mui/material"
 import { Stack } from "@mui/system"
 import { navigate, useLocation } from "@reach/router"
-import firebase from "firebase/app"
+import { auth } from "../../index"
 import { useEffect } from "react"
 import { useAuthState } from "react-firebase-hooks/auth"
 import SplitLayout from "../../layouts/split"
@@ -17,7 +17,7 @@ type AuthPanelProps = {
 }
 
 const AuthPanel = ({ children }: AuthPanelProps) => {
-  const [user, authorizing] = useAuthState(firebase.auth())
+  const [user, authorizing] = useAuthState(auth)
   const location = useLocation() as LocationProps
 
   useEffect(() => {
