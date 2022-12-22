@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
-import firebase from "firebase/app"
+import { auth, firebaseApp } from "../../index"
+import { browserLocalPersistence, setPersistence, signInWithEmailAndPassword, browserSessionPersistence } from "firebase/auth"
 
 import { Button, Stack, Checkbox, FormControlLabel, Typography, Link, FormLabel } from '@mui/material'
 import EastIcon from '@mui/icons-material/East'
@@ -25,7 +26,7 @@ export const SignInForm = () => {
   const [passwordError, setPasswordError] = useState<SigninErrorType | null>()
   const [emailError, setEmailError] = useState<SigninErrorType>()
   const [loading, setLoading] = useState(false)
-  const [, authorizing, authError] = useAuthState(firebase.auth());
+  const [, authorizing, authError] = useAuthState(auth);
 
   if (authError) console.error(authError);
 
@@ -36,12 +37,9 @@ export const SignInForm = () => {
     event.preventDefault();
     if (loading) return;
     setLoading(true);
-    const persistence =
-      firebase.auth.Auth.Persistence[remember ? "LOCAL" : "NONE"];
-    firebase
-      .auth()
-      .setPersistence(persistence)
-      .then(() => firebase.auth().signInWithEmailAndPassword(email, password))
+    const persistence = remember ? browserLocalPersistence : browserSessionPersistence
+    setPersistence(auth, persistence)
+      .then(() => signInWithEmailAndPassword(auth, email, password))
       .catch((error: SigninErrorType) => {
         const isEmailError = error && errorTypes[error.code] === "email"
         const isPasswordError = error && errorTypes[error.code] === "password"
