@@ -1,11 +1,12 @@
 import EastIcon from '@mui/icons-material/East'
-import { CircularProgress } from '@mui/material'
+import { ButtonBaseProps, ButtonProps, CircularProgress, SvgIconTypeMap } from '@mui/material'
+import { OverridableComponent } from '@mui/material/OverridableComponent'
 import { LoadingButton } from './styles'
 
 
-type ButtonPropTypes = {
+type ButtonPropTypes = ButtonProps & {
   children: React.ReactNode
-  icon?: React.ComponentType
+  icon?: OverridableComponent<SvgIconTypeMap<{}, "svg">>
   onSubmit?: (event: React.FormEvent<HTMLButtonElement>) => void
   onClick?: (event: React.FormEvent<HTMLButtonElement>) => void
   loading?: boolean
@@ -25,6 +26,7 @@ const Button = ({ children, onSubmit, loading, disabled, icon: Icon = EastIcon, 
     endIcon={loading ? <CircularProgress sx={{ color: 'white' }} size="1em" /> : <Icon />}
     onSubmit={onSubmit}
     disabled={disabled || loading}
+    disableElevation
     {...rest}
   >
     {children}
