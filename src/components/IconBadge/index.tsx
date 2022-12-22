@@ -1,8 +1,9 @@
-import { Box, useTheme } from "@mui/material";
+import { Box, SvgIconTypeMap, useTheme } from "@mui/material";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { OverridableComponent } from "@mui/material/OverridableComponent";
 
 type IconBadgeProps = {
-  icon?: React.ComponentType
+  icon?: OverridableComponent<SvgIconTypeMap<{}, "svg">>
   colour?: React.CSSProperties['backgroundColor']
   backgroundColor?: React.CSSProperties['backgroundColor']
 }

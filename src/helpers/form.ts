@@ -6,19 +6,19 @@ type errorCodeType = SignupErrorCodeType | SigninErrorCodeType
 
 export type SignupErrorType = {
   code: SignupErrorCodeType
-}
+} | undefined
 
 export type SigninErrorType = {
   code: SigninErrorCodeType
-}
+} | undefined
 
 type errorType = SignupErrorType | SigninErrorType | null
 
-export const validateEmail = (email: string, callback: (arg0: any) => void, code: errorCodeType = "auth/invalid-email") => {
+// export const validateEmail = (email: string) => email.match(emailRegex)
+export const validateEmail = (email: string, callback: (arg0: any) => void, code: SignupErrorCodeType = "auth/invalid-email") => {
   const validEmail = email.match(emailRegex)
 
   if (typeof callback === 'function') {
-
     callback(!validEmail ? {
       code
     } : null)

@@ -69,5 +69,13 @@ export const theme = createTheme({
   limeGreen: LIME_GREEN,
   palette: {
     primary: { main: MAPEO_BLUE }
-  }
+  },
+  components: {
+    MuiButtonBase: {
+      defaultProps: {
+        disableRipple: true,
+        // disableElevation: true,
+      },
+    },
+  },
 });
