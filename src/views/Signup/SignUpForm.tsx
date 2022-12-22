@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react"
-import firebase from "firebase/app"
+import { useState } from "react"
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { auth } from "../../index"
+
 import { useAuthState } from "react-firebase-hooks/auth";
 import { navigate, useLocation } from "@reach/router";
 import { useIntl } from "react-intl"
@@ -9,7 +11,7 @@ import { useTheme } from "@mui/material"
 import { validatePassword, validateEmail, SignupErrorCodeType, SignupErrorType } from '../../helpers/form'
 
 import TextInput from '../../components/TextInput'
-import FormButton from '../../components/FormButton'
+import Button from '../../components/Button'
 
 import msgs from './messages'
 import IconBadge from "../../components/IconBadge"
@@ -24,7 +26,7 @@ const errorTypes = {
 export const SignUpForm = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [, authorizing] = useAuthState(firebase.auth())
+  const [, authorizing] = useAuthState(auth)
 
   const [emailError, setEmailError] = useState<SignupErrorType>()
   const [passwordError, setPasswordError] = useState<SignupErrorType>()
@@ -36,9 +38,13 @@ export const SignUpForm = () => {
   const signup = (event: React.FormEvent<HTMLButtonElement | HTMLFormElement>) => {
     event.preventDefault()
     setLoading(true)
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+        console.log({ user })
+        // ...
+      })
       .catch((error: SignupErrorType) => {
         const isEmailError = error && errorTypes[error.code] === "email"
         const isPasswordError = error && errorTypes[error.code] === "password"
@@ -105,9 +111,9 @@ export const SignUpForm = () => {
         }}
         onChange={handlePasswordChange}
       />
-      <FormButton onSubmit={signup} loading={loading} disabled={!!emailError || !!passwordError || !!authorizing}>
+      <Button onSubmit={signup} loading={loading} disabled={!!emailError || !!passwordError || !!authorizing}>
         {formatMessage(msgs['signup'])}
-      </FormButton>
+      </Button>
       <Link
         href="/auth/login"
         variant="body1"
