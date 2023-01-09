@@ -1,36 +1,45 @@
-import { useState } from "react"
-import { Button, Stack, Checkbox, FormControlLabel, Typography, Link, FormLabel } from '@mui/material'
-import EastIcon from '@mui/icons-material/East'
-import { useTheme } from "@mui/material"
-import { useIntl } from "react-intl"
-import TextInput from '../../components/TextInput'
+import { useState } from "react";
+import {
+  Button,
+  Stack,
+  Checkbox,
+  FormControlLabel,
+  Typography,
+  Link,
+  FormLabel,
+} from "@mui/material";
+import { East as EastIcon } from "@mui/icons-material";
+import { useTheme } from "@mui/material";
+import { useIntl } from "react-intl";
+import TextInput from "../../components/TextInput";
 
-import msgs from './messages'
-
+import msgs from "./messages";
 
 export const SignInForm = () => {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [remember, setRemember] = useState(false)
-  const [error, setError] = useState()
-  const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState(false);
+  const [error, setError] = useState();
+  const [loading, setLoading] = useState(false);
 
-  const { formatMessage } = useIntl()
-  const theme = useTheme()
+  const { formatMessage } = useIntl();
+  const theme = useTheme();
 
-  const login = () => { console.log('do a login') }
+  const login = () => {
+    console.log("do a login");
+  };
 
   const handleToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRemember(event.target.checked)
-  }
+    setRemember(event.target.checked);
+  };
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value)
-  }
+    setEmail(event.target.value);
+  };
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value)
-  }
+    setPassword(event.target.value);
+  };
 
   return (
     <Stack spacing={2} component="form" onSubmit={login}>
@@ -59,18 +68,25 @@ export const SignInForm = () => {
       />
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <FormControlLabel
-          control={<Checkbox value="remember" color="primary" sx={{ color: remember ? theme.primary : theme.white }} onChange={handleToggle} />}
-          label={'Remember me'}
+          control={
+            <Checkbox
+              value="remember"
+              color="primary"
+              sx={{ color: remember ? theme.primary : theme.white }}
+              onChange={handleToggle}
+            />
+          }
+          label={"Remember me"}
           checked={remember}
         />
         <Link
           href="/auth/reset-password"
           variant="body1"
           fontWeight={600}
-          underline={'hover'}
-          color={theme.white}
+          underline={"hover"}
+          color={"white"}
         >
-          {formatMessage(msgs['forgot'])}
+          {formatMessage(msgs["forgot"])}
         </Link>
       </Stack>
       <Button
@@ -81,19 +97,25 @@ export const SignInForm = () => {
         size="large"
         variant="contained"
         color="primary"
-        sx={{ borderRadius: 5, display: 'flex', justifyContent: 'space-between', textTransform: 'none' }}
+        sx={{
+          borderRadius: 5,
+          display: "flex",
+          justifyContent: "space-between",
+          textTransform: "none",
+        }}
         endIcon={<EastIcon />}
       >
-        {formatMessage(msgs['login'])}
+        {formatMessage(msgs["login"])}
       </Button>
       <Link
         href="/auth/signup"
         variant="body1"
         fontWeight={600}
-        underline={'hover'}
-        color={theme.white}
+        underline={"hover"}
+        color={"white"}
       >
-        {formatMessage(msgs['signup'])}
+        {formatMessage(msgs["signup"])}
       </Link>
-    </Stack>)
-}
+    </Stack>
+  );
+};
