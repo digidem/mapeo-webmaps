@@ -3,7 +3,7 @@
     "target": "es2016",
     "module": "esnext",
     "allowJs": true,
-    "esModuleInterop": true,
+    "esModuleInterop": false,
     "forceConsistentCasingInFileNames": true,
     "noEmitOnError": true,
     "strict": true,
