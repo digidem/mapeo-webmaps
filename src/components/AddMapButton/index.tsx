@@ -20,3 +20,4 @@ export const AddMapButton = ({ onClick }: AddMapButtonTypes) => {
     <Button fullWidth={false} icon={AddIcon} onClick={onClick}>{message}</Button>
   )
 }
+

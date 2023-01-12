@@ -1,18 +1,18 @@
-import { Stack, Typography } from '@mui/material'
-import { useAuthState } from 'react-firebase-hooks/auth'
+import { Stack, Typography } from "@mui/material"
+import { useAuthState } from "react-firebase-hooks/auth";
+import { signOut } from "@firebase/auth";
+import { StackBaseProps } from "@mui/system";
 
-import { signOut } from 'firebase/auth'
-import { StackBaseProps } from '@mui/system'
-import { useIntl } from 'react-intl'
-
-import { Link } from '@reach/router'
-import { HeaderWrapper, LogoImg, LogOutButton, Block } from './styles'
-import { auth } from '../..'
+import { HeaderWrapper, LogoImg, LogOutButton, Block } from "./styles"
+import { auth } from "../..";
+import { AddMapButton } from "../AddMapButton";
+import { useIntl } from "react-intl";
+import { Link } from "@reach/router";
 import { messages as msgs } from './messages'
-import { AddMapButton } from '../AddMapButton'
 
 type HeaderProps = {
   children?: React.ReactNode
+  onClickAddMap?: () => void
 }
 
 type JustifyContentProperty = 'space-between' | 'center' | 'flex-start' | 'flex-end'
@@ -35,9 +35,10 @@ const Row = ({ padding = 0, justify = 'space-between', ...rest }: RowProps) => (
   />
 )
 
-export const Header = ({ children }: HeaderProps) => {
+export const Header = ({ children, onClickAddMap }: HeaderProps) => {
   const { formatMessage } = useIntl()
-  const [user] = useAuthState(auth)
+  const [user,] = useAuthState(auth)
+
 
   const handleLogOut = () => {
     signOut(auth).catch((error: ErrorCallback) => {
