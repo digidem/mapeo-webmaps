@@ -10,6 +10,8 @@ import { LoginView as Login } from "../../views/Login";
 import { theme } from "../../theme";
 import { HomeView } from "../../views/Home";
 import { firebaseApp } from "../../index";
+import { SignupView } from "../../views/Signup";
+import { ForgottenPasswordView } from "../../views/ForgottenPassword";
 
 type Translations = {
   es: IntlConfig["messages"];
@@ -37,9 +39,9 @@ export const App = () => (
       <Router>
         <Login path="/auth/login" />
         <Authorized path="/*" />
-        {/* <Signup path="/auth/signup" /> */}
-        {/* <ResetPassword path="/auth/reset-password" /> */}
-        {/* <Authorized path="/*" /> */}
+        <SignupView path="/auth/signup" />
+        <ForgottenPasswordView path="/auth/reset-password" />
+        <Authorized path="/*" />
       </Router>
     </ThemeProvider>
   </IntlProvider>
