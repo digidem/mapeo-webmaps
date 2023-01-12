@@ -72,13 +72,13 @@ export const ForgottenPasswordView = ({ }: RouteComponentProps) => {
       : formatMessage(msgs.successDescription, { email: attemptedEmail })
 
   return (
-    <AuthScreen>
+    <AuthPanel>
       <Stack spacing={8}>
         <Stack spacing={2}>
           <Stack direction="row" spacing={2} alignItems="center">
             <IconBadge />
             <Typography variant="h5" component="h2">
-              {formatMessage(msgs.initialTitle)}
+              {formatMessage(msgs["initialTitle"])}
             </Typography>
           </Stack>
           {resetAttempt === 'untried' ? (
@@ -109,16 +109,13 @@ export const ForgottenPasswordView = ({ }: RouteComponentProps) => {
             {formatMessage(msgs.resetButton)}
           </Button>
           <Link
-            // href attribute is included here to ensure this component renders a semantically correct <a> tag.
             href="/auth/login"
-            // onMouseDown handles the navigation because otherwise onblur event on input will block nav.
-            onMouseDown={() => navigate('/auth/login')}
             variant="body1"
             fontWeight={600}
-            underline="hover"
+            underline={"hover"}
             color={theme.white}
           >
-            {formatMessage(msgs.login_link)}
+            {formatMessage(msgs["login_link"])}
           </Link>
         </Stack>
       </Stack>
