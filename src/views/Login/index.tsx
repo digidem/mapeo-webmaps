@@ -1,9 +1,10 @@
 import { SignInForm } from "./SignInForm"
 import AuthPanel from "../../components/AuthPanel"
-import { RouteType } from "../../types"
+
+import { RouteComponentProps } from "@reach/router"
 
 
-const LoginView = ({ }: RouteType) => {
+const LoginView = ({ }: RouteComponentProps) => {
   return (
     <AuthPanel>
       <SignInForm />

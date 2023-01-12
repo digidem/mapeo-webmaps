@@ -1,4 +1,4 @@
-import { ChildType } from "../../types"
+type ChildType = React.ReactNode
 
 type GridStyleType = {
   backgroundColor?: string,
