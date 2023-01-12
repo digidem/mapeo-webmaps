@@ -10,14 +10,15 @@ const msgs = defineMessages({
 })
 
 type AddMapButtonTypes = {
-  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
+  onClick?: ((event?: React.MouseEvent<HTMLButtonElement>) => void) | (() => void)
+  fullWidth?: boolean
 }
 
 export const AddMapButton = ({ onClick }: AddMapButtonTypes) => {
   const message = useIntl().formatMessage(msgs.addMap)
 
   return (
-    <Button fullWidth={false} icon={AddIcon} onClick={onClick}>{message}</Button>
+    <Button fullWidth={false} icon={AddIcon}>{message}</Button>
   )
 }
 
