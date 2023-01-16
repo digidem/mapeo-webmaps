@@ -4,10 +4,17 @@
   "root": true,
   "rules": {
     "semi": ["warn", "never"],
-    "quotes": ["warn", "single"],
+    "quotes": [
+      "warn",
+      "single",
+      {
+        "avoidEscape": true
+      }
+    ],
     "import/no-default-export": "error",
     "no-empty-pattern": 0,
     "global-require": 0,
+    "@typescript-eslint/unbound-method": 0,
     "prettier/prettier": [
       "error",
       {
