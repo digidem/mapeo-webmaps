@@ -1,19 +1,19 @@
-import EastIcon from '@mui/icons-material/East'
-import { ButtonBaseProps, ButtonProps, CircularProgress, SvgIconTypeMap } from '@mui/material'
-import { OverridableComponent } from '@mui/material/OverridableComponent'
-import { LoadingButton } from './styles'
+import EastIcon from "@mui/icons-material/East";
+import { ButtonProps, CircularProgress, SvgIconTypeMap } from "@mui/material";
+import { OverridableComponent } from "@mui/material/OverridableComponent";
+import { LoadingButton } from "./styles";
 
 type ButtonPropTypes = ButtonProps & {
-  children: React.ReactNode
-  icon?: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>
-  onSubmit?: (event: React.FormEvent<HTMLButtonElement>) => void
-  onClick?: (event: React.FormEvent<HTMLButtonElement>) => void
-  loading?: boolean
-  disabled?: null | boolean | undefined
-  fullWidth?: boolean
-}
+  children: React.ReactNode;
+  icon?: OverridableComponent<SvgIconTypeMap>;
+  onSubmit?: (event: React.FormEvent<HTMLButtonElement>) => void;
+  onClick?: (event: React.FormEvent<HTMLButtonElement>) => void;
+  loading?: boolean;
+  disabled?: null | boolean | undefined;
+  fullWidth?: boolean;
+};
 
-const Button = ({
+export const Button = ({
   children,
   onSubmit,
   loading,
@@ -31,12 +31,18 @@ const Button = ({
     color="primary"
     sx={{
       borderRadius: 5,
-      display: 'flex',
-      justifyContent: 'space-between',
-      textTransform: 'none',
+      display: "flex",
+      justifyContent: "space-between",
+      textTransform: "none",
       fontWeight: 600,
     }}
-    endIcon={loading ? <CircularProgress sx={{ color: 'white' }} size="1em" /> : <Icon />}
+    endIcon={
+      loading ? (
+        <CircularProgress sx={{ color: "white" }} size="1em" />
+      ) : (
+        <Icon />
+      )
+    }
     onSubmit={onSubmit}
     disabled={disabled || loading}
     disableElevation
@@ -44,6 +50,4 @@ const Button = ({
   >
     {children}
   </LoadingButton>
-)
-
-export default Button
+);
