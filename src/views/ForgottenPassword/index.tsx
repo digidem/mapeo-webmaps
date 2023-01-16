@@ -1,22 +1,22 @@
-import AuthPanel from "../../components/AuthPanel";
-import { Typography, Stack, Button, Link, useTheme } from "@mui/material";
-import EastIcon from "@mui/icons-material/East";
+import { Typography, Stack, Button, Link, useTheme } from '@mui/material'
+import EastIcon from '@mui/icons-material/East'
 
-import msgs from "./messages";
-import { useIntl } from "react-intl";
-import IconBadge from "../../components/IconBadge";
-import { useState } from "react";
-import TextInput from "../../components/TextInput";
-import { RouteComponentProps } from "@reach/router";
+import { useIntl } from 'react-intl'
+import { useState } from 'react'
+import { RouteComponentProps } from '@reach/router'
+import msgs from './messages'
+import IconBadge from '../../components/IconBadge'
+import TextInput from '../../components/TextInput'
+import AuthPanel from '../../components/AuthPanel'
 
 export const ForgottenPasswordView = ({}: RouteComponentProps) => {
-  const { formatMessage } = useIntl();
-  const [email, setEmail] = useState("");
-  const theme = useTheme();
+  const { formatMessage } = useIntl()
+  const [email, setEmail] = useState('')
+  const theme = useTheme()
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
-  };
+    setEmail(event.target.value)
+  }
 
   return (
     <AuthPanel>
@@ -25,13 +25,11 @@ export const ForgottenPasswordView = ({}: RouteComponentProps) => {
           <Stack direction="row" spacing={2} alignItems="center">
             <IconBadge />
             <Typography variant="h5" component="h2">
-              {formatMessage(msgs["initialTitle"])}
+              {formatMessage(msgs.initialTitle)}
             </Typography>
           </Stack>
 
-          <Typography variant="body1">
-            {formatMessage(msgs["initialDescription"])}
-          </Typography>
+          <Typography variant="body1">{formatMessage(msgs.initialDescription)}</Typography>
         </Stack>
 
         <Stack spacing={2}>
@@ -57,26 +55,20 @@ export const ForgottenPasswordView = ({}: RouteComponentProps) => {
             color="primary"
             sx={{
               borderRadius: 5,
-              display: "flex",
-              justifyContent: "space-between",
-              textTransform: "none",
+              display: 'flex',
+              justifyContent: 'space-between',
+              textTransform: 'none',
               fontWeight: 600,
             }}
             endIcon={<EastIcon />}
           >
-            {formatMessage(msgs["resetButton"])}
+            {formatMessage(msgs.resetButton)}
           </Button>
-          <Link
-            href="/auth/login"
-            variant="body1"
-            fontWeight={600}
-            underline={"hover"}
-            color={theme.white}
-          >
-            {formatMessage(msgs["login_link"])}
+          <Link href="/auth/login" variant="body1" fontWeight={600} underline="hover" color={theme.white}>
+            {formatMessage(msgs.login_link)}
           </Link>
         </Stack>
       </Stack>
     </AuthPanel>
-  );
-};
+  )
+}

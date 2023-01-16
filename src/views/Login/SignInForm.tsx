@@ -1,58 +1,70 @@
-import { useEffect, useState } from "react"
-import { auth, firebaseApp } from "../../index"
-import { browserLocalPersistence, setPersistence, signInWithEmailAndPassword, browserSessionPersistence } from "firebase/auth"
+import { useEffect, useState } from 'react'
+import {
+  browserLocalPersistence,
+  setPersistence,
+  signInWithEmailAndPassword,
+  browserSessionPersistence,
+} from 'firebase/auth'
 
-import { Button, Stack, Checkbox, FormControlLabel, Typography, Link, FormLabel } from '@mui/material'
+import {
+  Button,
+  Stack,
+  Checkbox,
+  FormControlLabel,
+  Typography,
+  Link,
+  FormLabel,
+  useTheme,
+} from '@mui/material'
 import EastIcon from '@mui/icons-material/East'
-import { useTheme } from "@mui/material"
-import { useIntl } from "react-intl"
+import { useIntl } from 'react-intl'
+import { useAuthState } from 'react-firebase-hooks/auth'
 import TextInput from '../../components/TextInput'
 
 import msgs from './messages'
-import { SigninErrorType, validateEmail } from "../../helpers/form";
-import { useAuthState } from "react-firebase-hooks/auth"
+import { SigninErrorType, validateEmail } from '../../helpers/form'
+import { auth, firebaseApp } from '../../index'
 
 const errorTypes = {
-  "auth/invalid-email": "email",
-  "auth/user-disabled": "email",
-  "auth/user-not-found": "email",
-  "auth/wrong-password": "password",
-};
+  'auth/invalid-email': 'email',
+  'auth/user-disabled': 'email',
+  'auth/user-not-found': 'email',
+  'auth/wrong-password': 'password',
+}
 
 export const SignInForm = () => {
   const [remember, setRemember] = useState(false)
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [passwordError, setPasswordError] = useState<SigninErrorType | null>()
   const [emailError, setEmailError] = useState<SigninErrorType>()
   const [loading, setLoading] = useState(false)
-  const [, authorizing, authError] = useAuthState(auth);
+  const [, authorizing, authError] = useAuthState(auth)
 
-  if (authError) console.error(authError);
+  if (authError) console.error(authError)
 
   const { formatMessage } = useIntl()
   const theme = useTheme()
 
   const login = (event: React.FormEvent<HTMLButtonElement | HTMLFormElement>) => {
-    event.preventDefault();
-    if (loading) return;
-    setLoading(true);
+    event.preventDefault()
+    if (loading) return
+    setLoading(true)
     const persistence = remember ? browserLocalPersistence : browserSessionPersistence
     setPersistence(auth, persistence)
       .then(() => signInWithEmailAndPassword(auth, email, password))
       .catch((error: SigninErrorType) => {
-        const isEmailError = error && errorTypes[error.code] === "email"
-        const isPasswordError = error && errorTypes[error.code] === "password"
+        const isEmailError = error && errorTypes[error.code] === 'email'
+        const isPasswordError = error && errorTypes[error.code] === 'password'
         if (isEmailError) {
           setEmailError(error)
           return
         }
         if (isPasswordError) {
           setPasswordError(error)
-          return
         }
-      });
-  };
+      })
+  }
 
   const handleToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRemember(event.target.checked)
@@ -105,18 +117,25 @@ export const SignInForm = () => {
       />
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <FormControlLabel
-          control={<Checkbox value="remember" color="primary" sx={{ color: remember ? theme.primary : theme.white }} onChange={handleToggle} />}
-          label={'Remember me'}
+          control={
+            <Checkbox
+              value="remember"
+              color="primary"
+              sx={{ color: remember ? theme.primary : theme.white }}
+              onChange={handleToggle}
+            />
+          }
+          label="Remember me"
           checked={remember}
         />
         <Link
           href="/auth/reset-password"
           variant="body1"
           fontWeight={600}
-          underline={'hover'}
+          underline="hover"
           color={theme.white}
         >
-          {formatMessage(msgs['forgot'])}
+          {formatMessage(msgs.forgot)}
         </Link>
       </Stack>
       <Button
@@ -131,16 +150,11 @@ export const SignInForm = () => {
         disabled={loading || authorizing}
         onSubmit={login}
       >
-        {formatMessage(msgs['login'])}
+        {formatMessage(msgs.login)}
       </Button>
-      <Link
-        href="/auth/signup"
-        variant="body1"
-        fontWeight={600}
-        underline={'hover'}
-        color={theme.white}
-      >
-        {formatMessage(msgs['signup'])}
+      <Link href="/auth/signup" variant="body1" fontWeight={600} underline="hover" color={theme.white}>
+        {formatMessage(msgs.signup)}
       </Link>
-    </Stack>)
+    </Stack>
+  )
 }
