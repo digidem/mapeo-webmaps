@@ -12,28 +12,32 @@ import { messages as msgs } from './messages'
 import { AddMapButton } from '../AddMapButton'
 
 type HeaderProps = {
-  children?: React.ReactNode
-}
+  children?: React.ReactNode;
+};
 
-type JustifyContentProperty = 'space-between' | 'center' | 'flex-start' | 'flex-end'
+type JustifyContentProperty =
+  | "space-between"
+  | "center"
+  | "flex-start"
+  | "flex-end";
 
 type RowProps = StackBaseProps & {
-  children: React.ReactNode
-  padding?: number | string
-  justify?: JustifyContentProperty
-}
+  children: React.ReactNode;
+  padding?: number | string;
+  justify?: JustifyContentProperty;
+};
 
-const Row = ({ padding = 0, justify = 'space-between', ...rest }: RowProps) => (
+const Row = ({ padding = 0, justify = "space-between", ...rest }: RowProps) => (
   <Stack
     direction="row"
     justifyContent={justify}
     alignItems="center"
     sx={{
-      padding: `${typeof padding === 'number' ? `${padding}px` : padding}`,
+      padding: `${typeof padding === "number" ? `${padding}px` : padding}`,
     }}
     {...rest}
   />
-)
+);
 
 export const Header = ({ children }: HeaderProps) => {
   const { formatMessage } = useIntl()
@@ -62,7 +66,12 @@ export const Header = ({ children }: HeaderProps) => {
           <Block>
             <Row spacing={3} justify="flex-end">
               {user ? (
-                <Typography variant="body1" color="white" sx={{ cursor: 'text' }} component="label">
+                <Typography
+                  variant="body1"
+                  color="white"
+                  sx={{ cursor: "text" }}
+                  component="label"
+                >
                   {user.email}
                 </Typography>
               ) : null}
