@@ -6,7 +6,7 @@ export type SigninErrorCodeType =
   | 'auth/user-disabled'
   | 'auth/user-not-found'
   | 'auth/wrong-password'
-type errorCodeType = SignupErrorCodeType | SigninErrorCodeType
+type ErrorCodeType = SignupErrorCodeType | SigninErrorCodeType
 
 export type SignupErrorType =
   | {
@@ -20,7 +20,7 @@ export type SigninErrorType =
     }
   | undefined
 
-type errorType = SignupErrorType | SigninErrorType | null
+type ErrorType = SignupErrorType | SigninErrorType | null
 
 // export const validateEmail = (email: string) => email.match(emailRegex)
 export const validateEmail = (
@@ -45,7 +45,7 @@ export const validateEmail = (
 export const validatePassword = (
   password: string,
   callback: (arg0?: any) => void,
-  code: errorCodeType = 'auth/weak-password',
+  code: ErrorCodeType = 'auth/weak-password',
 ) => {
   const validPassword = password.length >= 6
 

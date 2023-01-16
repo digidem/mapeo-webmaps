@@ -1,18 +1,18 @@
 import { Box, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
-import { useCollectionData } from 'react-firebase-hooks/firestore'
+// import { useCollectionData } from 'react-firebase-hooks/firestore'
 
-import { useAuthState } from 'react-firebase-hooks/auth'
+// import { useAuthState } from 'react-firebase-hooks/auth'
 import { AddMapButton } from '../../components/AddMapButton'
 import { AuthorisedLayout } from '../../layouts/Authorised'
 import { Img } from './styles'
 // import msgs from './messages'
-import { auth } from '../..'
+// import { auth } from '../..'
 
 // console.log({ msgs })
 
-export const HomeView = () => {
-  const [user] = useAuthState(auth)
+export const HomeView = () => (
+  // const [user] = useAuthState(auth)
   // const [maps = [], loading] = useCollectionData(
   //   firebase
   //     .firestore()
@@ -21,13 +21,11 @@ export const HomeView = () => {
   //   { idField: "id" }
   // );
 
-  return (
-    <AuthorisedLayout loading={false}>
-      {/* {maps && maps?.length ? <div>maps!</div> : <NoMaps />} */}
-      <NoMaps />
-    </AuthorisedLayout>
-  )
-}
+  <AuthorisedLayout loading={false}>
+    {/* {maps && maps?.length ? <div>maps!</div> : <NoMaps />} */}
+    <NoMaps />
+  </AuthorisedLayout>
+)
 
 const NoMaps = () => (
   <Box

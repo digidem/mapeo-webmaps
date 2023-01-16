@@ -1,14 +1,9 @@
-import { Box, useTheme } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2";
-import { SplitLayoutTypes } from "./types";
+import { Box, useTheme } from '@mui/material'
+import Grid from '@mui/material/Unstable_Grid2'
+import { SplitLayoutTypes } from './types'
 
-export const SplitLayout = ({
-  children,
-  grid = [4, 8],
-  gridStyles,
-  columns = 12,
-}: SplitLayoutTypes) => {
-  const theme = useTheme();
+export const SplitLayout = ({ children, grid = [4, 8], gridStyles, columns = 12 }: SplitLayoutTypes) => {
+  const theme = useTheme()
 
   const defaultGridStyles = [
     {
@@ -19,15 +14,15 @@ export const SplitLayout = ({
       backgroundColor: theme.background,
       color: theme.black,
     },
-  ];
+  ]
 
-  const gridStylesInternal = gridStyles || defaultGridStyles;
+  const gridStylesInternal = gridStyles || defaultGridStyles
 
   return (
     <Box
       sx={{
-        minHeight: "100vh",
-        backgroundColor: "background",
+        minHeight: '100vh',
+        backgroundColor: 'background',
       }}
     >
       <Grid container columns={columns}>
@@ -36,8 +31,8 @@ export const SplitLayout = ({
           bgcolor={gridStylesInternal[0].backgroundColor}
           color={gridStylesInternal[0].color}
           sx={{
-            minHeight: "100vh",
-            overflow: "hidden",
+            minHeight: '100vh',
+            overflow: 'hidden',
           }}
         >
           {children[0] || null}
@@ -47,13 +42,13 @@ export const SplitLayout = ({
           bgcolor={gridStylesInternal[1].backgroundColor}
           color={gridStylesInternal[1].color}
           sx={{
-            minHeight: "100vh",
-            overflow: "hidden",
+            minHeight: '100vh',
+            overflow: 'hidden',
           }}
         >
           {children[1] || null}
         </Grid>
       </Grid>
     </Box>
-  );
-};
+  )
+}

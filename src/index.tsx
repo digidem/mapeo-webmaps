@@ -1,3 +1,4 @@
+/* eslint-disable import/no-mutable-exports, @typescript-eslint/no-unsafe-assignment */
 import { initializeApp, FirebaseApp } from 'firebase/app'
 import * as ReactDOM from 'react-dom'
 import { Auth, getAuth } from 'firebase/auth'
@@ -6,7 +7,17 @@ import { enableIndexedDbPersistence, Firestore, getFirestore } from 'firebase/fi
 import { App } from './components/App'
 import * as serviceWorker from './serviceWorker'
 
-const devConfig = {
+type ConfigType = {
+  projectId: string
+  appId: string
+  storageBucket: string
+  apiKey: string
+  authDomain: string
+  messagingSenderId: string
+  measurementId: string
+}
+
+const devConfig: ConfigType = {
   projectId: 'mapeo-webmaps-staging',
   appId: '1:354071501370:web:a92ea6497d55c4dd9ab303',
   storageBucket: 'mapeo-webmaps-staging.appspot.com',
@@ -24,7 +35,7 @@ export let auth: Auth
 export let firebaseApp: FirebaseApp
 
 async function init() {
-  const config = process.env.NODE_ENV === 'development' ? devConfig : await getConfig()
+  const config: ConfigType = process.env.NODE_ENV === 'development' ? devConfig : await getConfig()
   firebaseApp = initializeApp(config)
   db = getFirestore(firebaseApp)
   auth = getAuth()
