@@ -1,6 +1,6 @@
-import { Box, SvgIconTypeMap, useTheme } from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { OverridableComponent } from "@mui/material/OverridableComponent";
+import { Box, SvgIconTypeMap, useTheme } from '@mui/material'
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
+import { OverridableComponent } from '@mui/material/OverridableComponent'
 
 type IconBadgeProps = {
   icon?: OverridableComponent<SvgIconTypeMap>
@@ -18,10 +18,10 @@ export const IconBadge = ({ icon, colour, backgroundColor }: IconBadgeProps) => 
     <Box
       sx={{
         backgroundColor: background,
-        borderRadius: "100%",
-        display: "flex",
-        alignContent: "center",
-        justifyContent: "center",
+        borderRadius: '100%',
+        display: 'flex',
+        alignContent: 'center',
+        justifyContent: 'center',
         padding: 1,
       }}
     >

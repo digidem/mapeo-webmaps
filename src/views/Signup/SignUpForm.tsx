@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useState } from 'react'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
 
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useIntl } from 'react-intl'
@@ -20,28 +20,26 @@ type EmailErrorCode = 'auth/email-already-in-use' | 'auth/invalid-email'
 type PasswordErrorCode = 'auth/weak-password'
 
 const errorTypes = {
-  "auth/email-already-in-use": "email",
-  "auth/invalid-email": "email",
-  "auth/weak-password": "password",
-};
+  'auth/email-already-in-use': 'email',
+  'auth/invalid-email': 'email',
+  'auth/weak-password': 'password',
+}
 
 export const SignUpForm = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [, authorizing] = useAuthState(auth);
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [, authorizing] = useAuthState(auth)
 
   const [emailError, setEmailError] = useState<EmailErrorCode | null>()
   const [passwordError, setPasswordError] = useState<PasswordErrorCode | null>()
   const [loading, setLoading] = useState(false)
 
-  const { formatMessage } = useIntl();
-  const theme = useTheme();
+  const { formatMessage } = useIntl()
+  const theme = useTheme()
 
-  const signup = (
-    event: React.FormEvent<HTMLButtonElement | HTMLFormElement>
-  ) => {
-    event.preventDefault();
-    setLoading(true);
+  const signup = (event: React.FormEvent<HTMLButtonElement | HTMLFormElement>) => {
+    event.preventDefault()
+    setLoading(true)
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const { user } = userCredential
@@ -65,22 +63,22 @@ export const SignUpForm = () => {
           setPasswordError(errorCode as PasswordErrorCode)
         }
       })
-      .finally(() => setLoading(false));
-  };
+      .finally(() => setLoading(false))
+  }
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (emailError) {
       handleValidateEmail()
     }
-    setEmail(event.target.value);
-  };
+    setEmail(event.target.value)
+  }
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (passwordError) {
       handleValidatePassword()
     }
-    setPassword(event.target.value);
-  };
+    setPassword(event.target.value)
+  }
 
   const handleValidateEmail = () => {
     const emailValidationCode = validateEmail(email)
@@ -94,10 +92,7 @@ export const SignUpForm = () => {
   return (
     <Stack spacing={2} component="form" onSubmit={signup}>
       <Stack direction="row" spacing={2} alignItems="center">
-        <IconBadge
-          backgroundColor={theme.primary}
-          icon={PersonAddAltOutlinedIcon}
-        />
+        <IconBadge backgroundColor={theme.primary} icon={PersonAddAltOutlinedIcon} />
         <Typography component="h1" variant="h5">
           {formatMessage(msgs.signup)}
         </Typography>

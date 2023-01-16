@@ -14,8 +14,8 @@ export const AuthorisedLayout = ({
 }: AuthorisedLayoutProps) => (
   <Box
     sx={{
-      minHeight: "100vh",
-      backgroundColor: "background",
+      minHeight: '100vh',
+      backgroundColor: 'background',
     }}
   >
     <>
