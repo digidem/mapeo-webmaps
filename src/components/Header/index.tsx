@@ -15,7 +15,11 @@ type HeaderProps = {
   onClickAddMap?: () => void
 }
 
-type JustifyContentProperty = 'space-between' | 'center' | 'flex-start' | 'flex-end'
+type JustifyContentProperty =
+  | "space-between"
+  | "center"
+  | "flex-start"
+  | "flex-end";
 
 type RowProps = StackBaseProps & {
   children: React.ReactNode
