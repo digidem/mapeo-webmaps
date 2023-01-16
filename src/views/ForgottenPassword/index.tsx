@@ -108,7 +108,13 @@ export const ForgottenPasswordView = ({ }: RouteComponentProps) => {
           <Button disabled={!validEmail} loading={loading} onSubmit={sendResetPassword}>
             {formatMessage(msgs.resetButton)}
           </Button>
-          <Link href="/auth/login" variant="body1" fontWeight={600} underline="hover" color={theme.white}>
+          <Link
+            href="/auth/login"
+            variant="body1"
+            fontWeight={600}
+            underline="hover"
+            color={theme.white}
+          >
             {formatMessage(msgs.login_link)}
           </Link>
         </Stack>

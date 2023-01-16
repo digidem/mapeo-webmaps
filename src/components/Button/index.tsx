@@ -42,17 +42,23 @@ export const Button = ({
     color={color}
     sx={{
       borderRadius: 5,
-      display: 'flex',
-      justifyContent: 'space-between',
-      textTransform: 'none',
+      display: "flex",
+      justifyContent: "space-between",
+      textTransform: "none",
       fontWeight: 600,
     }}
-    endIcon={loading ? <CircularProgress sx={{ color: 'white' }} size="1em" /> : <Icon />}
+    endIcon={
+      loading ? (
+        <CircularProgress sx={{ color: "white" }} size="1em" />
+      ) : (
+        <Icon />
+      )
+    }
     onSubmit={onSubmit}
     disabled={disabled || loading}
     disableElevation
     {...rest}
   >
     {children}
-  </StyledButton>
+  </StyledButton >
 )

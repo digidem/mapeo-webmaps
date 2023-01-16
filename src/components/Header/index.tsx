@@ -1,41 +1,46 @@
 import { Stack, Typography } from '@mui/material'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { signOut } from 'firebase/auth'
-import { Box, StackBaseProps } from '@mui/system'
 
+import { signOut } from 'firebase/auth'
+import { StackBaseProps } from '@mui/system'
 import { useIntl } from 'react-intl'
+
 import { Link } from '@reach/router'
 import { HeaderWrapper, LogoImg, LogOutButton, Block } from './styles'
 import { auth } from '../..'
-import { AddMapButton } from '../AddMapButton'
 import { messages as msgs } from './messages'
+import { AddMapButton } from '../AddMapButton'
 
 type HeaderProps = {
   children?: React.ReactNode
   onClickAddMap: () => void
 }
 
-type JustifyContentProperty = 'space-between' | 'center' | 'flex-start' | 'flex-end'
+type JustifyContentProperty =
+  | "space-between"
+  | "center"
+  | "flex-start"
+  | "flex-end";
 
 type RowProps = StackBaseProps & {
-  children: React.ReactNode
-  padding?: number | string
-  justify?: JustifyContentProperty
-}
+  children: React.ReactNode;
+  padding?: number | string;
+  justify?: JustifyContentProperty;
+};
 
-const Row = ({ padding = 0, justify = 'space-between', ...rest }: RowProps) => (
+const Row = ({ padding = 0, justify = "space-between", ...rest }: RowProps) => (
   <Stack
     direction="row"
     justifyContent={justify}
     alignItems="center"
     sx={{
-      padding: `${typeof padding === 'number' ? `${padding}px` : padding}`,
+      padding: `${typeof padding === "number" ? `${padding}px` : padding}`,
     }}
     {...rest}
   />
-)
+);
 
-export const Header = ({ children, onClickAddMap }: HeaderProps) => {
+export const Header = ({ children }: HeaderProps) => {
   const { formatMessage } = useIntl()
   const [user] = useAuthState(auth)
 
@@ -51,7 +56,7 @@ export const Header = ({ children, onClickAddMap }: HeaderProps) => {
       {children || (
         <Row padding="0 0 0 18px">
           <Block>
-            <AddMapButton onClick={onClickAddMap} />
+            <AddMapButton />
           </Block>
 
           <Link to="/">
@@ -62,7 +67,12 @@ export const Header = ({ children, onClickAddMap }: HeaderProps) => {
           <Block>
             <Row spacing={3} justify="flex-end">
               {user ? (
-                <Typography variant="body1" color="white" sx={{ cursor: 'text' }} component="label">
+                <Typography
+                  variant="body1"
+                  color="white"
+                  sx={{ cursor: "text" }}
+                  component="label"
+                >
                   {user.email}
                 </Typography>
               ) : null}
