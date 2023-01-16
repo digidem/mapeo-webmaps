@@ -1,0 +1,11 @@
+{
+  "extends": ["wesbos/typescript"],
+  "plugins": ["@typescript-eslint", "import"],
+  "root": true,
+  "rules": {
+    "semi": ["warn", "never"],
+    "quotes": ["warn", "single"],
+    "import/no-default-export": "error"
+    // "prettier/prettier": 0
+  }
+}
