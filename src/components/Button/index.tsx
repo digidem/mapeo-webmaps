@@ -9,7 +9,7 @@ type ButtonPropTypes = ButtonProps & {
   onSubmit?: (event: React.FormEvent<HTMLButtonElement>) => void
   onClick?: (event: React.FormEvent<HTMLButtonElement>) => void
   loading?: boolean
-  disabled?: null | boolean | undefined
+  disabled?: boolean
   fullWidth?: boolean
 }
 
