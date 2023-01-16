@@ -1,5 +1,7 @@
-export type LocationProps = {
+import { WindowLocation } from "@reach/router";
+
+export type LocationProps = WindowLocation & {
   state: {
-    from?: string
-  }
-}
+    from?: string;
+  };
+};
