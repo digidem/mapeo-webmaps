@@ -1,9 +1,17 @@
 {
-  "extends": ["wesbos/typescript"],
-  "plugins": ["@typescript-eslint", "import"],
+  "extends": [
+    "wesbos/typescript"
+  ],
+  "plugins": [
+    "@typescript-eslint",
+    "import"
+  ],
   "root": true,
   "rules": {
-    "semi": ["warn", "never"],
+    "semi": [
+      "warn",
+      "never"
+    ],
     "quotes": [
       "warn",
       "single",
