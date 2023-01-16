@@ -1,49 +1,49 @@
-import { Stack, Typography } from '@mui/material'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import AddIcon from '@mui/icons-material/Add'
-import { signOut } from 'firebase/auth'
-import { StackBaseProps } from '@mui/system'
-import { Button } from '../Button'
-import { HeaderWrapper, LogoImg, LogOutButton, Block } from './styles'
-import { auth } from '../..'
+import { Stack, Typography } from "@mui/material";
+import { useAuthState } from "react-firebase-hooks/auth";
+import AddIcon from "@mui/icons-material/Add";
+import { signOut } from "firebase/auth";
+import { StackBaseProps } from "@mui/system";
+import { Button } from "../Button";
+import { HeaderWrapper, LogoImg, LogOutButton, Block } from "./styles";
+import { auth } from "../..";
 
 type HeaderProps = {
-  children?: React.ReactNode
-}
+  children?: React.ReactNode;
+};
 
-type JustifyContentProperty = 'space-between' | 'center' | 'flex-start' | 'flex-end'
+type JustifyContentProperty =
+  | "space-between"
+  | "center"
+  | "flex-start"
+  | "flex-end";
 
 type RowProps = StackBaseProps & {
-  children: React.ReactNode
-  padding?: number | string
-  justify?: JustifyContentProperty
-}
+  children: React.ReactNode;
+  padding?: number | string;
+  justify?: JustifyContentProperty;
+};
 
-const Row = ({ padding = 0, justify = 'space-between', ...rest }: RowProps) => (
+const Row = ({ padding = 0, justify = "space-between", ...rest }: RowProps) => (
   <Stack
     direction="row"
     justifyContent={justify}
     alignItems="center"
     sx={{
-      padding: `${typeof padding === 'number' ? `${padding}px` : padding}`,
+      padding: `${typeof padding === "number" ? `${padding}px` : padding}`,
     }}
     {...rest}
   />
-)
+);
 
 export const Header = ({ children }: HeaderProps) => {
-  const [user] = useAuthState(auth)
+  const [user] = useAuthState(auth);
 
   const handleLogOut = () => {
-    signOut(auth)
-      .then(() => {
-        // Sign-out successful.
-      })
-      .catch((error: ErrorCallback) => {
-        console.log({ error })
-        // An error happened.
-      })
-  }
+    signOut(auth).catch((error: ErrorCallback) => {
+      console.log({ error });
+      // An error happened.
+    });
+  };
 
   return (
     <HeaderWrapper>
@@ -60,15 +60,22 @@ export const Header = ({ children }: HeaderProps) => {
           <Block>
             <Row spacing={3} justify="flex-end">
               {user ? (
-                <Typography variant="body1" color="white" sx={{ cursor: 'text' }} component="label">
+                <Typography
+                  variant="body1"
+                  color="white"
+                  sx={{ cursor: "text" }}
+                  component="label"
+                >
                   {user.email}
                 </Typography>
               ) : null}
-              {user ? <LogOutButton onClick={handleLogOut}>Log out</LogOutButton> : null}
+              {user ? (
+                <LogOutButton onClick={handleLogOut}>Log out</LogOutButton>
+              ) : null}
             </Row>
           </Block>
         </Row>
       )}
     </HeaderWrapper>
-  )
-}
+  );
+};
