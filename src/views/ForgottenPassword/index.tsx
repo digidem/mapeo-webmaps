@@ -1,6 +1,5 @@
 import AuthPanel from "../../components/AuthPanel";
-import { RouteType } from "../../types";
-import { Typography, Box, Stack, Button, Link, useTheme } from "@mui/material";
+import { Typography, Stack, Button, Link, useTheme } from "@mui/material";
 import EastIcon from "@mui/icons-material/East";
 
 import msgs from "./messages";
@@ -8,8 +7,9 @@ import { useIntl } from "react-intl";
 import IconBadge from "../../components/IconBadge";
 import { useState } from "react";
 import TextInput from "../../components/TextInput";
+import { RouteComponentProps } from "@reach/router";
 
-export const ForgottenPasswordView = ({}: RouteType) => {
+export const ForgottenPasswordView = ({}: RouteComponentProps) => {
   const { formatMessage } = useIntl();
   const [email, setEmail] = useState("");
   const theme = useTheme();
