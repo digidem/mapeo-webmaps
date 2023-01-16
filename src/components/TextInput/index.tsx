@@ -3,36 +3,36 @@ import { FormLabel, Stack, useTheme, TextFieldProps } from '@mui/material'
 import { StyledTextField } from './styles'
 
 type TextInputType = TextFieldProps & {
-  label: string;
-  required: boolean;
-  type?: React.HTMLInputTypeAttribute;
-};
+  label: string
+  required: boolean
+  type?: React.HTMLInputTypeAttribute
+}
 
 export const TextInput = ({ label, required, type, ...rest }: TextInputType) => {
   const theme = useTheme()
 
   const inputSx = {
     backgroundColor: theme.white,
-    borderRadius: "5px",
-  };
+    borderRadius: '5px',
+  }
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const focusInput = () => {
     if (inputRef.current) {
-      inputRef.current.focus();
+      inputRef.current.focus()
     }
-  };
+  }
 
   return (
     <Stack spacing={1} onClick={focusInput}>
-      <FormLabel sx={{ color: "inherit" }}>
+      <FormLabel sx={{ color: 'inherit' }}>
         {label}
-        {required && " *"}
+        {required && ' *'}
       </FormLabel>
       <StyledTextField
         inputRef={inputRef}
-        type={type || "text"}
+        type={type || 'text'}
         hiddenLabel
         variant="filled"
         size="small"

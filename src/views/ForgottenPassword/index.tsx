@@ -1,75 +1,22 @@
-import { Typography, Stack, Link, useTheme, Zoom } from '@mui/material'
-import { getAuth, sendPasswordResetEmail } from 'firebase/auth'
+import { Typography, Stack, Button, Link, useTheme } from '@mui/material'
+import EastIcon from '@mui/icons-material/East'
+
 import { useIntl } from 'react-intl'
 import { useState } from 'react'
-import { navigate, RouteComponentProps } from '@reach/router'
-import { FirebaseError } from 'firebase/app'
-
+import { RouteComponentProps } from '@reach/router'
 import { messages as msgs } from './messages'
 import { IconBadge } from '../../components/IconBadge'
 import { TextInput } from '../../components/TextInput'
-import { AuthScreen } from '../../components/AuthScreen'
-import { Button } from '../../components/Button'
-import { emailRegex } from '../../helpers/regex'
+import { AuthPanel } from '../../components/AuthPanel'
 
-type SuccessfulReset = 'success' | 'untried' | 'emailNonexistant'
-
-export const ForgottenPasswordView = ({ }: RouteComponentProps) => {
+export const ForgottenPasswordView = ({}: RouteComponentProps) => {
   const { formatMessage } = useIntl()
   const [email, setEmail] = useState('')
-  const [emailError, setEmailError] = useState(false)
-
-  const [resetAttempt, setResetAttempt] = useState<SuccessfulReset>('untried')
-  const [loading, setLoading] = useState(false)
-
   const theme = useTheme()
-  const auth = getAuth()
-
-  const validEmail = emailIsValid(email)
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newEmailValue = event.target.value
-    setEmail(newEmailValue)
-    // clears email error
-    if (emailError && emailIsValid(newEmailValue)) {
-      setEmailError(false)
-    }
-    // clears error message
-    if (resetAttempt !== 'untried') {
-      setResetAttempt('untried')
-    }
+    setEmail(event.target.value)
   }
-
-  const handleBlur = () => {
-    if (email && !validEmail) setEmailError(true)
-  }
-
-  const sendResetPassword = (event: React.FormEvent<HTMLButtonElement | HTMLFormElement>) => {
-    event.preventDefault()
-    if (!validEmail) return
-    setLoading(true)
-
-    sendPasswordResetEmail(auth, email)
-      .then(() => {
-        setResetAttempt('success')
-      })
-      .catch((err: FirebaseError) => {
-        if (err.code === 'auth/user-not-found') {
-          setResetAttempt('emailNonexistant')
-        }
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }
-
-  const selectErrorMsg = (
-    unsuccessfulResetAttempt: Exclude<SuccessfulReset, 'untried'>,
-    attemptedEmail: string,
-  ) =>
-    unsuccessfulResetAttempt === 'emailNonexistant'
-      ? formatMessage(msgs.email_nonexistant, { email: attemptedEmail })
-      : formatMessage(msgs.successDescription, { email: attemptedEmail })
 
   return (
     <AuthPanel>
@@ -81,17 +28,11 @@ export const ForgottenPasswordView = ({ }: RouteComponentProps) => {
               {formatMessage(msgs.initialTitle)}
             </Typography>
           </Stack>
-          {resetAttempt === 'untried' ? (
-            <Typography variant="body1">{formatMessage(msgs.initialDescription)}</Typography>
-          ) : (
-            // eslint-disable-next-line
-            <Zoom in={true} style={{ transitionDelay: '500ms' }}>
-              <Typography variant="body1">{selectErrorMsg(resetAttempt, email)}</Typography>
-            </Zoom>
-          )}
+
+          <Typography variant="body1">{formatMessage(msgs.initialDescription)}</Typography>
         </Stack>
 
-        <Stack spacing={2} component="form" onSubmit={sendResetPassword}>
+        <Stack spacing={2}>
           <TextInput
             required
             id="email"
@@ -99,30 +40,35 @@ export const ForgottenPasswordView = ({ }: RouteComponentProps) => {
             name="email"
             autoComplete="email"
             autoFocus
-            error={!!emailError}
-            helperText={emailError && formatMessage(msgs.invalid_email)}
+            // error={!!isEmailError}
+            // helperText={isEmailError && formatMessage(msgs[error.code])}
             value={email}
             onChange={handleEmailChange}
-            onBlur={handleBlur}
           />
-          <Button disabled={!validEmail} loading={loading} onSubmit={sendResetPassword}>
+          <Button
+            data-testid="submit-button"
+            type="submit"
+            // disabled={loading || authorizing}
+            fullWidth
+            size="large"
+            variant="contained"
+            color="primary"
+            sx={{
+              borderRadius: 5,
+              display: 'flex',
+              justifyContent: 'space-between',
+              textTransform: 'none',
+              fontWeight: 600,
+            }}
+            endIcon={<EastIcon />}
+          >
             {formatMessage(msgs.resetButton)}
           </Button>
-          <Link
-            href="/auth/login"
-            variant="body1"
-            fontWeight={600}
-            underline="hover"
-            color={theme.white}
-          >
+          <Link href="/auth/login" variant="body1" fontWeight={600} underline="hover" color={theme.white}>
             {formatMessage(msgs.login_link)}
           </Link>
         </Stack>
       </Stack>
-    </AuthScreen>
+    </AuthPanel>
   )
-}
-
-function emailIsValid(email: string) {
-  return email.match(emailRegex)
 }
