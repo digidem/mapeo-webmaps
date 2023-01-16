@@ -9,8 +9,8 @@ type AuthorisedLayoutProps = {
 export const AuthorisedLayout = ({ renderHeader: CustomHeader, children }: AuthorisedLayoutProps) => (
   <Box
     sx={{
-      minHeight: '100vh',
-      backgroundColor: 'background',
+      minHeight: "100vh",
+      backgroundColor: "background",
     }}
   >
     <>
