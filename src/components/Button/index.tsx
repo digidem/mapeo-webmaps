@@ -1,7 +1,7 @@
 import EastIcon from '@mui/icons-material/East'
 import { ButtonProps, CircularProgress, SvgIconTypeMap } from '@mui/material'
 import { OverridableComponent } from '@mui/material/OverridableComponent'
-import { LoadingButton } from './styles'
+import { StyledButton } from './styles'
 
 type ButtonPropTypes = ButtonProps & {
   children: React.ReactNode
@@ -22,7 +22,7 @@ export const Button = ({
   fullWidth = true,
   ...rest
 }: ButtonPropTypes) => (
-  <LoadingButton
+  <StyledButton
     data-testid="submit-button"
     type="submit"
     fullWidth={fullWidth}
@@ -43,5 +43,5 @@ export const Button = ({
     {...rest}
   >
     {children}
-  </LoadingButton>
+  </StyledButton>
 )

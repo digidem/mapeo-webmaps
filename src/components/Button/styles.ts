@@ -1,6 +1,6 @@
 import { styled, Button } from '@mui/material'
 
-export const LoadingButton = styled(Button)`
+export const StyledButton = styled(Button)`
   &.Mui-disabled {
     background-color: ${({ theme }) => theme.primary};
     color: ${({ theme }) => theme.white};
