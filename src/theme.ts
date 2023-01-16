@@ -1,6 +1,4 @@
-import { createTheme } from "@mui/material";
-
-
+import { createTheme } from '@mui/material'
 
 declare module '@mui/material/styles' {
   interface Theme {
@@ -32,7 +30,6 @@ declare module '@mui/material/styles' {
   }
 }
 
-
 const MAPEO_BLUE = '#0066FF'
 const MAPEO_BLACK = '#333333'
 const MAPEO_ORANGE = '#EA7913'
@@ -41,23 +38,23 @@ const WARNING_RED = '#D92222'
 const WHITE = '#FFFFFF'
 const LIME_GREEN = {
   main: '#C4FFD5',
-  light: '#E5FFE5'
+  light: '#E5FFE5',
 }
 const BACKGROUND_LIGHT = '#F4F4FF'
 
 export const theme = createTheme({
   typography: {
     fontFamily: [
-      "Rubik",
-      "Roboto",
+      'Rubik',
+      'Roboto',
       '"Segoe UI"',
       '"Helvetica Neue"',
-      "Arial",
-      "sans-serif",
+      'Arial',
+      'sans-serif',
       '"Apple Color Emoji"',
       '"Segoe UI Emoji"',
       '"Segoe UI Symbol"',
-    ].join(","),
+    ].join(','),
   },
   background: BACKGROUND_LIGHT,
   blueDark: DARK_BLUE,
@@ -68,7 +65,7 @@ export const theme = createTheme({
   white: WHITE,
   limeGreen: LIME_GREEN,
   palette: {
-    primary: { main: MAPEO_BLUE }
+    primary: { main: MAPEO_BLUE },
   },
   components: {
     MuiButtonBase: {
@@ -78,4 +75,4 @@ export const theme = createTheme({
       },
     },
   },
-});
+})

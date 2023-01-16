@@ -1,31 +1,29 @@
-import { useState } from "react"
+import { useState } from 'react'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { auth } from "../../index"
 
-import { useAuthState } from "react-firebase-hooks/auth";
-import { navigate, useLocation } from "@reach/router";
-import { useIntl } from "react-intl"
-import { Stack, Typography, Link } from '@mui/material'
-import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
-import { useTheme } from "@mui/material"
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { navigate, useLocation } from '@reach/router'
+import { useIntl } from 'react-intl'
+import { Stack, Typography, Link, useTheme } from '@mui/material'
+import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined'
+import { auth } from '../../index'
 import { validatePassword, validateEmail, SignupErrorCodeType, SignupErrorType } from '../../helpers/form'
 
 import TextInput from '../../components/TextInput'
 import Button from '../../components/Button'
 
 import msgs from './messages'
-import IconBadge from "../../components/IconBadge"
+import IconBadge from '../../components/IconBadge'
 
 const errorTypes = {
-  "auth/email-already-in-use": "email",
-  "auth/invalid-email": "email",
-  "auth/weak-password": "password"
-};
-
+  'auth/email-already-in-use': 'email',
+  'auth/invalid-email': 'email',
+  'auth/weak-password': 'password',
+}
 
 export const SignUpForm = () => {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [, authorizing] = useAuthState(auth)
 
   const [emailError, setEmailError] = useState<SignupErrorType>()
@@ -40,21 +38,20 @@ export const SignUpForm = () => {
     setLoading(true)
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in 
-        const user = userCredential.user;
+        // Signed in
+        const { user } = userCredential
         console.log({ user })
         // ...
       })
       .catch((error: SignupErrorType) => {
-        const isEmailError = error && errorTypes[error.code] === "email"
-        const isPasswordError = error && errorTypes[error.code] === "password"
+        const isEmailError = error && errorTypes[error.code] === 'email'
+        const isPasswordError = error && errorTypes[error.code] === 'password'
         if (isEmailError) {
           setEmailError(error)
           return
         }
         if (isPasswordError) {
           setPasswordError(error)
-          return
         }
       })
       .finally(() => setLoading(false))
@@ -86,7 +83,7 @@ export const SignUpForm = () => {
         required
         type="email"
         id="email"
-        label={formatMessage(msgs['email'])}
+        label={formatMessage(msgs.email)}
         name="email"
         autoComplete="email"
         autoFocus
@@ -112,16 +109,11 @@ export const SignUpForm = () => {
         onChange={handlePasswordChange}
       />
       <Button onSubmit={signup} loading={loading} disabled={!!emailError || !!passwordError || !!authorizing}>
-        {formatMessage(msgs['signup'])}
+        {formatMessage(msgs.signup)}
       </Button>
-      <Link
-        href="/auth/login"
-        variant="body1"
-        fontWeight={600}
-        underline={'hover'}
-        color={theme.white}
-      >
-        {formatMessage(msgs['have_account'])}
+      <Link href="/auth/login" variant="body1" fontWeight={600} underline="hover" color={theme.white}>
+        {formatMessage(msgs.have_account)}
       </Link>
-    </Stack>)
+    </Stack>
+  )
 }

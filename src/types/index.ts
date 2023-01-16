@@ -1,7 +1,7 @@
-import { Location } from "@reach/router";
+import { Location } from '@reach/router'
 
 export type LocationProps = {
   state: {
-    from?: string;
-  };
-};
+    from?: string
+  }
+}

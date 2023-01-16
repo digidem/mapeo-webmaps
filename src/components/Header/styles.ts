@@ -1,17 +1,16 @@
-import { css, styled } from '@mui/material';
+import { css, styled } from '@mui/material'
 
 export const HeaderWrapper = styled('header')`
   width: 100%;
   height: 80px;
   /* padding: 18px; */
-  background-color: ${({ theme }) => theme.blueDark}
-  `;
+  background-color: ${({ theme }) => theme.blueDark};
+`
 
 export const LogoImg = styled('img')`
   width: 300px;
   height: auto;
-
-  `
+`
 
 export const LogOutButton = styled('button')`
   all: unset;
@@ -28,14 +27,17 @@ export const LogOutButton = styled('button')`
   cursor: pointer;
 
   &:hover {
-    opacity: 0.9
+    opacity: 0.9;
   }
-`;
+`
 
 export const Block = styled('div')`
   flex: 1;
-  ${({ centered }: { centered?: boolean }) => centered ? css`
-    display: flex;
-    justify-content: center;
-  ` : ''}
-`;
+  ${({ centered }: { centered?: boolean }) =>
+    centered
+      ? css`
+          display: flex;
+          justify-content: center;
+        `
+      : ''}
+`

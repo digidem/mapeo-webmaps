@@ -1,35 +1,35 @@
-import * as React from "react";
-import { ThemeProvider } from "@mui/material";
-import CssBaseline from "@mui/material/CssBaseline";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { getAuth } from "firebase/auth";
-import { Router, navigate, RouteComponentProps } from "@reach/router";
-import { IntlConfig, IntlProvider } from "react-intl";
+import * as React from 'react'
+import { ThemeProvider } from '@mui/material'
+import CssBaseline from '@mui/material/CssBaseline'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { getAuth } from 'firebase/auth'
+import { Router, navigate, RouteComponentProps } from '@reach/router'
+import { IntlConfig, IntlProvider } from 'react-intl'
 
-import { LoginView as Login } from "../../views/Login";
-import { theme } from "../../theme";
-import { HomeView } from "../../views/Home";
-import { firebaseApp } from "../../index";
-import { SignupView } from "../../views/Signup";
-import { ForgottenPasswordView } from "../../views/ForgottenPassword";
+import { LoginView as Login } from '../../views/Login'
+import { theme } from '../../theme'
+import { HomeView } from '../../views/Home'
+import { firebaseApp } from '../../index'
+import { SignupView } from '../../views/Signup'
+import { ForgottenPasswordView } from '../../views/ForgottenPassword'
 
 type Translations = {
-  es: IntlConfig["messages"];
-  en: IntlConfig["messages"];
-};
+  es: IntlConfig['messages']
+  en: IntlConfig['messages']
+}
 
 const translations: Translations = {
-  es: require("../../translations/es.json"),
-  en: require("../../translations/en.json"),
-};
+  es: require('../../translations/es.json'),
+  en: require('../../translations/en.json'),
+}
 
-const navLang = navigator.language.split("-")[0];
+const navLang = navigator.language.split('-')[0]
 
-const lang = isTranslation(navLang) ? navLang : "en";
+const lang = isTranslation(navLang) ? navLang : 'en'
 
 function isTranslation(langugage?: string): langugage is keyof Translations {
-  if (!langugage) return false;
-  return Object.keys(translations).includes(langugage);
+  if (!langugage) return false
+  return Object.keys(translations).includes(langugage)
 }
 
 export const App = () => (
@@ -45,24 +45,24 @@ export const App = () => (
       </Router>
     </ThemeProvider>
   </IntlProvider>
-);
+)
 
 const Authorized = ({ location }: RouteComponentProps) => {
-  const auth = getAuth(firebaseApp);
-  const [user, initializing] = useAuthState(auth);
+  const auth = getAuth(firebaseApp)
+  const [user, initializing] = useAuthState(auth)
 
   // Is the user authorized to see this page? An unauthorised user can see any
   // path in the publicPaths map
-  const isAuthorized = user || location?.pathname.startsWith("/auth");
+  const isAuthorized = user || location?.pathname.startsWith('/auth')
   React.useEffect(() => {
-    if (isAuthorized || initializing) return;
+    if (isAuthorized || initializing) return
     // Redirect unauthorized users to the login page, but keep state of where
     // they come from
-    navigate("/auth/login", {
+    navigate('/auth/login', {
       replace: true,
       state: { from: location?.pathname },
-    });
-  }, [isAuthorized, initializing, location]);
+    })
+  }, [isAuthorized, initializing, location])
 
-  return <HomeView />;
-};
+  return <HomeView />
+}
