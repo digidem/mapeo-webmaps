@@ -4,22 +4,17 @@ import { Button } from '../Button'
 
 const msgs = defineMessages({
   addMap: {
-    id: 'add_map_button',
-    defaultMessage: 'Add Map',
+    id: "add_map_button",
+    defaultMessage: "Add Map",
   },
-})
+});
 
-type AddMapButtonTypes = {
-  onClick?: any
-  // onClick?: ((event?: React.MouseEvent<HTMLButtonElement>) => void) | (() => void)
-}
-
-export const AddMapButton = ({ onClick }: AddMapButtonTypes) => {
-  const message = useIntl().formatMessage(msgs.addMap)
-
+export const AddMapButton = () => {
+  const addMap = () => null; // TODO: Implement addMapp functionality.
+  const message = useIntl().formatMessage(msgs.addMap);
   return (
-    <Button fullWidth={false} icon={AddIcon} onClick={onClick}>
+    <Button fullWidth={false} icon={AddIcon} onClick={addMap}>
       {message}
     </Button>
-  )
-}
+  );
+};

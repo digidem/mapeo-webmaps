@@ -1,91 +1,93 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
 import {
   browserLocalPersistence,
   setPersistence,
   signInWithEmailAndPassword,
   browserSessionPersistence,
-} from 'firebase/auth'
+} from "firebase/auth";
 
 import {
   Button,
   Stack,
   Checkbox,
   FormControlLabel,
-  Typography,
   Link,
-  FormLabel,
   useTheme,
-} from '@mui/material'
-import EastIcon from '@mui/icons-material/East'
-import { useIntl } from 'react-intl'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import TextInput from '../../components/TextInput'
+} from "@mui/material";
+import EastIcon from "@mui/icons-material/East";
+import { useIntl } from "react-intl";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { TextInput } from "../../components/TextInput";
 
-import msgs from './messages'
-import { SigninErrorType, validateEmail } from '../../helpers/form'
-import { auth, firebaseApp } from '../../index'
+import { messages as msgs } from "./messages";
+import { SigninErrorType, validateEmail } from "../../helpers/form";
+import { auth } from "../../index";
 
 const errorTypes = {
-  'auth/invalid-email': 'email',
-  'auth/user-disabled': 'email',
-  'auth/user-not-found': 'email',
-  'auth/wrong-password': 'password',
-}
+  "auth/invalid-email": "email",
+  "auth/user-disabled": "email",
+  "auth/user-not-found": "email",
+  "auth/wrong-password": "password",
+};
 
 export const SignInForm = () => {
-  const [remember, setRemember] = useState(false)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [passwordError, setPasswordError] = useState<SigninErrorType | null>()
-  const [emailError, setEmailError] = useState<SigninErrorType>()
-  const [loading, setLoading] = useState(false)
-  const [, authorizing, authError] = useAuthState(auth)
+  const [remember, setRemember] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState<SigninErrorType | null>();
+  const [emailError, setEmailError] = useState<SigninErrorType>();
+  const [loading, setLoading] = useState(false);
+  const [, authorizing, authError] = useAuthState(auth);
 
-  if (authError) console.error(authError)
+  if (authError) console.error(authError);
 
-  const { formatMessage } = useIntl()
-  const theme = useTheme()
+  const { formatMessage } = useIntl();
+  const theme = useTheme();
 
-  const login = (event: React.FormEvent<HTMLButtonElement | HTMLFormElement>) => {
-    event.preventDefault()
-    if (loading) return
-    setLoading(true)
-    const persistence = remember ? browserLocalPersistence : browserSessionPersistence
+  const login = (
+    event: React.FormEvent<HTMLButtonElement | HTMLFormElement>
+  ) => {
+    event.preventDefault();
+    if (loading) return;
+    setLoading(true);
+    const persistence = remember
+      ? browserLocalPersistence
+      : browserSessionPersistence;
     setPersistence(auth, persistence)
       .then(() => signInWithEmailAndPassword(auth, email, password))
       .catch((error: SigninErrorType) => {
-        const isEmailError = error && errorTypes[error.code] === 'email'
-        const isPasswordError = error && errorTypes[error.code] === 'password'
+        const isEmailError = error && errorTypes[error.code] === "email";
+        const isPasswordError = error && errorTypes[error.code] === "password";
         if (isEmailError) {
-          setEmailError(error)
-          return
+          setEmailError(error);
+          return;
         }
         if (isPasswordError) {
-          setPasswordError(error)
+          setPasswordError(error);
         }
-      })
-  }
+      });
+  };
 
   const handleToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRemember(event.target.checked)
-  }
+    setRemember(event.target.checked);
+  };
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value)
-  }
+    setEmail(event.target.value);
+  };
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (passwordError) {
-      setPasswordError(null)
+      setPasswordError(null);
     }
-    setPassword(event.target.value)
-  }
+    setPassword(event.target.value);
+  };
 
   useEffect(() => {
     if (passwordError) {
-      console.log({ passwordError })
+      console.log({ passwordError });
     }
-  }, [passwordError])
+  }, [passwordError]);
 
   return (
     <Stack spacing={2} component="form" onSubmit={login}>
@@ -102,7 +104,7 @@ export const SignInForm = () => {
         value={email}
         onChange={handleEmailChange}
         onBlur={() => {
-          validateEmail(email, setEmailError)
+          validateEmail(email, setEmailError);
         }}
       />
       <TextInput
@@ -145,16 +147,27 @@ export const SignInForm = () => {
         size="large"
         variant="contained"
         color="primary"
-        sx={{ borderRadius: 5, display: 'flex', justifyContent: 'space-between', textTransform: 'none' }}
+        sx={{
+          borderRadius: 5,
+          display: "flex",
+          justifyContent: "space-between",
+          textTransform: "none",
+        }}
         endIcon={<EastIcon />}
         disabled={loading || authorizing}
         onSubmit={login}
       >
         {formatMessage(msgs.login)}
       </Button>
-      <Link href="/auth/signup" variant="body1" fontWeight={600} underline="hover" color={theme.white}>
+      <Link
+        href="/auth/signup"
+        variant="body1"
+        fontWeight={600}
+        underline="hover"
+        color={theme.white}
+      >
         {formatMessage(msgs.signup)}
       </Link>
     </Stack>
-  )
-}
+  );
+};
