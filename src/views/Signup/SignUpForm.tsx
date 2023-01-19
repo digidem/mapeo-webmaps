@@ -6,13 +6,16 @@ import { useIntl } from 'react-intl'
 import { Stack, Typography, Link, useTheme } from '@mui/material'
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined'
 import { auth } from '../../index'
-import { validatePassword, validateEmail, SignupErrorType } from '../../helpers/form'
+import { validatePassword, validateEmail } from '../../helpers/form'
 
 import { TextInput } from '../../components/TextInput'
 import { Button } from '../../components/Button'
 
 import { messages as msgs } from './messages'
 import { IconBadge } from '../../components/IconBadge'
+
+type EmailErrorCode = 'auth/email-already-in-use' | 'auth/invalid-email' | null
+type PasswordErrorCode = 'auth/weak-password' | null
 
 const errorTypes = {
   'auth/email-already-in-use': 'email',
@@ -25,8 +28,8 @@ export const SignUpForm = () => {
   const [password, setPassword] = useState('')
   const [, authorizing] = useAuthState(auth)
 
-  const [emailError, setEmailError] = useState<SignupErrorType>()
-  const [passwordError, setPasswordError] = useState<SignupErrorType>()
+  const [emailError, setEmailError] = useState<EmailErrorCode>()
+  const [passwordError, setPasswordError] = useState<PasswordErrorCode>()
   const [loading, setLoading] = useState(false)
 
   const { formatMessage } = useIntl()
@@ -37,20 +40,19 @@ export const SignUpForm = () => {
     setLoading(true)
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in
         const { user } = userCredential
         console.log({ user })
-        // ...
       })
-      .catch((error: SignupErrorType) => {
-        const isEmailError = error && errorTypes[error.code] === 'email'
-        const isPasswordError = error && errorTypes[error.code] === 'password'
+      .catch((error: PasswordErrorCode | EmailErrorCode) => {
+        const isEmailError = error && Object.keys(errorTypes).includes(error) && errorTypes[error] === 'email'
+        const isPasswordError =
+          error && Object.keys(errorTypes).includes(error) && errorTypes[error] === 'password'
         if (isEmailError) {
-          setEmailError(error)
+          setEmailError(error as EmailErrorCode)
           return
         }
         if (isPasswordError) {
-          setPasswordError(error)
+          setPasswordError(error as PasswordErrorCode)
         }
       })
       .finally(() => setLoading(false))
@@ -58,16 +60,25 @@ export const SignUpForm = () => {
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (emailError) {
-      validateEmail(email, setEmailError)
+      handleValidateEmail()
     }
     setEmail(event.target.value)
   }
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (passwordError) {
-      validatePassword(password, setPasswordError)
+      validatePassword(password)
     }
     setPassword(event.target.value)
+  }
+
+  const handleValidateEmail = () => {
+    const emailValidationCode = validateEmail(email)
+    setEmailError(emailValidationCode)
+  }
+  const handleValidatePassword = () => {
+    const passwordValidationCode = validatePassword(email)
+    setPasswordError(passwordValidationCode)
   }
 
   return (
@@ -87,12 +98,10 @@ export const SignUpForm = () => {
         autoComplete="email"
         autoFocus
         error={!!emailError}
-        helperText={emailError && formatMessage(msgs[emailError.code])}
+        helperText={emailError && formatMessage(msgs[emailError])}
         value={email}
         onChange={handleEmailChange}
-        onBlur={() => {
-          validateEmail(email, setEmailError)
-        }}
+        onBlur={handleValidateEmail}
       />
       <TextInput
         required
@@ -100,11 +109,9 @@ export const SignUpForm = () => {
         type="password"
         label="Password"
         error={!!passwordError}
-        helperText={passwordError && formatMessage(msgs[passwordError.code])}
+        helperText={passwordError && formatMessage(msgs[passwordError])}
         value={password}
-        onBlur={() => {
-          validatePassword(password, setPasswordError)
-        }}
+        onBlur={handleValidatePassword}
         onChange={handlePasswordChange}
       />
       <Button onSubmit={signup} loading={loading} disabled={!!emailError || !!passwordError || !!authorizing}>

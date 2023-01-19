@@ -6,15 +6,19 @@ import {
   browserSessionPersistence,
 } from 'firebase/auth'
 
-import { Button, Stack, Checkbox, FormControlLabel, Link, useTheme } from '@mui/material'
+import { Stack, Checkbox, FormControlLabel, Link, useTheme } from '@mui/material'
 import EastIcon from '@mui/icons-material/East'
 import { useIntl } from 'react-intl'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { TextInput } from '../../components/TextInput'
 
 import { messages as msgs } from './messages'
-import { SigninErrorType, validateEmail } from '../../helpers/form'
+import { validateEmail } from '../../helpers/form'
 import { auth } from '../../index'
+import { Button } from '../../components/Button'
+
+type PasswordErrorCode = 'auth/wrong-password' | null
+type EmailErrorCode = 'auth/invalid-email' | 'auth/user-disabled' | 'auth/user-not-found' | null
 
 const errorTypes = {
   'auth/invalid-email': 'email',
@@ -27,8 +31,8 @@ export const SignInForm = () => {
   const [remember, setRemember] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [passwordError, setPasswordError] = useState<SigninErrorType | null>()
-  const [emailError, setEmailError] = useState<SigninErrorType>()
+  const [passwordError, setPasswordError] = useState<PasswordErrorCode | null>()
+  const [emailError, setEmailError] = useState<EmailErrorCode>()
   const [loading, setLoading] = useState(false)
   const [, authorizing, authError] = useAuthState(auth)
 
@@ -44,15 +48,16 @@ export const SignInForm = () => {
     const persistence = remember ? browserLocalPersistence : browserSessionPersistence
     setPersistence(auth, persistence)
       .then(() => signInWithEmailAndPassword(auth, email, password))
-      .catch((error: SigninErrorType) => {
-        const isEmailError = error && errorTypes[error.code] === 'email'
-        const isPasswordError = error && errorTypes[error.code] === 'password'
+      .catch((error: PasswordErrorCode | EmailErrorCode) => {
+        const isEmailError = error && Object.keys(errorTypes).includes(error) && errorTypes[error] === 'email'
+        const isPasswordError =
+          error && Object.keys(errorTypes).includes(error) && errorTypes[error] === 'password'
         if (isEmailError) {
-          setEmailError(error)
+          setEmailError(error as EmailErrorCode)
           return
         }
         if (isPasswordError) {
-          setPasswordError(error)
+          setPasswordError(error as PasswordErrorCode)
         }
       })
   }
@@ -62,6 +67,9 @@ export const SignInForm = () => {
   }
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (emailError) {
+      handleValidateEmail()
+    }
     setEmail(event.target.value)
   }
 
@@ -70,6 +78,11 @@ export const SignInForm = () => {
       setPasswordError(null)
     }
     setPassword(event.target.value)
+  }
+
+  const handleValidateEmail = () => {
+    const emailValidationCode = validateEmail(email)
+    setEmailError(emailValidationCode)
   }
 
   useEffect(() => {
@@ -89,12 +102,10 @@ export const SignInForm = () => {
         autoComplete="email"
         autoFocus
         error={!!emailError}
-        helperText={emailError && formatMessage(msgs[emailError.code])}
+        helperText={emailError && formatMessage(msgs[emailError])}
         value={email}
         onChange={handleEmailChange}
-        onBlur={() => {
-          validateEmail(email, setEmailError)
-        }}
+        onBlur={handleValidateEmail}
       />
       <TextInput
         required
@@ -102,7 +113,7 @@ export const SignInForm = () => {
         type="password"
         label="Password"
         error={!!passwordError}
-        helperText={passwordError && formatMessage(msgs[passwordError.code])}
+        helperText={passwordError && formatMessage(msgs[passwordError])}
         value={password}
         onChange={handlePasswordChange}
       />
