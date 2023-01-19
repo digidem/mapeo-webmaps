@@ -15,19 +15,7 @@
     "no-empty-pattern": 0,
     "global-require": 0,
     "@typescript-eslint/unbound-method": 0,
-    "prettier/prettier": [
-      "error",
-      {
-        "trailingComma": "all",
-        "tabWidth": 2,
-        "useTabs": false,
-        "printWidth": 110,
-        "bracketSpacing": true,
-        "jsxBracketSameLine": false,
-        "singleQuote": true,
-        "semi": false,
-        "jsonEnable": ["json"]
-      }
-    ]
+    "@typescript-eslint/no-unsafe-assignment": 0,
+    "prettier/prettier": 0
   }
 }
