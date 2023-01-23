@@ -67,7 +67,7 @@ export const SignUpForm = () => {
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (passwordError) {
-      validatePassword(password)
+      handleValidatePassword()
     }
     setPassword(event.target.value)
   }
@@ -77,7 +77,7 @@ export const SignUpForm = () => {
     setEmailError(emailValidationCode)
   }
   const handleValidatePassword = () => {
-    const passwordValidationCode = validatePassword(email)
+    const passwordValidationCode = validatePassword(password)
     setPasswordError(passwordValidationCode)
   }
 
@@ -114,7 +114,11 @@ export const SignUpForm = () => {
         onBlur={handleValidatePassword}
         onChange={handlePasswordChange}
       />
-      <Button onSubmit={signup} loading={loading} disabled={!!emailError || !!passwordError || !!authorizing}>
+      <Button
+        onSubmit={signup}
+        loading={loading}
+        disabled={!!emailError || !!passwordError || !!authorizing || loading}
+      >
         {formatMessage(msgs.signup)}
       </Button>
       <Link href="/auth/login" variant="body1" fontWeight={600} underline="hover" color={theme.white}>
