@@ -1,5 +1,6 @@
-import { Fade, Typography, useTheme } from '@mui/material'
+import { Fade, useTheme, Box, Link, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
+
 import { useIntl } from 'react-intl'
 import { useDropzone } from 'react-dropzone'
 import { useCallback } from 'react'
@@ -71,6 +72,7 @@ export const HomeView = () => {
 
 const DragDropOverlay = ({ active }: { active: boolean }) => {
   const { formatMessage } = useIntl()
+
   return (
     <Fade in={active}>
       <Overlay>
@@ -96,27 +98,39 @@ const Uploading = ({
       <Button onClick={retryFailedFiles}>Retry</Button>
       {failedFiles.length ? (
         <Typography variant="body1">
-          Failed files:{' '}
-          {failedFiles.map((failed) => (
-            <span>{failed}</span>
-          ))}
+          {formatMessage(msgs.empty_message)}
+          <Link href={formatMessage(msgs.empty_message_href)}>{formatMessage(msgs.empty_message_link)}</Link>
         </Typography>
-      ) : null}
-    </>
-  ) : (
-    <>
-      <Loader width={100} value={completed} />
-      <Container>
-        <Typography variant="body1">completed: {completed}</Typography>
-        <Typography variant="body1">currentFile: {currentFile}</Typography>
-        {failedFiles.length ? (
-          <Typography variant="body1">
-            failedFiles:{' '}
-            {failedFiles.map((failed) => (
-              <span>{failed}</span>
-            ))}
-          </Typography>
-        ) : null}
-      </Container>
-    </>
+        <AddMapButton />
+      </Stack>
+    </Box >
   )
+}
+
+const NoMaps = () => {
+  const { formatMessage } = useIntl()
+
+  return (
+    <Box
+      justifyContent="center"
+      alignItems="center"
+      sx={{ width: '100%', height: 'calc(100vh - 80px)', paddingTop: '15vh' }}
+    >
+      <Stack direction="column" justifyContent="center" alignItems="center" spacing={5}>
+        <Img src="/svg/nomap.svg" alt="" />
+        <Typography variant="h3">{formatMessage(msgs.empty_title)}</Typography>
+        <Typography variant="body1">
+          {formatMessage(msgs.empty_message)}
+          <Link href={formatMessage(msgs.empty_message_href)}>{formatMessage(msgs.empty_message_link)}</Link>
+        </Typography>
+        <AddMapButton />
+      </Stack>
+    </Box>
+  )
+}
+
+export const HomeView = () => (
+  <AuthorisedLayout>
+    <NoMaps />
+  </AuthorisedLayout>
+)

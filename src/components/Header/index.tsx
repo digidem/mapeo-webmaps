@@ -52,8 +52,7 @@ export const Header = ({ children }: HeaderProps) => {
         <Row padding="0 0 0 18px">
           <Block>
             <AddMapButton />
-          </Block>
-
+          </Block >
           <Link to="/">
             <Block centered>
               <LogoImg src="/svg/logo-w.svg" alt="" />
