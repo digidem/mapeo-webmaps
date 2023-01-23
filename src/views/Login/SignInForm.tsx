@@ -10,6 +10,7 @@ import { Stack, Checkbox, FormControlLabel, Link, useTheme } from '@mui/material
 import EastIcon from '@mui/icons-material/East'
 import { useIntl } from 'react-intl'
 import { useAuthState } from 'react-firebase-hooks/auth'
+import { FirebaseError } from 'firebase/app'
 import { TextInput } from '../../components/TextInput'
 
 import { messages as msgs } from './messages'
@@ -17,8 +18,8 @@ import { validateEmail } from '../../helpers/form'
 import { auth } from '../../index'
 import { Button } from '../../components/Button'
 
-type PasswordErrorCode = 'auth/wrong-password' | null
-type EmailErrorCode = 'auth/invalid-email' | 'auth/user-disabled' | 'auth/user-not-found' | null
+type PasswordErrorCode = 'auth/wrong-password'
+type EmailErrorCode = 'auth/invalid-email' | 'auth/user-disabled' | 'auth/user-not-found'
 
 const errorTypes = {
   'auth/invalid-email': 'email',
@@ -32,7 +33,7 @@ export const SignInForm = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordError, setPasswordError] = useState<PasswordErrorCode | null>()
-  const [emailError, setEmailError] = useState<EmailErrorCode>()
+  const [emailError, setEmailError] = useState<EmailErrorCode | null>()
   const [loading, setLoading] = useState(false)
   const [, authorizing, authError] = useAuthState(auth)
 
@@ -48,16 +49,21 @@ export const SignInForm = () => {
     const persistence = remember ? browserLocalPersistence : browserSessionPersistence
     setPersistence(auth, persistence)
       .then(() => signInWithEmailAndPassword(auth, email, password))
-      .catch((error: PasswordErrorCode | EmailErrorCode) => {
-        const isEmailError = error && Object.keys(errorTypes).includes(error) && errorTypes[error] === 'email'
+      .catch(({ code: errorCode }: FirebaseError) => {
+        const isEmailError =
+          errorCode &&
+          Object.keys(errorTypes).includes(errorCode) &&
+          errorTypes[errorCode as EmailErrorCode] === 'email'
         const isPasswordError =
-          error && Object.keys(errorTypes).includes(error) && errorTypes[error] === 'password'
+          errorCode &&
+          Object.keys(errorTypes).includes(errorCode) &&
+          errorTypes[errorCode as PasswordErrorCode] === 'password'
         if (isEmailError) {
-          setEmailError(error as EmailErrorCode)
+          setEmailError(errorCode as EmailErrorCode)
           return
         }
         if (isPasswordError) {
-          setPasswordError(error as PasswordErrorCode)
+          setPasswordError(errorCode as PasswordErrorCode)
         }
       })
   }
@@ -84,12 +90,6 @@ export const SignInForm = () => {
     const emailValidationCode = validateEmail(email)
     setEmailError(emailValidationCode)
   }
-
-  useEffect(() => {
-    if (passwordError) {
-      console.log({ passwordError })
-    }
-  }, [passwordError])
 
   return (
     <Stack spacing={2} component="form" onSubmit={login}>
