@@ -45,7 +45,7 @@ export const HomeView = () => (
   //   { idField: "id" }
   // );
 
-  <AuthorisedLayout loading={false}>
+  <AuthorisedLayout>
     {/* {maps && maps?.length ? <div>maps!</div> : <NoMaps />} */}
     <NoMaps />
   </AuthorisedLayout>
