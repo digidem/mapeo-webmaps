@@ -3,15 +3,25 @@ import { ButtonProps, CircularProgress, SvgIconTypeMap } from '@mui/material'
 import { OverridableComponent } from '@mui/material/OverridableComponent'
 import { StyledButton } from './styles'
 
-type ButtonPropTypes = ButtonProps & {
+type ButtonPropTypesHelper = ButtonProps & {
   children: React.ReactNode
   icon?: OverridableComponent<SvgIconTypeMap>
-  onSubmit?: (event: React.FormEvent<HTMLButtonElement>) => void
-  onClick?: (event: React.FormEvent<HTMLButtonElement>) => void
   loading?: boolean
   disabled?: boolean
   fullWidth?: boolean
 }
+
+type ButtonPropTypesOnClick = ButtonPropTypesHelper & {
+  onSubmit?: (event: React.FormEvent<HTMLButtonElement>) => void
+  onClick: (event: React.FormEvent<HTMLButtonElement>) => void // required here
+}
+
+type ButtonPropTypesOnSubmit = ButtonPropTypesHelper & {
+  onSubmit: (event: React.FormEvent<HTMLButtonElement>) => void // required here
+  onClick?: (event: React.FormEvent<HTMLButtonElement>) => void
+}
+
+type ButtonPropTypes = ButtonPropTypesOnSubmit | ButtonPropTypesOnClick
 
 export const Button = ({
   children,
