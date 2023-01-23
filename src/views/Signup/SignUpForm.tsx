@@ -44,6 +44,7 @@ export const SignUpForm = () => {
         console.log({ user })
       })
       .catch((error: PasswordErrorCode | EmailErrorCode) => {
+        setLoading(false)
         const isEmailError = error && Object.keys(errorTypes).includes(error) && errorTypes[error] === 'email'
         const isPasswordError =
           error && Object.keys(errorTypes).includes(error) && errorTypes[error] === 'password'
