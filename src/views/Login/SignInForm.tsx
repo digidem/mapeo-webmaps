@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
   browserLocalPersistence,
   setPersistence,
@@ -7,7 +7,6 @@ import {
 } from 'firebase/auth'
 
 import { Stack, Checkbox, FormControlLabel, Link, useTheme } from '@mui/material'
-import EastIcon from '@mui/icons-material/East'
 import { useIntl } from 'react-intl'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { FirebaseError } from 'firebase/app'
@@ -18,13 +17,19 @@ import { validateEmail } from '../../helpers/form'
 import { auth } from '../../index'
 import { Button } from '../../components/Button'
 
-type PasswordErrorCode = 'auth/wrong-password'
-type EmailErrorCode = 'auth/invalid-email' | 'auth/user-disabled' | 'auth/user-not-found'
+type PasswordErrorCode = 'auth/wrong-password' | 'auth/password-required'
+type EmailErrorCode =
+  | 'auth/invalid-email'
+  | 'auth/user-disabled'
+  | 'auth/user-not-found'
+  | 'auth/email-required'
 
 const errorTypes = {
   'auth/invalid-email': 'email',
   'auth/user-disabled': 'email',
   'auth/user-not-found': 'email',
+  'auth/email-required': 'email',
+  'auth/password-required': 'password',
   'auth/wrong-password': 'password',
 }
 
@@ -44,12 +49,23 @@ export const SignInForm = () => {
 
   const login = (event: React.FormEvent<HTMLButtonElement | HTMLFormElement>) => {
     event.preventDefault()
-    if (loading) return
     setLoading(true)
+    if (!email) {
+      setEmailError('auth/email-required')
+      setLoading(false)
+      return
+    }
+    if (!password) {
+      setPasswordError('auth/password-required')
+      setLoading(false)
+      return
+    }
+    if (loading) return
     const persistence = remember ? browserLocalPersistence : browserSessionPersistence
     setPersistence(auth, persistence)
       .then(() => signInWithEmailAndPassword(auth, email, password))
       .catch(({ code: errorCode }: FirebaseError) => {
+        setLoading(false)
         const isEmailError =
           errorCode &&
           Object.keys(errorTypes).includes(errorCode) &&
@@ -153,9 +169,9 @@ export const SignInForm = () => {
           justifyContent: 'space-between',
           textTransform: 'none',
         }}
-        endIcon={<EastIcon />}
         disabled={loading || authorizing}
         onSubmit={login}
+        loading={loading}
       >
         {formatMessage(msgs.login)}
       </Button>
