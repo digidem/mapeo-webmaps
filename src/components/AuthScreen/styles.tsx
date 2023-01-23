@@ -27,15 +27,17 @@ const SvgImg = styled.img`
 export const SvgImg1 = styled(SvgImg)`
   top: -5%;
   right: -5%;
-  width: 60%;
+  height: 30%;
 `
 export const SvgImg2 = styled.img`
   width: 100%;
+  height: 100%;
 `
 export const SvgImg3 = styled(SvgImg)`
-  top: 75%;
+  bottom: -5%;
   left: -10%;
   width: 25%;
+  height: 25%;
 `
 
 export const CenteredStack = ({ ...rest }) => (

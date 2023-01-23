@@ -83,7 +83,6 @@ export const AuthScreen = ({ children }: { children: React.ReactNode }) => {
                 sx={{
                   width: '60%',
                   position: 'relative',
-                  top: '-2%',
                   left: '5%',
                 }}
                 spacing={1}
