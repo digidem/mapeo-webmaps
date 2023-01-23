@@ -7,12 +7,12 @@ import { getAuth } from 'firebase/auth'
 import { Router, navigate, RouteComponentProps } from '@reach/router'
 import { IntlConfig, IntlProvider } from 'react-intl'
 
-import { LoginView as Login } from '../../views/Login'
+import { LoginView as Login } from '../../views/Signin'
+import { SignupView as Signup } from '../../views/Signup'
 import { theme } from '../../theme'
-import { HomeView } from '../../views/Home'
+import { HomeView as Home } from '../../views/Home'
 import { firebaseApp } from '../../index'
-import { SignupView } from '../../views/Signup'
-import { ForgottenPasswordView } from '../../views/ForgottenPassword'
+import { ForgottenPasswordView as ForgottenPassword } from '../../views/ForgottenPassword'
 
 type Translations = {
   es: IntlConfig['messages']
@@ -40,8 +40,8 @@ export const App = () => (
       <Router>
         <Login path="/auth/login" />
         <Authorized path="/*" />
-        <SignupView path="/auth/signup" />
-        <ForgottenPasswordView path="/auth/reset-password" />
+        <Signup path="/auth/signup" />
+        <ForgottenPassword path="/auth/reset-password" />
         <Authorized path="/*" />
       </Router>
     </ThemeProvider>
@@ -65,5 +65,5 @@ const Authorized = ({ location }: RouteComponentProps) => {
     })
   }, [isAuthorized, initializing, location])
 
-  return <HomeView />
+  return <Home />
 }
