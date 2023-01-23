@@ -1,11 +1,14 @@
 import { Stack, Typography } from '@mui/material'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import AddIcon from '@mui/icons-material/Add'
+
 import { signOut } from 'firebase/auth'
 import { StackBaseProps } from '@mui/system'
-import { Button } from '../Button'
+import { useIntl } from 'react-intl'
+
 import { HeaderWrapper, LogoImg, LogOutButton, Block } from './styles'
 import { auth } from '../..'
+import { messages as msgs } from './messages'
+import { AddMapButton } from '../AddMapButton'
 
 type HeaderProps = {
   children?: React.ReactNode
@@ -32,6 +35,7 @@ const Row = ({ padding = 0, justify = 'space-between', ...rest }: RowProps) => (
 )
 
 export const Header = ({ children }: HeaderProps) => {
+  const { formatMessage } = useIntl()
   const [user] = useAuthState(auth)
 
   const handleLogOut = () => {
@@ -46,9 +50,7 @@ export const Header = ({ children }: HeaderProps) => {
       {children || (
         <Row padding="0 0 0 18px">
           <Block>
-            <Button fullWidth={false} icon={AddIcon}>
-              Add map
-            </Button>
+            <AddMapButton />
           </Block>
           <Block centered>
             <LogoImg src="/svg/logo-w.svg" alt="" />
@@ -60,7 +62,9 @@ export const Header = ({ children }: HeaderProps) => {
                   {user.email}
                 </Typography>
               ) : null}
-              {user ? <LogOutButton onClick={handleLogOut}>Log out</LogOutButton> : null}
+              {user ? (
+                <LogOutButton onClick={handleLogOut}>{formatMessage(msgs.log_out)}</LogOutButton>
+              ) : null}
             </Row>
           </Block>
         </Row>

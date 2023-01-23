@@ -1,9 +1,9 @@
 import { RouteComponentProps } from '@reach/router'
 import { SignUpForm } from './SignUpForm'
-import { AuthPanel } from '../../components/AuthPanel'
+import { AuthScreen } from '../../components/AuthScreen'
 
 export const SignupView = ({}: RouteComponentProps) => (
-  <AuthPanel>
+  <AuthScreen>
     <SignUpForm />
-  </AuthPanel>
+  </AuthScreen>
 )
