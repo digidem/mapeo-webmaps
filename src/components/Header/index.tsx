@@ -5,6 +5,7 @@ import { signOut } from 'firebase/auth'
 import { StackBaseProps } from '@mui/system'
 import { useIntl } from 'react-intl'
 
+import { Link } from '@reach/router'
 import { HeaderWrapper, LogoImg, LogOutButton, Block } from './styles'
 import { auth } from '../..'
 import { messages as msgs } from './messages'
@@ -52,9 +53,11 @@ export const Header = ({ children }: HeaderProps) => {
           <Block>
             <AddMapButton />
           </Block>
-          <Block centered>
-            <LogoImg src="/svg/logo-w.svg" alt="" />
-          </Block>
+          <Link to="/">
+            <Block centered>
+              <LogoImg src="/svg/logo-w.svg" alt="" />
+            </Block>
+          </Link>
           <Block>
             <Row spacing={3} justify="flex-end">
               {user ? (
