@@ -7,7 +7,7 @@ import { RouteComponentProps } from '@reach/router'
 import { messages as msgs } from './messages'
 import { IconBadge } from '../../components/IconBadge'
 import { TextInput } from '../../components/TextInput'
-import { AuthPanel } from '../../components/AuthPanel'
+import { AuthScreen } from '../../components/AuthScreen'
 
 export const ForgottenPasswordView = ({}: RouteComponentProps) => {
   const { formatMessage } = useIntl()
@@ -19,7 +19,7 @@ export const ForgottenPasswordView = ({}: RouteComponentProps) => {
   }
 
   return (
-    <AuthPanel>
+    <AuthScreen>
       <Stack spacing={8}>
         <Stack spacing={2}>
           <Stack direction="row" spacing={2} alignItems="center">
@@ -69,6 +69,6 @@ export const ForgottenPasswordView = ({}: RouteComponentProps) => {
           </Link>
         </Stack>
       </Stack>
-    </AuthPanel>
+    </AuthScreen>
   )
 }
