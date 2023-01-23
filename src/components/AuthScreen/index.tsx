@@ -14,7 +14,7 @@ const LeftColumn = Column
 const RightColumn = Column
 const GRID_LAYOUT = [4, 8]
 
-export const AuthPanel = ({ children }: { children: React.ReactNode }) => {
+export const AuthScreen = ({ children }: { children: React.ReactNode }) => {
   const theme = useTheme()
   const { formatMessage } = useIntl()
   const [user] = useAuthState(auth)
@@ -51,7 +51,7 @@ export const AuthPanel = ({ children }: { children: React.ReactNode }) => {
               >
                 <Image src="/svg/logo.svg" alt="" />
                 <Typography component="h1" variant="h4" align="center">
-                  Webmaps
+                  {formatMessage(msgs.app_title)}
                 </Typography>
               </Centered>
               {children}

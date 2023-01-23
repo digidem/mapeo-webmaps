@@ -1,6 +1,10 @@
 import { defineMessages } from 'react-intl'
 
 export const messages = defineMessages({
+  app_title: {
+    id: 'app_title',
+    defaultMessage: 'Webmaps',
+  },
   auth_title: {
     id: 'auth_title',
     defaultMessage: 'Share your Mapeo maps publicly',
