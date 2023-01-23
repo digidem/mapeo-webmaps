@@ -70,6 +70,7 @@
     "storybook": "start-storybook -p 9009 -s public",
     "extract-messages": "formatjs extract --format crowdin 'src/**/*.js' --out-file messages/en.json",
     "prepare": "husky install",
+    "lint": "eslint ./src",
     "lint:fix": "eslint . --fix"
   },
   "keywords": [
