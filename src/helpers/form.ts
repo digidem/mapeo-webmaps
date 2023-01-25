@@ -1,5 +1,6 @@
 import { emailRegex } from './regex'
 
-export const validateEmail = (email: string) => (email.match(emailRegex) ? null : 'auth/invalid-email')
+export const validateEmail = (email: string) =>
+  !email || email.match(emailRegex) ? null : 'auth/invalid-email'
 
 export const validatePassword = (password: string) => (password.length >= 6 ? null : 'auth/weak-password')
