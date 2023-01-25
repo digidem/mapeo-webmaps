@@ -145,14 +145,16 @@ export const SignInForm = () => {
               onChange={handleToggle}
             />
           }
-          label="Remember me"
+          label={formatMessage(msgs.remember)}
           checked={remember}
         />
         <Link
+          // href attribute is included here to ensure this component renders a semantically correct <a> tag.
+          href="/auth/reset-password"
+          // onMouseDown handles the navigation because otherwise onblur event on input will block nav.
           onMouseDown={() => {
             navigate('/auth/reset-password')
           }}
-          // href=""
           variant="body1"
           fontWeight={600}
           underline="hover"
@@ -161,27 +163,13 @@ export const SignInForm = () => {
           {formatMessage(msgs.forgot)}
         </Link>
       </Stack>
-      <Button
-        data-testid="submit-button"
-        type="submit"
-        fullWidth
-        size="large"
-        variant="contained"
-        color="primary"
-        sx={{
-          borderRadius: 5,
-          display: 'flex',
-          justifyContent: 'space-between',
-          textTransform: 'none',
-        }}
-        disabled={loading || authorizing}
-        onSubmit={login}
-        loading={loading}
-      >
+      <Button type="submit" disabled={loading || authorizing} onSubmit={login} loading={loading}>
         {formatMessage(msgs.login)}
       </Button>
       <Link
+        // href attribute is included here to ensure this component renders a semantically correct <a> tag.
         href="/auth/signup"
+        // onMouseDown handles the navigation because otherwise onblur event on input will block nav.
         onMouseDown={() => navigate('/auth/signup')}
         variant="body1"
         fontWeight={600}

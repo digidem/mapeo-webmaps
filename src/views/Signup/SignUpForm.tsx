@@ -124,7 +124,9 @@ export const SignUpForm = () => {
         {formatMessage(msgs.signup)}
       </Button>
       <Link
+        // href attribute is included here to ensure this component renders a semantically correct <a> tag.
         href="/auth/login"
+        // onMouseDown handles the navigation because otherwise onblur event on input will block nav.
         onMouseDown={() => navigate('/auth/login')}
         variant="body1"
         fontWeight={600}
