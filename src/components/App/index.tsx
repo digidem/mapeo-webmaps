@@ -39,7 +39,6 @@ export const App = () => (
     <ThemeProvider theme={theme}>
       <Router>
         <Login path="/auth/login" />
-        <Authorized path="/*" />
         <Signup path="/auth/signup" />
         <ForgottenPassword path="/auth/reset-password" />
         <Authorized path="/*" />
@@ -65,5 +64,5 @@ const Authorized = ({ location }: RouteComponentProps) => {
     })
   }, [isAuthorized, initializing, location])
 
-  return <Home />
+  return user ? <Home /> : null
 }
