@@ -40,8 +40,6 @@ export const ForgottenPasswordView = ({}: RouteComponentProps) => {
             name="email"
             autoComplete="email"
             autoFocus
-            // error={!!isEmailError}
-            // helperText={isEmailError && formatMessage(msgs[error.code])}
             value={email}
             onChange={handleEmailChange}
           />
