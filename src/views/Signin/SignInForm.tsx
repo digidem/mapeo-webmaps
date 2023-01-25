@@ -38,6 +38,7 @@ export const SignInForm = () => {
   const [remember, setRemember] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [navigating, setNavigating] = useState(false)
   const [passwordError, setPasswordError] = useState<PasswordErrorCode | null>()
   const [emailError, setEmailError] = useState<EmailErrorCode | null>()
   const [loading, setLoading] = useState(false)
