@@ -2,46 +2,51 @@ import { Fade, useTheme, Box, Link, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
 
 import { useIntl } from 'react-intl'
+import { DropzoneInputProps, DropzoneRootProps, useDropzone } from 'react-dropzone'
+import { useCallback } from 'react'
 import { AddMapButton } from '../../components/AddMapButton'
 import { AuthorisedLayout } from '../../layouts/Authorised'
 import { Img } from './styles'
-import { useEffect } from "react";
-import { DropzoneInputProps, DropzoneRootProps, useDropzone } from "react-dropzone";
+
 import { messages as msgs } from './messages'
+import { unzip } from '../../helpers/file'
 
 export const HomeView = () => {
+  const onDrop = useCallback(async (acceptedFiles: File[]) => {
+    if (!acceptedFiles.length || !acceptedFiles[0].name.match(/.mapeomap$/))
+      return console.log('invalid file', acceptedFiles[0])
+    const unzippedFiles = await unzip(acceptedFiles[0])
+    console.log({ unzippedFiles })
+    // createMap(files);
+  }, [])
+  const { getRootProps, getInputProps, open, acceptedFiles, isDragActive } = useDropzone({
+    noClick: true,
+    noKeyboard: true,
+    accept: ['.mapeomap'],
+    onDrop,
+  })
 
-  // import { useAuthState } from "react-firebase-hooks/auth";
-  // import { auth } from "../..";
-  import { useCallback, useEffect } from "react";
-  import { DropzoneInputProps, DropzoneRootProps, useDropzone } from "react-dropzone";
-  import { unzip } from "../../helpers/file"
+  return (
+    <AuthorisedLayout onClickAddMap={open}>
+      <NoMaps
+        openDialog={open}
+        getRootProps={getRootProps}
+        getInputProps={getInputProps}
+        isDragActive={isDragActive}
+      />
+    </AuthorisedLayout>
+  )
+}
 
-  export const HomeView = () => {
-    const onDrop = useCallback(
-      async (acceptedFiles: File[]) => {
-        if (!acceptedFiles.length || !acceptedFiles[0].name.match(/.mapeomap$/))
-          return console.log("invalid file", acceptedFiles[0]);
-        const unzippedFiles = await unzip(acceptedFiles[0]);
-        console.log({ unzippedFiles })
-        // createMap(files);
-      },
-      []
-    );
-    const { getRootProps, getInputProps, open, acceptedFiles, isDragActive } = useDropzone({
-      noClick: true,
-      noKeyboard: true,
-      accept: [
-        '.mapeomap'
-      ],
-      onDrop,
-    });
+type NoMapsType = {
+  openDialog: () => void
+  getRootProps: (props?: DropzoneRootProps | undefined) => DropzoneRootProps
+  getInputProps: (props?: DropzoneInputProps | undefined) => DropzoneInputProps
+  isDragActive: boolean
+}
 
-    return (
-      <AuthorisedLayout onClickAddMap={open}>
-        <NoMaps openDialog={open} getRootProps={getRootProps} getInputProps={getInputProps} isDragActive={isDragActive} />
-      </AuthorisedLayout>)
-  }
+const NoMaps = ({ openDialog, getRootProps, getInputProps, isDragActive }: NoMapsType) => {
+  const { formatMessage } = useIntl()
 
   type NoMapsType = {
     openDialog: () => void
