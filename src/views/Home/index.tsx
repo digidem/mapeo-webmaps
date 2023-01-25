@@ -1,17 +1,11 @@
 import { Box, Link, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
-// import { useCollectionData } from 'react-firebase-hooks/firestore'
 
-// import { useAuthState } from 'react-firebase-hooks/auth'
 import { useIntl } from 'react-intl'
 import { AddMapButton } from '../../components/AddMapButton'
 import { AuthorisedLayout } from '../../layouts/Authorised'
 import { Img } from './styles'
 import { messages as msgs } from './messages'
-
-// import { auth } from '../..'
-
-// console.log({ msgs })
 
 const NoMaps = () => {
   const { formatMessage } = useIntl()
@@ -36,17 +30,7 @@ const NoMaps = () => {
 }
 
 export const HomeView = () => (
-  // const [user] = useAuthState(auth)
-  // const [maps = [], loading] = useCollectionData(
-  //   firebase
-  //     .firestore()
-  //     .collection(`groups/${user.uid}/maps`)
-  //     .orderBy("createdAt", "desc"),
-  //   { idField: "id" }
-  // );
-
   <AuthorisedLayout>
-    {/* {maps && maps?.length ? <div>maps!</div> : <NoMaps />} */}
     <NoMaps />
   </AuthorisedLayout>
 )
