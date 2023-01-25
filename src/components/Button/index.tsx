@@ -30,6 +30,7 @@ export const Button = ({
   disabled,
   icon: Icon = EastIcon,
   fullWidth = true,
+  color = 'primary',
   ...rest
 }: ButtonPropTypes) => (
   <StyledButton
@@ -38,7 +39,7 @@ export const Button = ({
     fullWidth={fullWidth}
     size="large"
     variant="contained"
-    color="primary"
+    color={color}
     sx={{
       borderRadius: 5,
       display: 'flex',
