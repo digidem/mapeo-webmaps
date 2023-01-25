@@ -10,6 +10,7 @@ import { Stack, Checkbox, FormControlLabel, Link, useTheme } from '@mui/material
 import { useIntl } from 'react-intl'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { FirebaseError } from 'firebase/app'
+import { navigate } from '@reach/router'
 import { TextInput } from '../../components/TextInput'
 
 import { messages as msgs } from './messages'
@@ -37,6 +38,7 @@ export const SignInForm = () => {
   const [remember, setRemember] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [navigating, setNavigating] = useState(false)
   const [passwordError, setPasswordError] = useState<PasswordErrorCode | null>()
   const [emailError, setEmailError] = useState<EmailErrorCode | null>()
   const [loading, setLoading] = useState(false)
@@ -113,7 +115,7 @@ export const SignInForm = () => {
         required
         type="email"
         id="email"
-        label="Email address"
+        label={formatMessage(msgs.email)}
         name="email"
         autoComplete="email"
         autoFocus
@@ -127,7 +129,7 @@ export const SignInForm = () => {
         required
         hiddenLabel
         type="password"
-        label="Password"
+        label={formatMessage(msgs.password)}
         error={!!passwordError}
         helperText={passwordError && formatMessage(msgs[passwordError])}
         value={password}
@@ -147,7 +149,10 @@ export const SignInForm = () => {
           checked={remember}
         />
         <Link
-          href="/auth/reset-password"
+          onMouseDown={() => {
+            navigate('/auth/reset-password')
+          }}
+          // href=""
           variant="body1"
           fontWeight={600}
           underline="hover"
@@ -175,7 +180,14 @@ export const SignInForm = () => {
       >
         {formatMessage(msgs.login)}
       </Button>
-      <Link href="/auth/signup" variant="body1" fontWeight={600} underline="hover" color={theme.white}>
+      <Link
+        href="/auth/signup"
+        onMouseDown={() => navigate('/auth/signup')}
+        variant="body1"
+        fontWeight={600}
+        underline="hover"
+        color={theme.white}
+      >
         {formatMessage(msgs.signup)}
       </Link>
     </Stack>

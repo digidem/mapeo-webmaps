@@ -5,6 +5,10 @@ export const messages = defineMessages({
     id: 'email_label',
     defaultMessage: 'Email Address',
   },
+  password: {
+    id: 'password',
+    defaultMessage: 'Password',
+  },
   'auth/email-required': {
     id: 'email_required',
     defaultMessage: 'An email address is required',

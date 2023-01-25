@@ -5,6 +5,7 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { useIntl } from 'react-intl'
 import { Stack, Typography, Link, useTheme } from '@mui/material'
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined'
+import { navigate } from '@reach/router'
 import { auth } from '../../index'
 import { validatePassword, validateEmail } from '../../helpers/form'
 
@@ -122,7 +123,14 @@ export const SignUpForm = () => {
       >
         {formatMessage(msgs.signup)}
       </Button>
-      <Link href="/auth/login" variant="body1" fontWeight={600} underline="hover" color={theme.white}>
+      <Link
+        href="/auth/login"
+        onMouseDown={() => navigate('/auth/login')}
+        variant="body1"
+        fontWeight={600}
+        underline="hover"
+        color={theme.white}
+      >
         {formatMessage(msgs.have_account)}
       </Link>
     </Stack>

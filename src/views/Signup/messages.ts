@@ -23,6 +23,6 @@ export const messages = defineMessages({
   },
   'auth/weak-password': {
     id: 'auth/weak-password',
-    defaultMessage: 'Password needs to be longer',
+    defaultMessage: 'Password needs to be 8 character or longer',
   },
 })
