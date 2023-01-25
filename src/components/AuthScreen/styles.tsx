@@ -13,7 +13,6 @@ export const Column = styled.div`
 export const IluContainer = styled.div`
   position: relative;
   height: 50vh;
-  width: 85%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
