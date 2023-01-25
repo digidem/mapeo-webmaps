@@ -3,7 +3,7 @@ import EastIcon from '@mui/icons-material/East'
 
 import { useIntl } from 'react-intl'
 import { useState } from 'react'
-import { RouteComponentProps } from '@reach/router'
+import { navigate, RouteComponentProps } from '@reach/router'
 import { messages as msgs } from './messages'
 import { IconBadge } from '../../components/IconBadge'
 import { TextInput } from '../../components/TextInput'
@@ -64,7 +64,14 @@ export const ForgottenPasswordView = ({}: RouteComponentProps) => {
           >
             {formatMessage(msgs.resetButton)}
           </Button>
-          <Link href="/auth/login" variant="body1" fontWeight={600} underline="hover" color={theme.white}>
+          <Link
+            href="/auth/login"
+            onMouseDown={() => navigate('/auth/login')}
+            variant="body1"
+            fontWeight={600}
+            underline="hover"
+            color={theme.white}
+          >
             {formatMessage(msgs.login_link)}
           </Link>
         </Stack>
