@@ -6,6 +6,7 @@ import { useIntl } from 'react-intl'
 import { Stack, Typography, Link, useTheme } from '@mui/material'
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined'
 import { navigate } from '@reach/router'
+import { FirebaseError } from 'firebase/app'
 import { auth } from '../../index'
 import { validatePassword, validateEmail } from '../../helpers/form'
 
@@ -15,8 +16,8 @@ import { Button } from '../../components/Button'
 import { messages as msgs } from './messages'
 import { IconBadge } from '../../components/IconBadge'
 
-type EmailErrorCode = 'auth/email-already-in-use' | 'auth/invalid-email' | null
-type PasswordErrorCode = 'auth/weak-password' | null
+type EmailErrorCode = 'auth/email-already-in-use' | 'auth/invalid-email'
+type PasswordErrorCode = 'auth/weak-password'
 
 const errorTypes = {
   'auth/email-already-in-use': 'email',
@@ -29,8 +30,8 @@ export const SignUpForm = () => {
   const [password, setPassword] = useState('')
   const [, authorizing] = useAuthState(auth)
 
-  const [emailError, setEmailError] = useState<EmailErrorCode>()
-  const [passwordError, setPasswordError] = useState<PasswordErrorCode>()
+  const [emailError, setEmailError] = useState<EmailErrorCode | null>()
+  const [passwordError, setPasswordError] = useState<PasswordErrorCode | null>()
   const [loading, setLoading] = useState(false)
 
   const { formatMessage } = useIntl()
@@ -44,17 +45,22 @@ export const SignUpForm = () => {
         const { user } = userCredential
         console.log({ user })
       })
-      .catch((error: PasswordErrorCode | EmailErrorCode) => {
+      .catch(({ code: errorCode }: FirebaseError) => {
         setLoading(false)
-        const isEmailError = error && Object.keys(errorTypes).includes(error) && errorTypes[error] === 'email'
+        const isEmailError =
+          errorCode &&
+          Object.keys(errorTypes).includes(errorCode) &&
+          errorTypes[errorCode as EmailErrorCode] === 'email'
         const isPasswordError =
-          error && Object.keys(errorTypes).includes(error) && errorTypes[error] === 'password'
+          errorCode &&
+          Object.keys(errorTypes).includes(errorCode) &&
+          errorTypes[errorCode as PasswordErrorCode] === 'password'
         if (isEmailError) {
-          setEmailError(error as EmailErrorCode)
+          setEmailError(errorCode as EmailErrorCode)
           return
         }
         if (isPasswordError) {
-          setPasswordError(error as PasswordErrorCode)
+          setPasswordError(errorCode as PasswordErrorCode)
         }
       })
       .finally(() => setLoading(false))
