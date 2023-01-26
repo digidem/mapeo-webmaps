@@ -30,5 +30,3 @@ export const messages = defineMessages({
     defaultMessage: 'Return to login',
   },
 })
-
-export default messages
