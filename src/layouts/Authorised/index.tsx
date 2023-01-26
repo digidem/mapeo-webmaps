@@ -7,18 +7,20 @@ type AuthorisedLayoutProps = {
   onClickAddMap?: () => void
 }
 
-export const AuthorisedLayout = ({ renderHeader: CustomHeader, children, onClickAddMap }: AuthorisedLayoutProps) => {
-  return (
-    <Box
-      sx={{
-        minHeight: '100vh',
-        backgroundColor: 'background',
-      }}
-    >
-      <>
-        <Header onClickAddMap={onClickAddMap}>{CustomHeader ? <CustomHeader /> : null}</Header>
-        {children}
-      </>
-    </Box>
-  )
-}
+export const AuthorisedLayout = ({
+  renderHeader: CustomHeader,
+  children,
+  onClickAddMap,
+}: AuthorisedLayoutProps) => (
+  <Box
+    sx={{
+      minHeight: '100vh',
+      backgroundColor: 'background',
+    }}
+  >
+    <>
+      <Header onClickAddMap={onClickAddMap}>{CustomHeader ? <CustomHeader /> : null}</Header>
+      {children}
+    </>
+  </Box>
+)
