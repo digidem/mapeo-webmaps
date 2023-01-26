@@ -1,13 +1,13 @@
-import { Stack, Typography } from "@mui/material"
-import { useAuthState } from "react-firebase-hooks/auth";
-import { signOut } from "@firebase/auth";
-import { StackBaseProps } from "@mui/system";
+import { Stack, Typography } from '@mui/material'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { signOut } from 'firebase/auth'
+import { StackBaseProps } from '@mui/system'
 
-import { HeaderWrapper, LogoImg, LogOutButton, Block } from "./styles"
-import { auth } from "../..";
-import { AddMapButton } from "../AddMapButton";
-import { useIntl } from "react-intl";
-import { Link } from "@reach/router";
+import { useIntl } from 'react-intl'
+import { Link } from '@reach/router'
+import { HeaderWrapper, LogoImg, LogOutButton, Block } from './styles'
+import { auth } from '../..'
+import { AddMapButton } from '../AddMapButton'
 import { messages as msgs } from './messages'
 
 type HeaderProps = {
@@ -37,8 +37,7 @@ const Row = ({ padding = 0, justify = 'space-between', ...rest }: RowProps) => (
 
 export const Header = ({ children, onClickAddMap }: HeaderProps) => {
   const { formatMessage } = useIntl()
-  const [user,] = useAuthState(auth)
-
+  const [user] = useAuthState(auth)
 
   const handleLogOut = () => {
     signOut(auth).catch((error: ErrorCallback) => {
@@ -75,6 +74,6 @@ export const Header = ({ children, onClickAddMap }: HeaderProps) => {
           </Block >
         </Row >
       )}
-    </HeaderWrapper >
+    </HeaderWrapper>
   )
 }
