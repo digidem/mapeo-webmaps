@@ -38,5 +38,3 @@ export const messages = defineMessages({
     defaultMessage: '{email} does not exist, please try another email.',
   },
 })
-
-export default messages
