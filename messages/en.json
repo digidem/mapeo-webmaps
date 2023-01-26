@@ -3,10 +3,7 @@
     "message": "Add Map"
   },
   "app_title": {
-    "message": "My Mapeo Maps"
-  },
-  "auth_title": {
-    "message": "Share your Mapeo maps publicly"
+    "message": "Webmaps"
   },
   "auth/email-already-in-use": {
     "message": "Email is already in use (you probably already have an account)"
@@ -21,13 +18,13 @@
     "message": "User account not found"
   },
   "auth/weak-password": {
-    "message": "Password needs to be longer"
+    "message": "Password needs to be 8 character or longer"
   },
   "auth/wrong-password": {
     "message": "Incorrect password"
   },
-  "cancel_button": {
-    "message": "Cancel"
+  "auth_title": {
+    "message": "Share your Mapeo maps publicly"
   },
   "confirm_cancel": {
     "message": "No, Cancel"
@@ -41,26 +38,26 @@
   "confirm_delete_title": {
     "message": "Delete this map?"
   },
-  "delete_map": {
-    "message": "Delete Map"
-  },
-  "description_label": {
-    "message": "Map Description"
-  },
-  "edit_dialog_title": {
-    "message": "Edit Map Details"
-  },
-  "edit_tooltip": {
-    "message": "Edit Map details"
-  },
   "email_label": {
     "message": "Email Address"
+  },
+  "email_required": {
+    "message": "An email address is required"
+  },
+  "empty_message": {
+    "message": "Export data from Mapeo Desktop to share publicly. Not sure how to add maps?"
+  },
+  "empty_message_href": {
+    "message": "https://docs.mapeo.app/quick-start-guide/mapeo-desktop#export-to-geojson-csv-or-smart-csv"
+  },
+  "empty_message_link": {
+    "message": "Go to Tutorials"
   },
   "empty_state": {
     "message": "Click \"ADD MAP\" to publicly share a map from a .mapeomap file exported from Mapeo"
   },
-  "file_uploading": {
-    "message": "Uploading file {currentFile} of {totalFiles}"
+  "empty_title": {
+    "message": "No maps to show"
   },
   "forgot_password_link": {
     "message": "Forgot password?"
@@ -68,11 +65,17 @@
   "have_account_link": {
     "message": "Already have an account? Sign in"
   },
-  "learn_more_title": {
-    "message": "Learn more about "
+  "learn_more_href": {
+    "message": "https://docs.mapeo.app/"
   },
   "learn_more_link": {
     "message": "Webmaps and Mapeo"
+  },
+  "learn_more_title": {
+    "message": "Learn more about"
+  },
+  "log_out": {
+    "message": "Log out"
   },
   "login_button": {
     "message": "Login"
@@ -80,14 +83,11 @@
   "login_remember": {
     "message": "Remember Me"
   },
-  "logout_button": {
-    "message": "Logout"
-  },
-  "mapstyle_label": {
-    "message": "Map Style"
-  },
-  "password_label": {
+  "password": {
     "message": "Password"
+  },
+  "password_required": {
+    "message": "A password is required"
   },
   "password_reset_button": {
     "message": "Get reset link"
@@ -104,40 +104,13 @@
   "password_reset_title": {
     "message": "Password Reset"
   },
-  "public_link_tooltip": {
-    "message": "Public link to Map"
-  },
   "return_to_login": {
     "message": "Return to login"
   },
-  "save_button": {
-    "message": "Save"
-  },
-  "share_all": {
-    "message": "Public link to all maps"
-  },
   "signup_button": {
-    "message": "Signup"
+    "message": "Create an account"
   },
   "signup_link": {
     "message": "Don't have an account? Sign Up"
-  },
-  "terms_hint": {
-    "message": "Add terms & limitations about how this data can be used"
-  },
-  "terms_label": {
-    "message": "Terms & Limitations"
-  },
-  "title_label": {
-    "message": "Map Title"
-  },
-  "upload_error_desc": {
-    "message": "There was a problem uploading your map. Click the retry button to try again."
-  },
-  "upload_error_title": {
-    "message": "Upload Error"
-  },
-  "upload_new_data": {
-    "message": "Upload new data"
   }
 }
