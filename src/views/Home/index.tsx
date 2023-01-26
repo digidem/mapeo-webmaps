@@ -1,25 +1,29 @@
-import { Box, Link, Typography } from '@mui/material'
+import { Box, Fade, Link, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
+import { FileUploadOutlined as UploadIcon } from '@mui/icons-material'
 
 import { useIntl } from 'react-intl'
 import { DropzoneInputProps, DropzoneRootProps, useDropzone } from 'react-dropzone'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { AddMapButton } from '../../components/AddMapButton'
 import { AuthorisedLayout } from '../../layouts/Authorised'
-import { Img } from './styles'
+import { Img, Overlay } from './styles'
 
 import { messages as msgs } from './messages'
 import { unzip } from '../../helpers/file'
+import { Loader } from '../../components/Loader'
 
 export const HomeView = () => {
+  const [loading, setLoading] = useState(false)
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (!acceptedFiles.length || !acceptedFiles[0].name.match(/.mapeomap$/))
       return console.log('invalid file', acceptedFiles[0])
     const unzippedFiles = await unzip(acceptedFiles[0])
     console.log({ unzippedFiles })
+    setLoading(true)
     // createMap(files);
   }, [])
-  const { getRootProps, getInputProps, open, acceptedFiles, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps, open, isDragActive } = useDropzone({
     noClick: true,
     noKeyboard: true,
     accept: ['.mapeomap'],
@@ -28,24 +32,25 @@ export const HomeView = () => {
 
   return (
     <AuthorisedLayout onClickAddMap={open}>
-      <NoMaps
-        openDialog={open}
-        getRootProps={getRootProps}
-        getInputProps={getInputProps}
-        isDragActive={isDragActive}
-      />
+      {loading ? (
+        <Loader width={100} justify="flex-end" />
+      ) : (
+        <div {...getRootProps({ className: 'dropzone' })}>
+          <DragDropOverlay active={isDragActive} />
+          <NoMaps openDialog={open} getInputProps={getInputProps} isDragActive={isDragActive} />
+        </div>
+      )}
     </AuthorisedLayout>
   )
 }
 
 type NoMapsType = {
   openDialog: () => void
-  getRootProps: (props?: DropzoneRootProps | undefined) => DropzoneRootProps
   getInputProps: (props?: DropzoneInputProps | undefined) => DropzoneInputProps
   isDragActive: boolean
 }
 
-const NoMaps = ({ openDialog, getRootProps, getInputProps, isDragActive }: NoMapsType) => {
+const DragDropOverlay = ({ active }: { active: boolean }) => {
   const { formatMessage } = useIntl()
 
   type NoMapsType = {
