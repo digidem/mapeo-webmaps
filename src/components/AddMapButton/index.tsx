@@ -1,6 +1,6 @@
-import { Button } from '../Button'
-import { Add as AddIcon } from '@mui/icons-material';
+import { Add as AddIcon } from '@mui/icons-material'
 import { defineMessages, useIntl } from 'react-intl'
+import { Button } from '../Button'
 
 const msgs = defineMessages({
   addMap: {
@@ -10,15 +10,16 @@ const msgs = defineMessages({
 })
 
 type AddMapButtonTypes = {
-  onClick?: ((event?: React.MouseEvent<HTMLButtonElement>) => void) | (() => void)
-  fullWidth?: boolean
+  onClick?: any
+  // onClick?: ((event?: React.MouseEvent<HTMLButtonElement>) => void) | (() => void)
 }
 
 export const AddMapButton = ({ onClick }: AddMapButtonTypes) => {
   const message = useIntl().formatMessage(msgs.addMap)
 
   return (
-    <Button fullWidth={false} icon={AddIcon}>{message}</Button>
+    <Button fullWidth={false} icon={AddIcon} onClick={onClick}>
+      {message}
+    </Button>
   )
 }
-

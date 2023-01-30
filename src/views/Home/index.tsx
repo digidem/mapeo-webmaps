@@ -1,14 +1,12 @@
 import { Fade, useTheme, Box, Link, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
 import { FileUploadOutlined as UploadIcon } from '@mui/icons-material'
-
 import { useIntl } from 'react-intl'
 import { DropzoneInputProps, DropzoneRootProps, useDropzone } from 'react-dropzone'
 import { useCallback, useState } from 'react'
 import { AddMapButton } from '../../components/AddMapButton'
 import { AuthorisedLayout } from '../../layouts/Authorised'
 import { Img, Overlay } from './styles'
-
 import { messages as msgs } from './messages'
 import { unzip } from '../../helpers/file'
 import { Loader } from '../../components/Loader'
@@ -29,7 +27,6 @@ export const HomeView = () => {
     accept: ['.mapeomap'],
     onDrop,
   })
-
   return (
     <AuthorisedLayout onClickAddMap={open}>
       {loading ? (
@@ -52,59 +49,42 @@ type NoMapsType = {
 
 const DragDropOverlay = ({ active }: { active: boolean }) => {
   const { formatMessage } = useIntl()
-
-  type NoMapsType = {
-    openDialog: () => void
-    getRootProps: (props?: DropzoneRootProps | undefined) => DropzoneRootProps
-    getInputProps: (props?: DropzoneInputProps | undefined) => DropzoneInputProps
-    isDragActive: boolean
-  }
-
-  const NoMaps = ({ openDialog, getRootProps, getInputProps, isDragActive }: NoMapsType) => {
-    const { formatMessage } = useIntl()
-
-    return (
-      <div {...getRootProps({ className: 'dropzone' })}>
-        <Box justifyContent="center" alignItems="center" sx={{ width: '100%', height: 'calc(100vh - 80px)', paddingTop: '15vh' }}>
-          <Stack direction="column" justifyContent="center" alignItems="center" spacing={5}>
-            <Img src="/svg/nomap.svg" alt="" />
-            <Typography variant="h3">No maps to show</Typography>
-            <Typography variant="body1">
-              {formatMessage(msgs.empty_message)}
-              <Link href={formatMessage(msgs.empty_message_href)}>{formatMessage(msgs.empty_message_link)}</Link>
-            </Typography>
-            <input {...getInputProps()} />
-            <AddMapButton onClick={openDialog} />
-          </Stack>
-        </Box >
-      </div>
-    )
-  }
-
-  const NoMaps = () => {
-    const { formatMessage } = useIntl()
-
-    return (
-      <Box
-        justifyContent="center"
-        alignItems="center"
-        sx={{ width: '100%', height: 'calc(100vh - 80px)', paddingTop: '15vh' }}
-      >
-        <Stack direction="column" justifyContent="center" alignItems="center" spacing={5}>
-          <Img src="/svg/nomap.svg" alt="" />
-          <Typography variant="h3">{formatMessage(msgs.empty_title)}</Typography>
-          <Typography variant="body1">
-            {formatMessage(msgs.empty_message)}
-            <Link href={formatMessage(msgs.empty_message_href)}>{formatMessage(msgs.empty_message_link)}</Link>
+  return (
+    <Fade in={active}>
+      <Overlay>
+        <span>
+          <Typography variant="h2" align="center" color="white">
+            {formatMessage(msgs.drop_file_message)}
           </Typography>
-          <AddMapButton />
-        </Stack>
-      </Box>
-    )
-  }
-
-  export const HomeView = () => (
-    <AuthorisedLayout>
-      <NoMaps />
-    </AuthorisedLayout>
+        </span>
+      </Overlay>
+    </Fade>
   )
+}
+
+const NoMaps = ({ openDialog, getInputProps, isDragActive }: NoMapsType) => {
+  const { formatMessage } = useIntl()
+  return (
+    <Box
+      justifyContent="center"
+      alignItems="center"
+      sx={{
+        width: '100%',
+        height: 'calc(100vh - 80px)',
+        paddingTop: '15vh',
+        opacity: isDragActive ? 0.5 : 0.5,
+      }}
+    >
+      <Stack direction="column" justifyContent="center" alignItems="center" spacing={5}>
+        <Img src="/svg/nomap.svg" alt="" />
+        <Typography variant="h3">{formatMessage(msgs.empty_title)}</Typography>
+        <Typography variant="body1">
+          {formatMessage(msgs.empty_message)}
+          <Link href={formatMessage(msgs.empty_message_href)}>{formatMessage(msgs.empty_message_link)}</Link>
+        </Typography>
+        <input {...getInputProps()} />
+        <AddMapButton onClick={openDialog} />
+      </Stack>
+    </Box>
+  )
+}
