@@ -5,9 +5,6 @@
   "app_title": {
     "message": "Webmaps"
   },
-  "auth_title": {
-    "message": "Share your Mapeo maps publicly"
-  },
   "auth/email-already-in-use": {
     "message": "Email is already in use (you probably already have an account)"
   },

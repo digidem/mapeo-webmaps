@@ -51,8 +51,8 @@ export const Header = ({ children, onClickAddMap }: HeaderProps) => {
       {children || (
         <Row padding="0 0 0 18px">
           <Block>
-            <AddMapButton />
-          </Block >
+            <AddMapButton onClick={onClickAddMap} />
+          </Block>
           <Link to="/">
             <Block centered>
               <LogoImg src="/svg/logo-w.svg" alt="" />
@@ -65,14 +65,12 @@ export const Header = ({ children, onClickAddMap }: HeaderProps) => {
                   {user.email}
                 </Typography>
               ) : null}
-              {
-                user ? (
-                  <LogOutButton onClick={handleLogOut}>{formatMessage(msgs.log_out)}</LogOutButton>
-                ) : null
-              }
-            </Row >
-          </Block >
-        </Row >
+              {user ? (
+                <LogOutButton onClick={handleLogOut}>{formatMessage(msgs.log_out)}</LogOutButton>
+              ) : null}
+            </Row>
+          </Block>
+        </Row>
       )}
     </HeaderWrapper>
   )
