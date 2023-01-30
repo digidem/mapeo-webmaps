@@ -72,7 +72,7 @@ const NoMaps = ({ openDialog, getInputProps, isDragActive }: NoMapsType) => {
         width: '100%',
         height: 'calc(100vh - 80px)',
         paddingTop: '15vh',
-        opacity: isDragActive ? 0.5 : 0.5,
+        opacity: isDragActive ? 0.5 : 1,
       }}
     >
       <Stack direction="column" justifyContent="center" alignItems="center" spacing={5}>
