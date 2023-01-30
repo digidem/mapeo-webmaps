@@ -78,9 +78,11 @@ const NoMaps = ({ openDialog, getInputProps, isDragActive }: NoMapsType) => {
       <Stack direction="column" justifyContent="center" alignItems="center" spacing={5}>
         <Img src="/svg/nomap.svg" alt="" />
         <Typography variant="h3">{formatMessage(msgs.empty_title)}</Typography>
-        <Typography variant="body1">
+        <Typography variant="body1" align="center">
           {formatMessage(msgs.empty_message)}
-          <Link href={formatMessage(msgs.empty_message_href)}>{formatMessage(msgs.empty_message_link)}</Link>
+          <Link display="block" href={formatMessage(msgs.empty_message_href)}>
+            {formatMessage(msgs.empty_message_link)}
+          </Link>
         </Typography>
         <input {...getInputProps()} />
         <AddMapButton onClick={openDialog} />
