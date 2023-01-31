@@ -1,12 +1,23 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from 'react'
+import { Feature } from 'geojson'
 import * as path from 'path'
 import * as md5 from 'js-md5'
-import { create } from 'js-md5'
-import { FileType, getJsonFromFiles } from '../helpers/file'
+// import { create } from 'js-md5'
+import { FileType, getImagesFromFiles, getJsonFromFiles } from '../helpers/file'
 
 // import * as api from "../api";
 
-const VALID_EXTS = ['.png', '.jpg', '.jpeg']
+type MetadataType = {
+  title: string
+  description: string
+  public?: boolean
+}
+
+type PointsType = {
+  features: Feature[]
+  description: string
+  public?: boolean
+}
 
 // function getImagesFromFiles(files) {
 //   return files
@@ -32,15 +43,15 @@ const VALID_EXTS = ['.png', '.jpg', '.jpeg']
 export const useCreateMap = () => {
   const cancelRef = useRef(false)
   const uploadsRef = useRef(new Map())
-  const metadataRef = useRef()
-  const pointsRef = useRef()
-  const totalBytesRef = useRef()
+  const metadataRef = useRef<MetadataType | undefined>()
+  const pointsRef = useRef<Feature[] | undefined>()
+  const totalBytesRef = useRef(0)
 
   const [totalFiles, setTotalFiles] = useState(0)
   const [currentFile, setCurrentFile] = useState(0)
   const [progress, setProgress] = useState(0)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState()
+  const [error, setError] = useState<Error | null>(null)
   const [done, setDone] = useState(false)
   // const [id, setId] = useState()
 
@@ -58,40 +69,51 @@ export const useCreateMap = () => {
   )
 
   const createMap = useCallback((files: FileType[], id?: string) => {
-    // const images = getImagesFromFiles(files)
+    setLoading(true)
+    const images = getImagesFromFiles(files)
     // totalBytesRef.current = images.reduce(
-    //   (acc, f) => acc + f.data.byteLength,
+    //   (acc, f: ArrayBuffer) => {
+    //     if (f?.data) {
+    //       return acc + f.data.byteLength
+    //     } return 0
+    //   },
     //   0
     // )
-    const pointsFC = getJsonFromFiles(files, 'points.json')
-    const metadata = getJsonFromFiles(files, 'metadata.json') || {}
+    const pointsFC = getJsonFromFiles(files, 'points.json') as PointsType
+    const metadata = getJsonFromFiles(files, 'metadata.json') as MetadataType
 
-    return { pointsFC, metadata }
+    uploadsRef.current = new Map()
+    setTotalFiles(images.length)
+    setCurrentFile(0)
+    setError(null)
+    setDone(false)
+    setLoading(true)
 
-    // if (!pointsFC || !pointsFC.features || !pointsFC.features.length)
-    //   return setError(new Error('No data found in file'))
-    // metadata.title = metadata.title || 'My Map'
-    // metadata.public = true
+    if (!pointsFC || !pointsFC.features || !pointsFC.features.length) {
+      return setError(new Error('No data found in file'))
+    }
+    metadata.title = metadata.title || 'My Map'
+    metadata.public = true
 
-    // const points = []
-    // for (var f of pointsFC.features) {
-    //   const image = images.find(
-    //     // eslint-disable-next-line no-loop-func
-    //     file => path.basename(file.name) === f.properties.image
-    //   )
-    //   if (!image && f.properties.image) {
-    //     console.log(`Missing image ${f.properties.image}`)
-    //     // return setError(new Error("Missing image " + f.properties.image));
-    //   }
-    //   points.push({
-    //     ...f,
-    //     properties: { ...f.properties, image: image ? image.hashedName : null }
-    //   })
-    // }
+    const points = pointsFC.features.map((feature) => {
+      const image = images.find((file) => path.basename(file.name) === feature.properties?.image)
 
-    // // Keep the metadata and points around in case we need to retry map creation
-    // metadataRef.current = metadata
-    // pointsRef.current = points
+      if (!image && feature.properties?.image) {
+        console.log(`Missing image ${feature.properties?.image as string}`)
+        setError(new Error(`Missing image ${feature.properties.image as string}`))
+      }
+
+      return {
+        ...feature,
+        properties: { ...feature.properties, image: image ? image.hashedName : null },
+      }
+    })
+
+    // Keep the metadata and points around in case we need to retry map creation
+    metadataRef.current = metadata
+    pointsRef.current = points
+
+    return { points, metadata, images }
 
     // // Don't await, we can start uploading files whilst the map is created
     // const createMapPromise = api.createMap(id, metadata, points)
