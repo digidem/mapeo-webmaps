@@ -10,16 +10,17 @@ import { Img, Overlay } from './styles'
 import { messages as msgs } from './messages'
 import { unzip } from '../../helpers/file'
 import { Loader } from '../../components/Loader'
+import { useCreateMap } from '../../hooks/mapHooks'
 
 export const HomeView = () => {
-  const [loading, setLoading] = useState(false)
+  const { createMap, progress, loading, error, done } = useCreateMap()
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (!acceptedFiles.length || !acceptedFiles[0].name.match(/.mapeomap$/))
       return console.log('invalid file', acceptedFiles[0])
     const unzippedFiles = await unzip(acceptedFiles[0])
     console.log({ unzippedFiles })
-    setLoading(true)
-    // createMap(files);
+    const data = createMap(unzippedFiles)
+    console.log({ data })
   }, [])
   const { getRootProps, getInputProps, open, isDragActive } = useDropzone({
     noClick: true,
