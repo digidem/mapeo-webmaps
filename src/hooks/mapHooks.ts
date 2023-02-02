@@ -115,6 +115,17 @@ export const useCreateMap = () => {
 
     return { points, metadata, images }
 
+    function updateProgress() {
+      if (!totalBytesRef.current) return
+      // const tfrd = sumMapValueProp(uploadsRef.current, "bytesTransferred");
+
+      // setProgress(Math.ceil((tfrd / totalBytesRef.current) * 100));
+      // TODO make this work
+      if (progress < 100) {
+        setProgress(progress + 10)
+      }
+    }
+
     // // Don't await, we can start uploading files whilst the map is created
     // const createMapPromise = api.createMap(id, metadata, points)
     // setId(createMapPromise.id)
