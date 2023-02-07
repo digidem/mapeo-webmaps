@@ -83,27 +83,42 @@ export async function createMap(metadata: MapMetadata, points: PointType, id?: s
     state: 'CA',
     country: 'USA',
   })
-  // const obsRef = mapRef.collection("observations")
-
-  // const promise = obsRef.get().then(snap => {
-  //   const existingIds = snap.docs.map(doc => doc.id)
-  //   const toDelete = existingIds.filter(id => !pointIds.includes(id))
-
-  //   const batch = writeBatch(db);
-  //   batch.set(mapRef, metadata)
-  //   for (var point of pointsWithIds) {
-  //     // Deterministic ids so that we can retry uploads
-  //     batch.set(obsRef.doc(point.properties._id), point)
-  //   }
-  //   for (var deleteId of toDelete) {
-  //     batch.delete(obsRef.doc(deleteId))
-  //   }
-  //   return batch.commit()
-  // })
-
-  // promise.id = mapRef.id
-  // return promise
 }
+
+// export const uploadFile = async (file: File) => {
+//   updateProgress()
+//   const upload = { file, bytesTransferred: 0 }
+//   uploadsRef.current.set(file.hashedName, upload)
+
+//   return new Promise((resolve, reject) => {
+//     const uploadTask = uploadImage(file.hashedName, file.data)
+//     upload.cancel = () => uploadTask.cancel()
+//     uploadTask.on('progress', (bytesTransferred) => {
+//       upload.bytesTransferred = bytesTransferred
+//       updateProgress()
+//     })
+//     uploadTask.on('error', (e) => {
+//       upload.error = e
+//       reject(e)
+//     })
+//     uploadTask.on('complete', () => {
+//       upload.bytesTransferred = file.data.byteLength
+//       upload.error = null
+//       updateProgress()
+//       resolve()
+//     })
+//   })
+
+//   function updateProgress() {
+//     if (!totalBytesRef.current) return
+//     const tfrd = sumMapValueProp(uploadsRef.current, 'bytesTransferred')
+//     setProgress(Math.ceil((tfrd / totalBytesRef.current) * 100))
+//   }
+// }
+
+// type CancellableEventEmitterType = EventEmitter & {
+//   cancel: () => void
+// }
 
 /**
  * Uploads an image to firebase storage. Will skip upload if the file already
@@ -117,126 +132,24 @@ export async function createMap(metadata: MapMetadata, points: PointType, id?: s
  * The returned event emitter also has the method `cancel()` which will cancel
  * the download and unsubscribe all events
  */
-// export function uploadImage(filename: string, data) {
+// export const uploadImage = async (filename: string, data: File) => {
 //   let cancel = false
-//   const emitter = new EventEmitter()
+//   const emitter = new EventEmitter() as CancellableEventEmitterType
 //   emitter.cancel = () => {
 //     cancel = true
 //     emitter.removeAllListeners()
 //   }
 
 //   const { currentUser } = auth
-//   const ref = firebase
-//     .storage()
-//     .ref()
-//     .child(`images/${currentUser?.uid}/original/${filename}`)
+//   const storage = getStorage()
 
-//   ref
-//     .getDownloadURL()
-//     .then(() => emitter.emit("complete"))
-//     .catch(() => {
-//       // No download URL => this image is not uploaded yet
-//       if (cancel) return
-//       const fileMeta = { contentType: "image/jpeg" } // TODO: Support PNG
-//       const uploadTask = ref.put(data, fileMeta)
-//       const unsubscribe = uploadTask.on("state_changed", {
-//         next: snapshot => emitter.emit("progress", snapshot.bytesTransferred),
-//         error: e => emitter.emit("error", e),
-//         complete: () => emitter.emit("complete")
-//       })
-//       emitter.cancel = () => {
-//         unsubscribe()
-//         emitter.removeAllListeners()
-//         return uploadTask.cancel()
-//       }
-//     })
+//   if (!currentUser) throw new Error('Not Authorized')
+
+//   const storeRef = ref(storage, `images/${currentUser.uid}/original/${filename}`)
+
+//   const snapshot = await uploadBytes(storeRef, data)
+
+//   console.log({ snapshot })
+
 //   return emitter
 // }
-
-export const uploadFile = async (file: File) => {
-  updateProgress()
-  const upload = { file, bytesTransferred: 0 }
-  uploadsRef.current.set(file.hashedName, upload)
-
-  return new Promise((resolve, reject) => {
-    const uploadTask = uploadImage(file.hashedName, file.data)
-    upload.cancel = () => uploadTask.cancel()
-    uploadTask.on('progress', (bytesTransferred) => {
-      upload.bytesTransferred = bytesTransferred
-      updateProgress()
-    })
-    uploadTask.on('error', (e) => {
-      upload.error = e
-      reject(e)
-    })
-    uploadTask.on('complete', () => {
-      upload.bytesTransferred = file.data.byteLength
-      upload.error = null
-      updateProgress()
-      resolve()
-    })
-  })
-
-  function updateProgress() {
-    if (!totalBytesRef.current) return
-    const tfrd = sumMapValueProp(uploadsRef.current, 'bytesTransferred')
-    setProgress(Math.ceil((tfrd / totalBytesRef.current) * 100))
-  }
-}
-
-type CancellableEventEmitterType = EventEmitter & {
-  cancel: () => void
-}
-
-/**
- * Uploads an image to firebase storage. Will skip upload if the file already
- * exists, so it should be called with a unique filename
- *
- * Returns an event emitter which will emit these events:
- * `progress` emitted with number of bytes transferred so far
- * `error` emitted with error object
- * `complete` when upload is complete
- *
- * The returned event emitter also has the method `cancel()` which will cancel
- * the download and unsubscribe all events
- */
-export const uploadImage = async (filename: string, data: File) => {
-  let cancel = false
-  const emitter = new EventEmitter() as CancellableEventEmitterType
-  emitter.cancel = () => {
-    cancel = true
-    emitter.removeAllListeners()
-  }
-
-  const { currentUser } = auth
-  const storage = getStorage()
-
-  if (!currentUser) throw new Error('Not Authorized')
-
-  const storeRef = ref(storage, `images/${currentUser.uid}/original/${filename}`)
-
-  const snapshot = await uploadBytes(storeRef, data)
-
-  console.log({ snapshot })
-
-  // storeRef
-  //   .getDownloadURL()
-  //   .then(() => emitter.emit('complete'))
-  //   .catch(() => {
-  //     // No download URL => this image is not uploaded yet
-  //     if (cancel) return
-  //     const fileMeta = { contentType: 'image/jpeg' } // TODO: Support PNG
-  //     const uploadTask = ref.put(data, fileMeta)
-  //     const unsubscribe = uploadTask.on('state_changed', {
-  //       next: snapshot => emitter.emit('progress', snapshot.bytesTransferred),
-  //       error: e => emitter.emit('error', e),
-  //       complete: () => emitter.emit('complete')
-  //     })
-  //     emitter.cancel = () => {
-  //       unsubscribe()
-  //       emitter.removeAllListeners()
-  //       return uploadTask.cancel()
-  //     }
-  //   })
-  return emitter
-}
