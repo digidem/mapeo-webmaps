@@ -10,7 +10,7 @@ import { Img, Overlay } from './styles'
 import { messages as msgs } from './messages'
 import { unzip } from '../../helpers/file'
 import { Loader } from '../../components/Loader'
-import { useCreateMap } from '../../hooks/mapHooks'
+import { useCreateMap } from '../../hooks/useCreateMap'
 
 export const HomeView = () => {
   const { createMap, progress, loading, error, done } = useCreateMap()

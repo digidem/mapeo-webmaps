@@ -12,3 +12,13 @@ export const getMetadata = (files: FileType[], id?: string) => {
 
   return metadata
 }
+
+// export const getPointsData = (files: FileType[], id?: string) => {
+//   const metadata = getJsonFromFiles(files, 'metadata.json') as MapMetadataType
+//   metadata.title = metadata.title || 'My Map'
+//   metadata.public = true
+
+//   if (!id) metadata.createdAt = serverTimestamp()
+
+//   return metadata
+// }
