@@ -132,7 +132,7 @@ export const useCreateMap = () => {
         uploadImage(imageFile.hashedName || '', imageFile.data)
       } catch (e) {
         // Continue uploads after a failed upload, but mark as error
-        setError(e)
+        // setError(e)
       }
     })
     await batch.commit()
