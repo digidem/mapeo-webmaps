@@ -12,6 +12,14 @@ export type FileType = {
   hashedName?: string
 }
 
+export type ImageFileType = {
+  type: 'arraybuffer'
+  data: any
+  name: string
+  date: Date
+  hashedName?: string
+}
+
 type FilePromiseType = Promise<FileType>
 
 // arraybuffer or string), filename, date
@@ -50,4 +58,4 @@ export const getImagesFromFiles = (files: FileType[], validExtensions: string[] 
     .map((file) => {
       file.hashedName = md5(file.data) + path.extname(file.name)
       return file
-    })
+    }) as ImageFileType[]
