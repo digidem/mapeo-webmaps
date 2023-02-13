@@ -54,5 +54,5 @@ export const Button = ({
     {...rest}
   >
     {children}
-  </StyledButton >
+  </StyledButton>
 )

@@ -9,7 +9,7 @@ import { IconBadge } from '../../components/IconBadge'
 import { TextInput } from '../../components/TextInput'
 import { AuthScreen } from '../../components/AuthScreen'
 
-export const ForgottenPasswordView = ({ }: RouteComponentProps) => {
+export const ForgottenPasswordView = ({}: RouteComponentProps) => {
   const { formatMessage } = useIntl()
   const [email, setEmail] = useState('')
   const theme = useTheme()
