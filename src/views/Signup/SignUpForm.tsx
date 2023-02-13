@@ -141,6 +141,6 @@ export const SignUpForm = () => {
       >
         {formatMessage(msgs.have_account)}
       </Link>
-    </Stack >
+    </Stack>
   )
 }
