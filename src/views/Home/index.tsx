@@ -17,6 +17,7 @@ export const HomeView = () => {
     createMap,
     progress: { completed, loading, error, done },
   } = useCreateMap()
+
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (!acceptedFiles.length || !acceptedFiles[0].name.match(/.mapeomap$/))
       return console.log('invalid file', acceptedFiles[0])
@@ -24,12 +25,14 @@ export const HomeView = () => {
     console.log({ unzippedFiles })
     const data = createMap(unzippedFiles)
   }, [])
+
   const { getRootProps, getInputProps, open, isDragActive } = useDropzone({
     noClick: true,
     noKeyboard: true,
     accept: ['.mapeomap'],
     onDrop,
   })
+
   return (
     <AuthorisedLayout onClickAddMap={open}>
       {done || loading ? (
@@ -37,7 +40,6 @@ export const HomeView = () => {
       ) : (
         <div {...getRootProps({ className: 'dropzone' })}>
           <DragDropOverlay active={isDragActive} />
-          <Loader width={100} value={33} justify="flex-end" />
           <NoMaps openDialog={open} getInputProps={getInputProps} isDragActive={isDragActive} />
         </div>
       )}

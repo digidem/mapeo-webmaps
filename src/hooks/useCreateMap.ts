@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useRef, useEffect } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { Feature } from 'geojson'
 import * as path from 'path'
 import * as md5 from 'js-md5'
@@ -6,22 +6,15 @@ import * as EventEmitter from 'events'
 
 // import { create } from 'js-md5'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import {
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytes,
-  uploadBytesResumable,
-  UploadTaskSnapshot,
-} from 'firebase/storage'
+import { getDownloadURL, getStorage, ref, uploadBytesResumable, UploadTaskSnapshot } from 'firebase/storage'
 // import { getStorage, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage'
 import { addDoc, collection, doc, writeBatch } from 'firebase/firestore'
 import * as stringify from 'json-stable-stringify'
 import { FirebaseError } from 'firebase/app'
-import { FileType, getImagesFromFiles, getJsonFromFiles, ImageFileType } from '../helpers/file'
+import { FileType, getImagesFromFiles, getJsonFromFiles } from '../helpers/file'
 import { auth, db, firebaseApp } from '..'
 import { getMetadata } from '../helpers/map'
-import { MapMetadataType } from '../types'
+// import { MapMetadataType } from '../types'
 
 // import * as api from "../api";
 
@@ -85,69 +78,14 @@ export const useCreateMap = () => {
     [user],
   )
 
-  const createObservationsDocs = useCallback(async (files: FileType[], mapPath: string) => {
-    const pointsJson = getJsonFromFiles(files, 'points.json') as PointsType
-    const images = getImagesFromFiles(files)
-    setTotalFiles(images.length)
-
-    totalBytesRef.current = images.reduce(
-      (acc, file) => (file.type === 'arraybuffer' ? acc + parseInt(file.data.byteLength) : acc),
-      0,
-    )
-
-    const points = pointsJson.features.map((feature) => {
-      const image = images.find((file) => path.basename(file.name) === feature.properties?.image)
-
-      if (!image && feature.properties?.image) {
-        console.log(`Missing image ${feature.properties?.image as string}`)
-        setError(new Error(`Missing image ${feature.properties.image as string}`))
-      }
-
-      return {
-        ...feature,
-        properties: { ...feature.properties, image: image ? image.hashedName : null },
-      }
-    })
-    const pointsWithIds = points.map((f) => ({
-      ...f,
-      properties: {
-        ...f.properties,
-        _id: md5(stringify(f)),
-      },
-    }))
-
-    const batch = writeBatch(db)
-
-    const observationsPath = `${mapPath}/observations`
-
-    pointsWithIds.forEach((point) => {
-      const pointRef = doc(db, observationsPath, point.properties._id)
-      batch.set(pointRef, point)
-    })
-
-    images.forEach((imageFile) => {
-      if (cancelRef.current) return // bail if component is unmounted
-      setCurrentFile((c) => c + 1)
-      try {
-        uploadImage(imageFile.hashedName || '', imageFile.data)
-      } catch (e) {
-        // Continue uploads after a failed upload, but mark as error
-        // setError(e)
-      }
-    })
-    await batch.commit()
-
-    console.log(`${observationsPath} set`)
-  }, [])
-
   const uploadImage = useCallback(
     // async (filename: string, data: ArrayBuffer | string) => {
     (filename: string, data: ArrayBuffer | string) => {
       if (!user) throw new Error('Not Authorized')
-      let cancel = false
+      // let cancel = false
       const emitter = new EventEmitter() as CancellableEventEmitterType
       emitter.cancel = () => {
-        cancel = true
+        // cancel = true
         emitter.removeAllListeners()
       }
       const fileMeta = { contentType: 'image/jpeg' } // TODO: Support PNG
@@ -159,7 +97,6 @@ export const useCreateMap = () => {
       // const snapshot = await uploadBytes(storageRef, data as ArrayBuffer, fileMeta)
       const uploadTask = uploadBytesResumable(storageRef, data as ArrayBuffer, fileMeta)
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       uploadTask.on(
         'state_changed',
         (snapshot: UploadTaskSnapshot) => {
@@ -183,6 +120,64 @@ export const useCreateMap = () => {
       )
     },
     [user, storage],
+  )
+
+  const createObservationsDocs = useCallback(
+    async (files: FileType[], mapPath: string) => {
+      const pointsJson = getJsonFromFiles(files, 'points.json') as PointsType
+      const images = getImagesFromFiles(files)
+      setTotalFiles(images.length)
+
+      totalBytesRef.current = images.reduce(
+        (acc, file) => (file.type === 'arraybuffer' ? acc + parseInt(file.data.byteLength) : acc),
+        0,
+      )
+
+      const points = pointsJson.features.map((feature) => {
+        const image = images.find((file) => path.basename(file.name) === feature.properties?.image)
+
+        if (!image && feature.properties?.image) {
+          console.log(`Missing image ${feature.properties?.image as string}`)
+          setError(new Error(`Missing image ${feature.properties.image as string}`))
+        }
+
+        return {
+          ...feature,
+          properties: { ...feature.properties, image: image ? image.hashedName : null },
+        }
+      })
+      const pointsWithIds = points.map((f) => ({
+        ...f,
+        properties: {
+          ...f.properties,
+          _id: md5(stringify(f)),
+        },
+      }))
+
+      const batch = writeBatch(db)
+
+      const observationsPath = `${mapPath}/observations`
+
+      pointsWithIds.forEach((point) => {
+        const pointRef = doc(db, observationsPath, point.properties._id)
+        batch.set(pointRef, point)
+      })
+
+      images.forEach((imageFile) => {
+        if (cancelRef.current) return // bail if component is unmounted
+        setCurrentFile((c) => c + 1)
+        try {
+          uploadImage(imageFile.hashedName || '', imageFile.data)
+        } catch (e) {
+          // Continue uploads after a failed upload, but mark as error
+          // setError(e)
+        }
+      })
+      await batch.commit()
+
+      console.log(`${observationsPath} set`)
+    },
+    [uploadImage],
   )
 
   const createMap = useCallback(
