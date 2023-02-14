@@ -1,5 +1,6 @@
 import { Add as AddIcon } from '@mui/icons-material'
 import { defineMessages, useIntl } from 'react-intl'
+import { useDropzoneMaps } from '../../hooks/useDropzoneMaps'
 import { Button } from '../Button'
 
 const msgs = defineMessages({
@@ -9,17 +10,17 @@ const msgs = defineMessages({
   },
 })
 
-type AddMapButtonTypes = {
-  onClick?: any
-  // onClick?: ((event?: React.MouseEvent<HTMLButtonElement>) => void) | (() => void)
-}
-
-export const AddMapButton = ({ onClick }: AddMapButtonTypes) => {
+export const AddMapButton = () => {
   const message = useIntl().formatMessage(msgs.addMap)
 
+  const { open, getInputProps } = useDropzoneMaps()
+
   return (
-    <Button fullWidth={false} icon={AddIcon} onClick={onClick}>
-      {message}
-    </Button>
+    <>
+      <input {...getInputProps()} />
+      <Button fullWidth={false} icon={AddIcon} onClick={open}>
+        {message}
+      </Button>
+    </>
   )
 }

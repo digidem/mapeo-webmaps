@@ -12,7 +12,6 @@ import { messages as msgs } from './messages'
 
 type HeaderProps = {
   children?: React.ReactNode
-  onClickAddMap?: () => void
 }
 
 type JustifyContentProperty = 'space-between' | 'center' | 'flex-start' | 'flex-end'
@@ -35,7 +34,7 @@ const Row = ({ padding = 0, justify = 'space-between', ...rest }: RowProps) => (
   />
 )
 
-export const Header = ({ children, onClickAddMap }: HeaderProps) => {
+export const Header = ({ children }: HeaderProps) => {
   const { formatMessage } = useIntl()
   const [user] = useAuthState(auth)
 
@@ -51,7 +50,7 @@ export const Header = ({ children, onClickAddMap }: HeaderProps) => {
       {children || (
         <Row padding="0 0 0 18px">
           <Block>
-            <AddMapButton onClick={onClickAddMap} />
+            <AddMapButton />
           </Block>
           <Link to="/">
             <Block centered>

@@ -11,6 +11,7 @@ import { messages as msgs } from './messages'
 import { unzip } from '../../helpers/file'
 import { Loader } from '../../components/Loader'
 import { useCreateMap } from '../../hooks/useCreateMap'
+import { useDropzoneMaps } from '../../hooks/useDropzoneMaps'
 
 export const HomeView = () => {
   const {
@@ -26,16 +27,11 @@ export const HomeView = () => {
     const data = createMap(unzippedFiles)
   }, [])
 
-  const { getRootProps, getInputProps, open, isDragActive } = useDropzone({
-    noClick: true,
-    noKeyboard: true,
-    accept: ['.mapeomap'],
-    onDrop,
-  })
+  const { getRootProps, getInputProps, open, isDragActive } = useDropzoneMaps()
 
   return (
-    <AuthorisedLayout onClickAddMap={open}>
-      {done || loading ? (
+    <AuthorisedLayout>
+      {loading ? (
         loading && <Loader width={100} value={completed} />
       ) : (
         <div {...getRootProps({ className: 'dropzone' })}>
@@ -68,7 +64,7 @@ const DragDropOverlay = ({ active }: { active: boolean }) => {
   )
 }
 
-const NoMaps = ({ openDialog, getInputProps, isDragActive }: NoMapsType) => {
+const NoMaps = ({ getInputProps, isDragActive }: NoMapsType) => {
   const { formatMessage } = useIntl()
   return (
     <Box
@@ -91,7 +87,7 @@ const NoMaps = ({ openDialog, getInputProps, isDragActive }: NoMapsType) => {
           </Link>
         </Typography>
         <input {...getInputProps()} />
-        <AddMapButton onClick={openDialog} />
+        <AddMapButton />
       </Stack>
     </Box>
   )
