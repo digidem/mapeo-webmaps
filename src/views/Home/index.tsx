@@ -1,9 +1,8 @@
 import { Box, Fade, Link, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
-import { FileUploadOutlined as UploadIcon } from '@mui/icons-material'
 import { useIntl } from 'react-intl'
-import { DropzoneInputProps, DropzoneRootProps, useDropzone } from 'react-dropzone'
-import { useCallback, useState } from 'react'
+import { DropzoneInputProps, useDropzone } from 'react-dropzone'
+import { useCallback } from 'react'
 import { AddMapButton } from '../../components/AddMapButton'
 import { AuthorisedLayout } from '../../layouts/Authorised'
 import { Img, Overlay } from './styles'
@@ -18,13 +17,16 @@ export const HomeView = () => {
     progress: { completed, loading, error, done },
   } = useCreateMap()
 
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    if (!acceptedFiles.length || !acceptedFiles[0].name.match(/.mapeomap$/))
-      return console.log('invalid file', acceptedFiles[0])
-    const unzippedFiles = await unzip(acceptedFiles[0])
-    console.log({ unzippedFiles })
-    const data = createMap(unzippedFiles)
-  }, [])
+  const onDrop = useCallback(
+    async (acceptedFiles: File[]) => {
+      if (!acceptedFiles.length || !acceptedFiles[0].name.match(/.mapeomap$/))
+        return console.log('invalid file', acceptedFiles[0])
+      const unzippedFiles = await unzip(acceptedFiles[0])
+      console.log({ unzippedFiles })
+      const data = createMap(unzippedFiles)
+    },
+    [createMap],
+  )
 
   const { getRootProps, getInputProps, open, isDragActive } = useDropzone({
     noClick: true,
