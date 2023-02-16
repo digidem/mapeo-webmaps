@@ -14,7 +14,7 @@ export type FileType = {
 
 export type ImageFileType = {
   type: 'arraybuffer'
-  data: any
+  data: ArrayBuffer
   name: string
   date: Date
   hashedName?: string
