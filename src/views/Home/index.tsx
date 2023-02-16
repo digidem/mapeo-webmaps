@@ -3,6 +3,7 @@ import { Stack } from '@mui/system'
 import { useIntl } from 'react-intl'
 import { DropzoneInputProps, useDropzone } from 'react-dropzone'
 import { useCallback } from 'react'
+import * as React from 'react'
 import { AddMapButton } from '../../components/AddMapButton'
 import { AuthorisedLayout } from '../../layouts/Authorised'
 import { Img, Overlay } from './styles'
@@ -20,12 +21,10 @@ export const HomeView = () => {
   } = useCreateMap()
 
   const onDrop = useCallback(
-    async (acceptedFiles: File[]) => {
+    (acceptedFiles: File[]) => {
       if (!acceptedFiles.length || !acceptedFiles[0].name.match(/.mapeomap$/))
         return console.log('invalid file', acceptedFiles[0])
-      const unzippedFiles = await unzip(acceptedFiles[0])
-      console.log({ unzippedFiles })
-      const data = createMap(unzippedFiles)
+      createMap(acceptedFiles)
     },
     [createMap],
   )
@@ -72,32 +71,38 @@ const DragDropOverlay = ({ active }: { active: boolean }) => {
   )
 }
 
+const Container = ({ children, isDragActive }: { children: React.ReactNode; isDragActive?: boolean }) => (
+  <Box
+    justifyContent="center"
+    alignItems="center"
+    sx={{
+      width: '100%',
+      height: 'calc(100vh - 80px)',
+      paddingTop: '15vh',
+      opacity: isDragActive ? 0.5 : 1,
+    }}
+  >
+    <Stack direction="column" justifyContent="center" alignItems="center" spacing={5}>
+      {children}
+    </Stack>
+  </Box>
+)
+
 const NoMaps = ({ openDialog, getInputProps, isDragActive }: NoMapsType) => {
   const { formatMessage } = useIntl()
   return (
-    <Box
-      justifyContent="center"
-      alignItems="center"
-      sx={{
-        width: '100%',
-        height: 'calc(100vh - 80px)',
-        paddingTop: '15vh',
-        opacity: isDragActive ? 0.5 : 1,
-      }}
-    >
-      <Stack direction="column" justifyContent="center" alignItems="center" spacing={5}>
-        <Img src="/svg/nomap.svg" alt="" />
-        <Typography variant="h3">{formatMessage(msgs.empty_title)}</Typography>
-        <Typography variant="body1" align="center">
-          {formatMessage(msgs.empty_message)}
-          <Link display="block" href={formatMessage(msgs.empty_message_href)}>
-            {formatMessage(msgs.empty_message_link)}
-          </Link>
-        </Typography>
-        <input {...getInputProps()} />
-        <AddMapButton onClick={openDialog} />
-      </Stack>
-    </Box>
+    <Container isDragActive={isDragActive}>
+      <Img src="/svg/nomap.svg" alt="" />
+      <Typography variant="h3">{formatMessage(msgs.empty_title)}</Typography>
+      <Typography variant="body1" align="center">
+        {formatMessage(msgs.empty_message)}
+        <Link display="block" href={formatMessage(msgs.empty_message_href)}>
+          {formatMessage(msgs.empty_message_link)}
+        </Link>
+      </Typography>
+      <input {...getInputProps()} />
+      <AddMapButton onClick={openDialog} />
+    </Container>
   )
 }
 
@@ -131,15 +136,17 @@ const Uploading = ({
   ) : (
     <>
       <Loader width={100} value={completed} />
-      <Typography variant="body1">completed: {completed}</Typography>
-      <Typography variant="body1">currentFile: {currentFile}</Typography>
-      {failedFiles.length ? (
-        <Typography variant="body1">
-          failedFiles:{' '}
-          {failedFiles.map((failed) => (
-            <span>{failed.name}</span>
-          ))}
-        </Typography>
-      ) : null}
+      <Container>
+        <Typography variant="body1">completed: {completed}</Typography>
+        <Typography variant="body1">currentFile: {currentFile}</Typography>
+        {failedFiles.length ? (
+          <Typography variant="body1">
+            failedFiles:{' '}
+            {failedFiles.map((failed) => (
+              <span>{failed.name}</span>
+            ))}
+          </Typography>
+        ) : null}
+      </Container>
     </>
   )
