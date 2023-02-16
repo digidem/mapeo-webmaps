@@ -106,7 +106,7 @@ export const useCreateMap = () => {
       // }
       // // <<! END DEBUG CODE !>>
 
-      const uploadTask = uploadBytesResumable(storageRef, file.data as ArrayBuffer, fileMeta)
+      const uploadTask = uploadBytesResumable(storageRef, file.data, fileMeta)
 
       uploadTask.on(
         'state_changed',
@@ -140,10 +140,8 @@ export const useCreateMap = () => {
       const pointsJson = getJsonFromFiles(files, 'points.json') as PointsType
       const images = getImagesFromFiles(files)
 
-      console.log({ imageslength: images.length })
-
       totalBytesRef.current = images.reduce(
-        (acc, file) => (file.type === 'arraybuffer' ? acc + parseInt(file.data.byteLength) : acc),
+        (acc, file) => (file.type === 'arraybuffer' ? acc + file.data.byteLength : acc),
         0,
       )
 
