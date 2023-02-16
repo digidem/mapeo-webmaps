@@ -6,7 +6,7 @@ export const Loader = ({ width = 70, justify = 'center', value }: LoaderTypes) =
   <Stack justifyContent={justify} alignItems="center">
     <LinearProgress
       color="primary"
-      variant={typeof value === 'number' && value !== 0 ? 'determinate' : 'indeterminate'}
+      variant={value ? 'determinate' : 'indeterminate'}
       value={value}
       sx={{ height: '10px', width: `${width}%` }}
     />
