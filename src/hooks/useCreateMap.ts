@@ -9,7 +9,7 @@ import { getStorage, ref, uploadBytesResumable, UploadTaskSnapshot } from 'fireb
 import { addDoc, collection, doc, writeBatch } from 'firebase/firestore'
 import * as stringify from 'json-stable-stringify'
 import { FirebaseError } from 'firebase/app'
-import { FileType, ImageFileType, getImagesFromFiles, getJsonFromFiles } from '../helpers/file'
+import { FileType, ImageFileType, getImagesFromFiles, getJsonFromFiles, unzip } from '../helpers/file'
 import { auth, db, firebaseApp } from '..'
 import { getMetadata } from '../helpers/map'
 
@@ -35,8 +35,6 @@ export const useCreateMap = () => {
   const [user] = useAuthState(auth)
   const cancelRef = useRef(false)
   const uploadsRef = useRef(new Map())
-
-  const bytesTransferredRef = useRef(0)
   const totalBytesRef = useRef(0)
 
   const [totalFiles, setTotalFiles] = useState(0)
@@ -127,6 +125,8 @@ export const useCreateMap = () => {
         () => {
           // Handle successful uploads on complete
           // If it's the last file set loading to false
+          console.log({ bytesTransferred: uploadTask.snapshot.bytesTransferred })
+          upload.bytesTransferred = uploadTask.snapshot.bytesTransferred
           updateProgress()
           handleLastUpload()
         },
@@ -204,24 +204,26 @@ export const useCreateMap = () => {
   )
 
   const createMap = useCallback(
-    async (files: FileType[]) => {
+    async (files: File[]) => {
       setLoading(true)
-      const mapPath = await createMapDoc(files)
-      await createObservationsDocs(files, mapPath)
+      const unzippedFiles = await unzip(files[0])
+      const mapPath = await createMapDoc(unzippedFiles)
+      await createObservationsDocs(unzippedFiles, mapPath)
     },
     [createMapDoc, createObservationsDocs],
   )
 
   function updateProgress() {
     if (!totalBytesRef.current) return
+
     const transferred = sumMapValue(uploadsRef.current)
     const currentProgress = Math.ceil((transferred / totalBytesRef.current) * 100)
     setProgress(currentProgress)
+
     console.log({
       currentProgress,
       totalBytesRef: totalBytesRef.current,
       transferred,
-      bytesTransferredRef: bytesTransferredRef.current,
     })
   }
 
