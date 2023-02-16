@@ -7,14 +7,16 @@ import { AddMapButton } from '../../components/AddMapButton'
 import { AuthorisedLayout } from '../../layouts/Authorised'
 import { Img, Overlay } from './styles'
 import { messages as msgs } from './messages'
-import { unzip } from '../../helpers/file'
+import { ImageFileType, unzip } from '../../helpers/file'
 import { Loader } from '../../components/Loader'
 import { useCreateMap } from '../../hooks/useCreateMap'
+import { Button } from '../../components/Button'
 
 export const HomeView = () => {
   const {
     createMap,
-    progress: { completed, loading, error, done },
+    progress: { loading, failedFiles },
+    progress,
   } = useCreateMap()
 
   const onDrop = useCallback(
@@ -37,8 +39,8 @@ export const HomeView = () => {
 
   return (
     <AuthorisedLayout onClickAddMap={open}>
-      {done || loading ? (
-        loading && <Loader width={100} value={completed} />
+      {loading || failedFiles?.length ? (
+        <Uploading progress={progress} />
       ) : (
         <div {...getRootProps({ className: 'dropzone' })}>
           <DragDropOverlay active={isDragActive} />
@@ -98,3 +100,46 @@ const NoMaps = ({ openDialog, getInputProps, isDragActive }: NoMapsType) => {
     </Box>
   )
 }
+
+type UploadingType = {
+  progress: {
+    currentFile: number
+    completed: number
+    totalFiles: number
+    error: Error | null
+    failedFiles: ImageFileType[]
+    retryFailedFiles: () => void
+    loading: boolean
+  }
+}
+
+const Uploading = ({
+  progress: { completed, loading, error, currentFile, failedFiles, retryFailedFiles },
+}: UploadingType) =>
+  failedFiles?.length && !loading ? (
+    <>
+      <Button onClick={retryFailedFiles}>Retry</Button>
+      {failedFiles.length ? (
+        <Typography variant="body1">
+          Failed files:{' '}
+          {failedFiles.map((failed) => (
+            <span>{failed.name}</span>
+          ))}
+        </Typography>
+      ) : null}
+    </>
+  ) : (
+    <>
+      <Loader width={100} value={completed} />
+      <Typography variant="body1">completed: {completed}</Typography>
+      <Typography variant="body1">currentFile: {currentFile}</Typography>
+      {failedFiles.length ? (
+        <Typography variant="body1">
+          failedFiles:{' '}
+          {failedFiles.map((failed) => (
+            <span>{failed.name}</span>
+          ))}
+        </Typography>
+      ) : null}
+    </>
+  )

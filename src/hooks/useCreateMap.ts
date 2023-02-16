@@ -2,19 +2,16 @@ import { useState, useCallback, useRef, useEffect } from 'react'
 import { Feature } from 'geojson'
 import * as path from 'path'
 import * as md5 from 'js-md5'
-import * as EventEmitter from 'events'
 
-// import { create } from 'js-md5'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { getDownloadURL, getStorage, ref, uploadBytesResumable, UploadTaskSnapshot } from 'firebase/storage'
+import { getStorage, ref, uploadBytesResumable, UploadTaskSnapshot } from 'firebase/storage'
 // import { getStorage, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage'
 import { addDoc, collection, doc, writeBatch } from 'firebase/firestore'
 import * as stringify from 'json-stable-stringify'
 import { FirebaseError } from 'firebase/app'
-import { FileType, getImagesFromFiles, getJsonFromFiles } from '../helpers/file'
+import { FileType, ImageFileType, getImagesFromFiles, getJsonFromFiles } from '../helpers/file'
 import { auth, db, firebaseApp } from '..'
 import { getMetadata } from '../helpers/map'
-// import { MapMetadataType } from '../types'
 
 // import * as api from "../api";
 
@@ -24,48 +21,49 @@ type PointsType = {
   public?: boolean
 }
 
-type CancellableEventEmitterType = EventEmitter & {
-  cancel: () => void
-}
+// type CancellableEventEmitterType = EventEmitter & {
+//   cancel: () => void
+// }
+
+type UploadType = { file: ImageFileType; bytesTransferred: number }
+
+const sumMapValue = (map: Map<string, UploadType>) =>
+  Array.from(map.values()).reduce((sum, upload) => sum + upload.bytesTransferred, 0)
 
 export const useCreateMap = () => {
   const storage = getStorage(firebaseApp)
   const [user] = useAuthState(auth)
   const cancelRef = useRef(false)
   const uploadsRef = useRef(new Map())
-  // const metadataRef = useRef<MapMetadataType | undefined>()
-  // const pointsRef = useRef<Feature[] | undefined>()
+
   const bytesTransferredRef = useRef(0)
   const totalBytesRef = useRef(0)
 
   const [totalFiles, setTotalFiles] = useState(0)
   const [currentFile, setCurrentFile] = useState(0)
+  const [failedFiles, setFailedFiles] = useState<ImageFileType[]>([])
   const [progress, setProgress] = useState(0)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<Error | null>(null)
-  const [done, setDone] = useState(false)
-  // const [id, setId] = useState()
 
-  useEffect(() => {
-    // cancel uploads on unmount
-    console.log({ progress, done })
-  }, [progress, done])
-
-  useEffect(
-    () => () => {
-      // cancel uploads on unmount
-      cancelRef.current = true
-      for (const upload of uploadsRef.current.values()) {
-        if (typeof upload.cancel === 'function') {
-          // upload.cancel()
-        }
-      }
-    },
-    [],
-  )
+  // useEffect(
+  //   // eslint-disable-next-line arrow-body-style
+  //   () => {
+  //     return () => {
+  //       // cancel uploads on unmount
+  //       cancelRef.current = true
+  //       for (const upload of uploadsRef.current.values()) {
+  //         if (typeof upload.cancel === 'function') {
+  //           // upload.cancel()
+  //         }
+  //       }
+  //     }
+  //   },
+  //   [],
+  // )
 
   const createMapDoc = useCallback(
-    async (files: FileType[], id?: string) => {
+    async (files: FileType[]) => {
       if (!user) throw new Error('Not Authorized')
 
       const metadata = getMetadata(files)
@@ -79,43 +77,58 @@ export const useCreateMap = () => {
   )
 
   const uploadImage = useCallback(
-    // async (filename: string, data: ArrayBuffer | string) => {
-    (filename: string, data: ArrayBuffer | string) => {
+    (file: ImageFileType, current: number, total: number) => {
       if (!user) throw new Error('Not Authorized')
-      // let cancel = false
-      const emitter = new EventEmitter() as CancellableEventEmitterType
-      emitter.cancel = () => {
-        // cancel = true
-        emitter.removeAllListeners()
+      // const emitter = new EventEmitter() as CancellableEventEmitterType
+      // emitter.cancel = () => {
+      //   emitter.removeAllListeners()
+      // }
+
+      const upload = { file, bytesTransferred: 0 }
+      uploadsRef.current.set(file.hashedName, upload)
+
+      console.log(`Uploading ${file.name}`)
+
+      const handleLastUpload = () => {
+        // If we on the last file, either on-success or on-error we want to unset loading state
+        if (current === total) {
+          console.log({ current, total })
+          setLoading(false)
+        }
       }
+
       const fileMeta = { contentType: 'image/jpeg' } // TODO: Support PNG
-      const storageRef = ref(storage, `images/${user.uid}/original/${filename}`)
+      const storageRef = ref(storage, `images/${user.uid}/original/${file.hashedName || file.name}`)
 
-      console.log({ storageRef, fileMeta, filename })
+      // // <<! DEBUG CODE START !>>
+      // if (file.name.includes('3.png')) {
+      //   setFailedFiles((prevFailedFiles) => [...prevFailedFiles, file])
+      //   handleLastUpload()
+      //   return
+      // }
+      // // <<! END DEBUG CODE !>>
 
-      //  uploadBytesResumable(storageRef, file, metadata);
-      // const snapshot = await uploadBytes(storageRef, data as ArrayBuffer, fileMeta)
-      const uploadTask = uploadBytesResumable(storageRef, data as ArrayBuffer, fileMeta)
+      const uploadTask = uploadBytesResumable(storageRef, file.data as ArrayBuffer, fileMeta)
 
       uploadTask.on(
         'state_changed',
         (snapshot: UploadTaskSnapshot) => {
-          // Observe state change events such as progress, pause, and resume
-          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          // Observe state change events such as progress, update the progress recorded.
+          upload.bytesTransferred = snapshot.bytesTransferred
 
-          const fileProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          console.log(`Upload is ${fileProgress}% done`)
-          updateProgress(snapshot.bytesTransferred)
+          updateProgress()
         },
         (uploadError: FirebaseError) => {
           console.log({ error: uploadError })
-          setError(uploadError)
+          setFailedFiles((prevFailedFiles) => [...prevFailedFiles, file])
+          handleLastUpload()
+          throw new Error('upload failed')
         },
-        async () => {
+        () => {
           // Handle successful uploads on complete
-          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref)
-          console.log('File available at', downloadURL)
+          // If it's the last file set loading to false
+          updateProgress()
+          handleLastUpload()
         },
       )
     },
@@ -126,7 +139,8 @@ export const useCreateMap = () => {
     async (files: FileType[], mapPath: string) => {
       const pointsJson = getJsonFromFiles(files, 'points.json') as PointsType
       const images = getImagesFromFiles(files)
-      setTotalFiles(images.length)
+
+      console.log({ imageslength: images.length })
 
       totalBytesRef.current = images.reduce(
         (acc, file) => (file.type === 'arraybuffer' ? acc + parseInt(file.data.byteLength) : acc),
@@ -163,16 +177,25 @@ export const useCreateMap = () => {
         batch.set(pointRef, point)
       })
 
+      let current = 0
+      const imagesLength = images.length
+      setTotalFiles(imagesLength)
+
       images.forEach((imageFile) => {
         if (cancelRef.current) return // bail if component is unmounted
-        setCurrentFile((c) => c + 1)
+        current += 1
+        setCurrentFile(current)
+        console.log({ current })
         try {
-          uploadImage(imageFile.hashedName || '', imageFile.data)
+          uploadImage(imageFile, current, imagesLength)
         } catch (e) {
-          // Continue uploads after a failed upload, but mark as error
-          // setError(e)
+          if (typeof e === 'string') {
+            const err = e
+            setError(new Error(err))
+          }
         }
       })
+
       await batch.commit()
 
       console.log(`${observationsPath} set`)
@@ -181,22 +204,49 @@ export const useCreateMap = () => {
   )
 
   const createMap = useCallback(
-    async (files: FileType[], id?: string) => {
+    async (files: FileType[]) => {
       setLoading(true)
-      setDone(false)
       const mapPath = await createMapDoc(files)
       await createObservationsDocs(files, mapPath)
-      setLoading(false)
-      setDone(true)
     },
     [createMapDoc, createObservationsDocs],
   )
 
-  function updateProgress(bytesTransferred: number) {
+  function updateProgress() {
     if (!totalBytesRef.current) return
-    const transferred = bytesTransferredRef.current + bytesTransferred
-    setProgress(Math.ceil((transferred / totalBytesRef.current) * 100))
+    const transferred = sumMapValue(uploadsRef.current)
+    const currentProgress = Math.ceil((transferred / totalBytesRef.current) * 100)
+    setProgress(currentProgress)
+    console.log({
+      currentProgress,
+      totalBytesRef: totalBytesRef.current,
+      transferred,
+      bytesTransferredRef: bytesTransferredRef.current,
+    })
   }
+
+  const retryFailedFiles = useCallback(() => {
+    if (!failedFiles.length) return
+    setLoading(true)
+    let current = 0
+    const imagesLength = failedFiles.length
+    setTotalFiles(imagesLength)
+    failedFiles.forEach((failedFile) => {
+      current += 1
+      setCurrentFile(current)
+      try {
+        uploadImage(failedFile, current, imagesLength)
+        setFailedFiles((prevFailedFiles) =>
+          prevFailedFiles.filter((file) => file.hashedName !== failedFile.hashedName),
+        )
+      } catch (e) {
+        if (typeof e === 'string') {
+          const err = e
+          setError(new Error(err))
+        }
+      }
+    })
+  }, [failedFiles, uploadImage])
 
   return {
     createMap,
@@ -205,7 +255,8 @@ export const useCreateMap = () => {
       completed: progress,
       totalFiles,
       error,
-      done,
+      failedFiles,
+      retryFailedFiles,
       // id,
       loading,
     },
