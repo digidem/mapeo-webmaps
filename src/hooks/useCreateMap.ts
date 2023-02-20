@@ -29,7 +29,7 @@ type UploadType = { file: ImageFileType; bytesTransferred: number }
 
 type UploadsList = { [name: string]: UploadType }
 
-const sumMapValue = (Uploads: { [name: string]: UploadType }) =>
+const sumMapValue = (Uploads: UploadsList) =>
   Object.values(Uploads).reduce((sum, upload) => sum + upload.bytesTransferred, 0)
 
 export const useCreateMap = () => {
