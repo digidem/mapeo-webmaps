@@ -8,7 +8,7 @@ import { AddMapButton } from '../../components/AddMapButton'
 import { AuthorisedLayout } from '../../layouts/Authorised'
 import { Img, Overlay } from './styles'
 import { messages as msgs } from './messages'
-import { ImageFileType, unzip } from '../../helpers/file'
+import { ImageFileType } from '../../helpers/file'
 import { Loader } from '../../components/Loader'
 import { useCreateMap } from '../../hooks/useCreateMap'
 import { Button } from '../../components/Button'
@@ -22,8 +22,7 @@ export const HomeView = () => {
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
-      if (!acceptedFiles.length || !acceptedFiles[0].name.match(/.mapeomap$/))
-        return console.log('invalid file', acceptedFiles[0])
+      if (!acceptedFiles.length || !acceptedFiles[0].name.match(/.mapeomap$/)) return
       createMap(acceptedFiles)
     },
     [createMap],
