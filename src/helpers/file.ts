@@ -13,11 +13,10 @@ export type FileType = {
 }
 
 export type ImageFileType = {
-  type: 'arraybuffer'
   data: ArrayBuffer
   name: string
   date: Date
-  hashedName?: string
+  hashedName: string
 }
 
 type FilePromiseType = Promise<FileType>
