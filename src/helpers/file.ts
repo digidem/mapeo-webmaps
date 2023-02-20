@@ -17,7 +17,7 @@ export type ImageFileType = {
   data: ArrayBuffer
   name: string
   date: Date
-  hashedName?: string
+  hashedName: string
 }
 
 type FilePromiseType = Promise<FileType>

@@ -36,7 +36,7 @@ export const useCreateMap = () => {
   const storage = getStorage(firebaseApp)
   const [user] = useAuthState(auth)
   const cancelRef = useRef(false)
-  //const uploadsRef = useRef<Map<string, UploadType>>(new Map())
+  // const uploadsRef = useRef<Map<string, UploadType>>(new Map())
   const totalBytesRef = useRef(0)
   const uploadsAsObjRef = useRef<UploadsList>({})
 
@@ -86,7 +86,7 @@ export const useCreateMap = () => {
       // }
 
       const upload = { file, bytesTransferred: 0 }
-      //uploadsRef.current.set(file.hashedName, upload)
+      // uploadsRef.current.set(file.hashedName, upload)
       uploadsAsObjRef.current = { ...uploadsAsObjRef.current, [file.hashedName]: upload }
 
       console.log(`Uploading ${file.name}`)
