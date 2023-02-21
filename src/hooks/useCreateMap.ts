@@ -57,7 +57,7 @@ export const useCreateMap = () => {
       return () => {
         // cancel uploads on unmount
         cancelRef.current = true
-        Object.values(uploadsAsObjRef).forEach((upload) => {
+        Object.values(uploadsAsObjRef).forEach((upload: UploadTask) => {
           if (typeof upload.cancel === 'function') {
             upload.cancel()
           }
@@ -84,10 +84,6 @@ export const useCreateMap = () => {
   const uploadImage = useCallback(
     (file: ImageFileType, current: number, total: number) => {
       if (!user) throw new Error('Not Authorized')
-      // const emitter = new EventEmitter() as CancellableEventEmitterType
-      // emitter.cancel = () => {
-      //   emitter.removeAllListeners()
-      // }
 
       const upload = { file, bytesTransferred: 0 }
       uploadsAsObjRef.current = { ...uploadsAsObjRef.current, [file.hashedName]: upload }
@@ -96,19 +92,12 @@ export const useCreateMap = () => {
         // If we on the last file, either on-success or on-error we want to unset loading state
         if (current === total) {
           setLoading(false)
+          filesRef.current = null
         }
       }
 
       const fileMeta = { contentType: 'image/jpeg' } // TODO: Support PNG
       const storageRef = ref(storage, `images/${user.uid}/original/${file.hashedName || file.name}`)
-
-      // <<! DEBUG CODE START !>>
-      if (file.name.includes('3.png')) {
-        setFailedFiles((prevFailedFiles) => [...prevFailedFiles, file.hashedName])
-        handleLastUpload()
-        return
-      }
-      // <<! END DEBUG CODE !>>
 
       const uploadTask = uploadBytesResumable(storageRef, file.data, fileMeta)
 
@@ -206,11 +195,14 @@ export const useCreateMap = () => {
 
   const createMap = useCallback(
     async (zipFile: File[]) => {
+      setTotalFiles(0)
+      setCurrentFile(0)
+      setError(null)
+      uploadsAsObjRef.current = {}
       setLoading(true)
-      const unzippedFiles = await unzip(zipFile[0])
-      filesRef.current = unzippedFiles
-      const mapPath = await createMapDoc(unzippedFiles)
-      await createObservationsDocs(unzippedFiles, mapPath)
+      filesRef.current = await unzip(zipFile[0])
+      const mapPath = await createMapDoc(filesRef.current)
+      await createObservationsDocs(filesRef.current, mapPath)
     },
     [createMapDoc, createObservationsDocs],
   )
