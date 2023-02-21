@@ -1,10 +1,10 @@
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { Feature } from 'geojson'
 import * as path from 'path'
 import * as md5 from 'js-md5'
 
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { getStorage, ref, uploadBytesResumable, UploadTaskSnapshot } from 'firebase/storage'
+import { getStorage, ref, uploadBytesResumable, UploadTask, UploadTaskSnapshot } from 'firebase/storage'
 import { addDoc, collection, doc, writeBatch } from 'firebase/firestore'
 import * as stringify from 'json-stable-stringify'
 import { FirebaseError } from 'firebase/app'
@@ -18,7 +18,17 @@ type PointsType = {
   public?: boolean
 }
 
-type UploadType = { file: ImageFileType; bytesTransferred: number }
+export type ProgressType = {
+  currentFile: number
+  completed: number
+  totalFiles: number
+  error: Error | null
+  failedFiles: string[]
+  retryFailedFiles: () => void
+  loading: boolean
+}
+
+type UploadType = { file: ImageFileType; bytesTransferred: number; cancel?: UploadTask['cancel'] }
 
 type UploadsList = { [name: string]: UploadType }
 
@@ -28,6 +38,7 @@ const sumMapValue = (Uploads: UploadsList) =>
 export const useCreateMap = () => {
   const storage = getStorage(firebaseApp)
   const [user] = useAuthState(auth)
+  const filesRef = useRef<FileType[] | null>()
   const cancelRef = useRef(false)
 
   const totalBytesRef = useRef(0)
@@ -35,26 +46,26 @@ export const useCreateMap = () => {
 
   const [totalFiles, setTotalFiles] = useState(0)
   const [currentFile, setCurrentFile] = useState(0)
-  const [failedFiles, setFailedFiles] = useState<ImageFileType[]>([])
+  const [failedFiles, setFailedFiles] = useState<string[]>([])
   const [progress, setProgress] = useState(0)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<Error | null>(null)
 
-  // useEffect(
-  //   // eslint-disable-next-line arrow-body-style
-  //   () => {
-  //     return () => {
-  //       // cancel uploads on unmount
-  //       cancelRef.current = true
-  //       for (const upload of uploadsRef.current.values()) {
-  //         if (typeof upload.cancel === 'function') {
-  //           // upload.cancel()
-  //         }
-  //       }
-  //     }
-  //   },
-  //   [],
-  // )
+  useEffect(
+    // eslint-disable-next-line arrow-body-style
+    () => {
+      return () => {
+        // cancel uploads on unmount
+        cancelRef.current = true
+        Object.values(uploadsAsObjRef).forEach((upload) => {
+          if (typeof upload.cancel === 'function') {
+            upload.cancel()
+          }
+        })
+      }
+    },
+    [],
+  )
 
   const createMapDoc = useCallback(
     async (files: FileType[]) => {
@@ -81,12 +92,9 @@ export const useCreateMap = () => {
       const upload = { file, bytesTransferred: 0 }
       uploadsAsObjRef.current = { ...uploadsAsObjRef.current, [file.hashedName]: upload }
 
-      console.log(`Uploading ${file.name}`)
-
       const handleLastUpload = () => {
         // If we on the last file, either on-success or on-error we want to unset loading state
         if (current === total) {
-          console.log({ current, total })
           setLoading(false)
         }
       }
@@ -94,13 +102,13 @@ export const useCreateMap = () => {
       const fileMeta = { contentType: 'image/jpeg' } // TODO: Support PNG
       const storageRef = ref(storage, `images/${user.uid}/original/${file.hashedName || file.name}`)
 
-      // // <<! DEBUG CODE START !>>
-      // if (file.name.includes('3.png')) {
-      //   setFailedFiles((prevFailedFiles) => [...prevFailedFiles, file])
-      //   handleLastUpload()
-      //   return
-      // }
-      // // <<! END DEBUG CODE !>>
+      // <<! DEBUG CODE START !>>
+      if (file.name.includes('3.png')) {
+        setFailedFiles((prevFailedFiles) => [...prevFailedFiles, file.hashedName])
+        handleLastUpload()
+        return
+      }
+      // <<! END DEBUG CODE !>>
 
       const uploadTask = uploadBytesResumable(storageRef, file.data, fileMeta)
 
@@ -108,21 +116,23 @@ export const useCreateMap = () => {
         'state_changed',
         (snapshot: UploadTaskSnapshot) => {
           // Observe state change events such as progress, update the progress recorded.
-          const thisUpload: UploadType = { ...upload, bytesTransferred: snapshot.bytesTransferred }
+          const thisUpload: UploadType = {
+            ...upload,
+            bytesTransferred: snapshot.bytesTransferred,
+            cancel: uploadTask.cancel,
+          }
           const updatedUploadList: UploadsList = { ...uploadsAsObjRef.current, [file.hashedName]: thisUpload }
           uploadsAsObjRef.current = updatedUploadList
           updateProgress(updatedUploadList)
         },
         (uploadError: FirebaseError) => {
-          console.log({ error: uploadError })
-          setFailedFiles((prevFailedFiles) => [...prevFailedFiles, file])
+          setFailedFiles((prevFailedFiles) => [...prevFailedFiles, file.hashedName])
           handleLastUpload()
-          throw new Error('upload failed')
+          throw new Error(`Upload failed: ${uploadError.message}`)
         },
         () => {
           // Handle successful uploads on complete
           // If it's the last file set loading to false
-          console.log({ bytesTransferred: uploadTask.snapshot.bytesTransferred })
           const thisUpload: UploadType = { ...upload, bytesTransferred: uploadTask.snapshot.bytesTransferred }
           const updatedUploadList: UploadsList = { ...uploadsAsObjRef.current, [file.hashedName]: thisUpload }
           uploadsAsObjRef.current = updatedUploadList
@@ -178,7 +188,6 @@ export const useCreateMap = () => {
       images.forEach((imageFile) => {
         if (cancelRef.current) return // bail if component is unmounted
         current += 1
-        console.log({ current })
         try {
           setCurrentFile(current)
           uploadImage(imageFile, current, imagesLength)
@@ -191,16 +200,15 @@ export const useCreateMap = () => {
       })
 
       await batch.commit()
-
-      console.log(`${observationsPath} set`)
     },
     [uploadImage],
   )
 
   const createMap = useCallback(
-    async (files: File[]) => {
+    async (zipFile: File[]) => {
       setLoading(true)
-      const unzippedFiles = await unzip(files[0])
+      const unzippedFiles = await unzip(zipFile[0])
+      filesRef.current = unzippedFiles
       const mapPath = await createMapDoc(unzippedFiles)
       await createObservationsDocs(unzippedFiles, mapPath)
     },
@@ -213,12 +221,6 @@ export const useCreateMap = () => {
     const transferred = sumMapValue(uploads)
     const currentProgress = Math.ceil((transferred / totalBytesRef.current) * 100)
     setProgress(currentProgress)
-
-    console.log({
-      currentProgress,
-      totalBytesRef: totalBytesRef.current,
-      transferred,
-    })
   }
 
   const retryFailedFiles = useCallback(() => {
@@ -227,14 +229,17 @@ export const useCreateMap = () => {
     let current = 0
     const imagesLength = failedFiles.length
     setTotalFiles(imagesLength)
-    failedFiles.forEach((failedFile) => {
+    failedFiles.forEach((failedFileHash) => {
+      const fileToUpload = filesRef.current?.find(
+        (failed) => failedFileHash === failed.hashedName,
+      ) as ImageFileType
       current += 1
       setCurrentFile(current)
       try {
-        uploadImage(failedFile, current, imagesLength)
-        setFailedFiles((prevFailedFiles) =>
-          prevFailedFiles.filter((file) => file.hashedName !== failedFile.hashedName),
-        )
+        if (fileToUpload) {
+          uploadImage(fileToUpload, current, imagesLength)
+          setFailedFiles((prevFailedFiles) => prevFailedFiles.filter((file) => file !== failedFileHash))
+        }
       } catch (e) {
         if (typeof e === 'string') {
           const err = e

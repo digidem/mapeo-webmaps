@@ -8,9 +8,8 @@ import { AddMapButton } from '../../components/AddMapButton'
 import { AuthorisedLayout } from '../../layouts/Authorised'
 import { Img, Overlay } from './styles'
 import { messages as msgs } from './messages'
-import { ImageFileType } from '../../helpers/file'
 import { Loader } from '../../components/Loader'
-import { useCreateMap } from '../../hooks/useCreateMap'
+import { ProgressType, useCreateMap } from '../../hooks/useCreateMap'
 import { Button } from '../../components/Button'
 
 export const HomeView = () => {
@@ -106,19 +105,11 @@ const NoMaps = ({ openDialog, getInputProps, isDragActive }: NoMapsType) => {
 }
 
 type UploadingType = {
-  progress: {
-    currentFile: number
-    completed: number
-    totalFiles: number
-    error: Error | null
-    failedFiles: ImageFileType[]
-    retryFailedFiles: () => void
-    loading: boolean
-  }
+  progress: ProgressType
 }
 
 const Uploading = ({
-  progress: { completed, loading, error, currentFile, failedFiles, retryFailedFiles },
+  progress: { completed, loading, currentFile, failedFiles, retryFailedFiles },
 }: UploadingType) =>
   failedFiles?.length && !loading ? (
     <>
@@ -127,7 +118,7 @@ const Uploading = ({
         <Typography variant="body1">
           Failed files:{' '}
           {failedFiles.map((failed) => (
-            <span>{failed.name}</span>
+            <span>{failed}</span>
           ))}
         </Typography>
       ) : null}
@@ -142,7 +133,7 @@ const Uploading = ({
           <Typography variant="body1">
             failedFiles:{' '}
             {failedFiles.map((failed) => (
-              <span>{failed.name}</span>
+              <span>{failed}</span>
             ))}
           </Typography>
         ) : null}
