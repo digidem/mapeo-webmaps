@@ -1,7 +1,14 @@
 import { LinearProgress, Stack } from '@mui/material'
 
-export const Loader = () => (
-  <Stack justifyContent="center" alignItems="center" sx={{ height: 'calc(100vh - 80px)' }}>
-    <LinearProgress color="primary" sx={{ height: '10px', maxWidth: '70vw' }} />
+type LoaderTypes = { width?: number; justify?: 'flex-start' | 'flex-end' | 'center'; value?: number }
+
+export const Loader = ({ width = 70, justify = 'center', value }: LoaderTypes) => (
+  <Stack justifyContent={justify} alignItems="center">
+    <LinearProgress
+      color="primary"
+      variant={value ? 'determinate' : 'indeterminate'}
+      value={value}
+      sx={{ height: '10px', width: `${width}%` }}
+    />
   </Stack>
 )

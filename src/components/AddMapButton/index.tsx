@@ -9,11 +9,16 @@ const msgs = defineMessages({
   },
 })
 
-export const AddMapButton = () => {
-  const addMap = () => null // TODO: Implement addMapp functionality.
+type AddMapButtonTypes = {
+  onClick?: any
+  // onClick?: ((event?: React.MouseEvent<HTMLButtonElement>) => void) | (() => void)
+}
+
+export const AddMapButton = ({ onClick }: AddMapButtonTypes) => {
   const message = useIntl().formatMessage(msgs.addMap)
+
   return (
-    <Button fullWidth={false} icon={AddIcon} onClick={addMap}>
+    <Button fullWidth={false} icon={AddIcon} onClick={onClick}>
       {message}
     </Button>
   )

@@ -1,18 +1,18 @@
 import { Stack, Typography } from '@mui/material'
 import { useAuthState } from 'react-firebase-hooks/auth'
-
 import { signOut } from 'firebase/auth'
 import { StackBaseProps } from '@mui/system'
-import { useIntl } from 'react-intl'
 
+import { useIntl } from 'react-intl'
 import { Link } from '@reach/router'
 import { HeaderWrapper, LogoImg, LogOutButton, Block } from './styles'
 import { auth } from '../..'
-import { messages as msgs } from './messages'
 import { AddMapButton } from '../AddMapButton'
+import { messages as msgs } from './messages'
 
 type HeaderProps = {
   children?: React.ReactNode
+  onClickAddMap?: () => void
 }
 
 type JustifyContentProperty = 'space-between' | 'center' | 'flex-start' | 'flex-end'
@@ -35,7 +35,7 @@ const Row = ({ padding = 0, justify = 'space-between', ...rest }: RowProps) => (
   />
 )
 
-export const Header = ({ children }: HeaderProps) => {
+export const Header = ({ children, onClickAddMap }: HeaderProps) => {
   const { formatMessage } = useIntl()
   const [user] = useAuthState(auth)
 
@@ -51,7 +51,7 @@ export const Header = ({ children }: HeaderProps) => {
       {children || (
         <Row padding="0 0 0 18px">
           <Block>
-            <AddMapButton />
+            <AddMapButton onClick={onClickAddMap} />
           </Block>
           <Link to="/">
             <Block centered>

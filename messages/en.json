@@ -38,6 +38,9 @@
   "confirm_delete_title": {
     "message": "Delete this map?"
   },
+  "drop_file_message": {
+    "message": "Drop the .mapeomap file that you wish to upload here"
+  },
   "email_label": {
     "message": "Email Address"
   },

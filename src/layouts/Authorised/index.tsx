@@ -4,9 +4,14 @@ import { Header } from '../../components/Header'
 type AuthorisedLayoutProps = {
   renderHeader?: React.ComponentType
   children: React.ReactNode
+  onClickAddMap?: () => void
 }
 
-export const AuthorisedLayout = ({ renderHeader: CustomHeader, children }: AuthorisedLayoutProps) => (
+export const AuthorisedLayout = ({
+  renderHeader: CustomHeader,
+  children,
+  onClickAddMap,
+}: AuthorisedLayoutProps) => (
   <Box
     sx={{
       minHeight: '100vh',
@@ -14,7 +19,7 @@ export const AuthorisedLayout = ({ renderHeader: CustomHeader, children }: Autho
     }}
   >
     <>
-      <Header>{CustomHeader ? <CustomHeader /> : null}</Header>
+      <Header onClickAddMap={onClickAddMap}>{CustomHeader ? <CustomHeader /> : null}</Header>
       {children}
     </>
   </Box>

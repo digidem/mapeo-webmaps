@@ -17,6 +17,10 @@ export const messages = defineMessages({
     id: 'empty_message_link',
     defaultMessage: 'Go to Tutorials',
   },
+  drop_file_message: {
+    id: 'drop_file_message',
+    defaultMessage: 'Drop the .mapeomap file that you wish to upload here',
+  },
   empty_message_href: {
     id: 'empty_message_href',
     defaultMessage:
