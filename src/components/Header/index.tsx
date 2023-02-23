@@ -1,7 +1,7 @@
 import { Stack, Typography } from '@mui/material'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { signOut } from 'firebase/auth'
-import { StackBaseProps } from '@mui/system'
+import { Box, StackBaseProps } from '@mui/system'
 
 import { useIntl } from 'react-intl'
 import { Link } from '@reach/router'
@@ -50,9 +50,13 @@ export const Header = ({ children, onClickAddMap }: HeaderProps) => {
     <HeaderWrapper>
       {children || (
         <Row padding="0 0 0 18px">
-          <Block>
-            <AddMapButton onClick={onClickAddMap} />
-          </Block>
+          {onClickAddMap ? (
+            <Block>
+              <AddMapButton onClick={onClickAddMap} />
+            </Block>
+          ) : (
+            <Box flex={1} />
+          )}
           <Link to="/">
             <Block centered>
               <LogoImg src="/svg/logo-w.svg" alt="" />
