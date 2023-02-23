@@ -3,20 +3,32 @@ import { Stack } from '@mui/system'
 import { useIntl } from 'react-intl'
 import { DropzoneInputProps, useDropzone } from 'react-dropzone'
 import { useCallback } from 'react'
-import * as React from 'react'
-import { AddMapButton } from '../../components/AddMapButton'
-import { AuthorisedLayout } from '../../layouts/Authorised'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { collection } from 'firebase/firestore'
+import { useCollection } from 'react-firebase-hooks/firestore'
+
 import { Img, Overlay } from './styles'
 import { messages as msgs } from './messages'
-import { ImageFileType } from '../../helpers/file'
+import { AddMapButton } from '../../components/AddMapButton'
 import { Loader } from '../../components/Loader'
-import { useCreateMap } from '../../hooks/useCreateMap'
 import { Button } from '../../components/Button'
+import { MapsList } from '../../components/MapsList'
+import { AuthorisedLayout } from '../../layouts/Authorised'
+import { ImageFileType } from '../../helpers/file'
+import { useCreateMap } from '../../hooks/useCreateMap'
+import { auth, db } from '../..'
 
 export const HomeView = () => {
+  const [user] = useAuthState(auth)
+
+  const mapsRef = user ? collection(db, `groups/${user.uid}/maps`) : null
+
+  const [mapsCollection = { docs: [] }, mapsLoading] = useCollection(mapsRef)
+  const maps = mapsCollection?.docs.map((map) => ({ ...map?.data(), id: map?.id }))
+
   const {
     createMap,
-    progress: { loading, failedFiles },
+    progress: { loading: uploading, failedFiles },
     progress,
   } = useCreateMap()
 
@@ -35,14 +47,28 @@ export const HomeView = () => {
     onDrop,
   })
 
+  if (mapsLoading)
+    return (
+      <AuthorisedLayout>
+        <Loader />
+      </AuthorisedLayout>
+    )
+
   return (
     <AuthorisedLayout onClickAddMap={open}>
-      {loading || failedFiles?.length ? (
+      <input {...getInputProps()} />
+      {uploading || failedFiles?.length ? (
         <Uploading progress={progress} />
       ) : (
         <div {...getRootProps({ className: 'dropzone' })}>
           <DragDropOverlay active={isDragActive} />
-          <NoMaps openDialog={open} getInputProps={getInputProps} isDragActive={isDragActive} />
+          {maps.length ? (
+            <Container>
+              <MapsList maps={maps} progress={{ id: 1, loading: uploading }} />
+            </Container>
+          ) : (
+            <NoMaps openDialog={open} getInputProps={getInputProps} isDragActive={isDragActive} />
+          )}
         </div>
       )}
     </AuthorisedLayout>
@@ -99,7 +125,6 @@ const NoMaps = ({ openDialog, getInputProps, isDragActive }: NoMapsType) => {
           {formatMessage(msgs.empty_message_link)}
         </Link>
       </Typography>
-      <input {...getInputProps()} />
       <AddMapButton onClick={openDialog} />
     </Container>
   )
