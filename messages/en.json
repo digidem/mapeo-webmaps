@@ -38,8 +38,17 @@
   "confirm_delete_title": {
     "message": "Delete this map?"
   },
+  "createdAtPrefix": {
+    "message": "Added"
+  },
+  "delete_map": {
+    "message": "Delete Map"
+  },
   "drop_file_message": {
     "message": "Drop the .mapeomap file that you wish to upload here"
+  },
+  "edit_tooltip": {
+    "message": "Edit Map details"
   },
   "email_label": {
     "message": "Email Address"
@@ -86,6 +95,9 @@
   "login_remember": {
     "message": "Remember Me"
   },
+  "observations": {
+    "message": "observations"
+  },
   "password": {
     "message": "Password"
   },
@@ -107,6 +119,9 @@
   "password_reset_title": {
     "message": "Password Reset"
   },
+  "public_link_tooltip": {
+    "message": "See map"
+  },
   "return_to_login": {
     "message": "Return to login"
   },
@@ -115,5 +130,8 @@
   },
   "signup_link": {
     "message": "Don't have an account? Sign Up"
+  },
+  "upload_new_data": {
+    "message": "Upload new data"
   }
 }
