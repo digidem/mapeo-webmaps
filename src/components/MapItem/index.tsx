@@ -36,7 +36,7 @@ export const MapItem = ({ id, title, description, createdAt }: MapItemProps) => 
   const dateTimeFormat = new Intl.DateTimeFormat('en-us', dateFormatOptions)
 
   return (
-    <Card>
+    <Card sx={{ width: '100%' }}>
       <CardContent>
         <Stack>
           <Box mb={6}>
@@ -50,10 +50,10 @@ export const MapItem = ({ id, title, description, createdAt }: MapItemProps) => 
             </Typography>
             {description ? <Typography variant="body1">{description}</Typography> : null}
           </Box>
-          <Stack direction="row">
-            <Box mr={50}>
+          <Stack direction="row" justifyContent="space-between" alignItems="flex-end">
+            <Typography variant="caption">
               {formatMessage(msgs.createdAtPrefix)} {dateTimeFormat.format(createdAt.toDate())}
-            </Box>
+            </Typography>
             <Link underline="hover" fontWeight="bold" href={shareUrl}>
               {formatMessage(msgs.publicLink)}
             </Link>
