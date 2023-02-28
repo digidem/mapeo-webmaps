@@ -4,7 +4,7 @@ import { Header } from '../../components/Header'
 type AuthorisedLayoutProps = {
   renderHeader?: React.ComponentType
   children: React.ReactNode
-  onClickAddMap?: () => void
+  onClickAddMap: () => void
 }
 
 export const AuthorisedLayout = ({

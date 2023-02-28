@@ -1,8 +1,8 @@
-import { Box, Fade, Link, SelectChangeEvent, Typography } from '@mui/material'
+import { Box, Fade, Link, SelectChangeEvent, Typography, useTheme } from '@mui/material'
 import { Stack } from '@mui/system'
 import { useIntl } from 'react-intl'
 import { DropzoneInputProps, useDropzone } from 'react-dropzone'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { collection, orderBy, query } from 'firebase/firestore'
 import { useCollection } from 'react-firebase-hooks/firestore'
@@ -14,13 +14,13 @@ import { Loader } from '../../components/Loader'
 import { Button } from '../../components/Button'
 import { MapsList } from '../../components/MapsList'
 import { AuthorisedLayout } from '../../layouts/Authorised'
-import { ImageFileType } from '../../helpers/file'
 import { ProgressType, useCreateMap } from '../../hooks/useCreateMap'
 import { auth, db } from '../..'
 import { SortToggle, SortDirectionType, SortType } from '../../components/SortToggle'
 
 export const HomeView = () => {
   const [user] = useAuthState(auth)
+  const theme = useTheme()
   const [sort, setSort] = useState<SortType>('createdAt')
   const [sortDirection, setSortDirection] = useState<SortDirectionType>('asc')
 
@@ -62,14 +62,28 @@ export const HomeView = () => {
 
   if (mapsLoading)
     return (
-      <AuthorisedLayout>
+      <AuthorisedLayout onClickAddMap={open}>
         <Loader />
       </AuthorisedLayout>
     )
 
   return (
     <AuthorisedLayout onClickAddMap={open}>
-      <Stack sx={{ overflowY: 'scroll' }}>
+      <Stack
+        sx={{
+          overflowY: 'scroll',
+          '&::-webkit-scrollbar': {
+            width: '10px' /* width of the entire scrollbar */,
+          },
+          '&::-webkit-scrollbar-track': {
+            background: theme.background /* color of the tracking area */,
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: theme.blueDark /* color of the scroll thumb */,
+            borderRadius: 0 /* roundness of the scroll thumb */,
+          },
+        }}
+      >
         <input {...getInputProps()} />
         {uploading || failedFiles?.length ? (
           <Uploading progress={progress} />
@@ -82,7 +96,7 @@ export const HomeView = () => {
                 <MapsList maps={maps} progress={{ id: 1, loading: uploading }} />
               </Container>
             ) : (
-              <NoMaps openDialog={open} getInputProps={getInputProps} isDragActive={isDragActive} />
+              <NoMaps openDialog={open} isDragActive={isDragActive} />
             )}
           </div>
         )}
@@ -93,7 +107,6 @@ export const HomeView = () => {
 
 type NoMapsType = {
   openDialog: () => void
-  getInputProps: (props?: DropzoneInputProps | undefined) => DropzoneInputProps
   isDragActive: boolean
 }
 
@@ -147,7 +160,7 @@ const Container = ({
   </Box>
 )
 
-const NoMaps = ({ openDialog, getInputProps, isDragActive }: NoMapsType) => {
+const NoMaps = ({ openDialog, isDragActive }: NoMapsType) => {
   const { formatMessage } = useIntl()
   return (
     <Container isDragActive={isDragActive} spacing={5}>
