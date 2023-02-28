@@ -15,7 +15,7 @@ import { Button } from '../../components/Button'
 import { MapsList } from '../../components/MapsList'
 import { AuthorisedLayout } from '../../layouts/Authorised'
 import { ImageFileType } from '../../helpers/file'
-import { useCreateMap } from '../../hooks/useCreateMap'
+import { ProgressType, useCreateMap } from '../../hooks/useCreateMap'
 import { auth, db } from '../..'
 import { SortToggle, SortDirectionType, SortType } from '../../components/SortToggle'
 
@@ -165,15 +165,7 @@ const NoMaps = ({ openDialog, getInputProps, isDragActive }: NoMapsType) => {
 }
 
 type UploadingType = {
-  progress: {
-    currentFile: number
-    completed: number
-    totalFiles: number
-    error: Error | null
-    failedFiles: ImageFileType[]
-    retryFailedFiles: () => void
-    loading: boolean
-  }
+  progress: ProgressType
 }
 
 const Uploading = ({
@@ -186,7 +178,7 @@ const Uploading = ({
         <Typography variant="body1">
           Failed files:{' '}
           {failedFiles.map((failed) => (
-            <span>{failed.name}</span>
+            <span>{failed}</span>
           ))}
         </Typography>
       ) : null}
@@ -201,7 +193,7 @@ const Uploading = ({
           <Typography variant="body1">
             failedFiles:{' '}
             {failedFiles.map((failed) => (
-              <span>{failed.name}</span>
+              <span>{failed}</span>
             ))}
           </Typography>
         ) : null}
