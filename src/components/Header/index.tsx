@@ -12,7 +12,7 @@ import { messages as msgs } from './messages'
 
 type HeaderProps = {
   children?: React.ReactNode
-  onClickAddMap?: () => void
+  onClickAddMap: () => void
 }
 
 type JustifyContentProperty = 'space-between' | 'center' | 'flex-start' | 'flex-end'
@@ -50,13 +50,10 @@ export const Header = ({ children, onClickAddMap }: HeaderProps) => {
     <HeaderWrapper>
       {children || (
         <Row padding="0 0 0 18px">
-          {onClickAddMap ? (
-            <Block>
-              <AddMapButton onClick={onClickAddMap} />
-            </Block>
-          ) : (
-            <Box flex={1} />
-          )}
+          <Block>
+            <AddMapButton onClick={onClickAddMap} />
+          </Block>
+
           <Link to="/">
             <Block centered>
               <LogoImg src="/svg/logo-w.svg" alt="" />
