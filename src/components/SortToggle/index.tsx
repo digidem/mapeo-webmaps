@@ -1,4 +1,4 @@
-import { Box, FormControl, FormLabel, Typography } from '@mui/material'
+import { Box, FormControl, FormLabel } from '@mui/material'
 import { useState } from 'react'
 import { useIntl } from 'react-intl'
 import { Stack } from '@mui/system'
