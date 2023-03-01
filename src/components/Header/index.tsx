@@ -12,7 +12,7 @@ import { messages as msgs } from './messages'
 
 type HeaderProps = {
   children?: React.ReactNode
-  onClickAddMap: () => void
+  onClickAddMap?: () => void
 }
 
 type JustifyContentProperty = 'space-between' | 'center' | 'flex-start' | 'flex-end'
