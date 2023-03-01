@@ -26,6 +26,9 @@
   "auth_title": {
     "message": "Share your Mapeo maps publicly"
   },
+  "byTitle": {
+    "message": "by title"
+  },
   "confirm_cancel": {
     "message": "No, Cancel"
   },
@@ -40,6 +43,9 @@
   },
   "createdAtPrefix": {
     "message": "Added"
+  },
+  "dateAdded": {
+    "message": "by date added"
   },
   "delete_map": {
     "message": "Delete Map"
@@ -130,6 +136,9 @@
   },
   "signup_link": {
     "message": "Don't have an account? Sign Up"
+  },
+  "sort": {
+    "message": "Sort"
   },
   "upload_new_data": {
     "message": "Upload new data"

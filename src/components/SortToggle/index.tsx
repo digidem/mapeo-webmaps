@@ -1,10 +1,9 @@
-import { Box, FormControl, FormLabel } from '@mui/material'
-import ImportExportIcon from '@mui/icons-material/ImportExport'
-import { ReactNode, useState } from 'react'
+import { Box, FormControl, FormLabel, Typography } from '@mui/material'
+import { useState } from 'react'
 import { useIntl } from 'react-intl'
 import { Stack } from '@mui/system'
-import { SelectChangeEvent } from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
+import { KeyboardArrowUp, KeyboardArrowDown } from '@mui/icons-material'
 import { StyledSelect as Select } from './styles'
 import { msgs } from './messages'
 
@@ -22,7 +21,6 @@ export const SortToggle = ({ value, onChange, direction }: SortToggleProps) => {
   return (
     <FormControl sx={{ m: 1, minWidth: 120, cursor: 'pointer' }} size="small" variant="standard">
       <Stack direction="row">
-        <ImportExportIcon onClick={handleOpen} />
         <FormLabel
           focused={false}
           onClick={handleOpen}
@@ -43,12 +41,20 @@ export const SortToggle = ({ value, onChange, direction }: SortToggleProps) => {
           onClose={handleClose}
           onOpen={handleOpen}
           value={value}
-          onChange={onChange}
           IconComponent={() => null}
         >
-          <MenuItem value="createdAt">{formatMessage(msgs.dateAdded)}</MenuItem>
-          <MenuItem value="title">{formatMessage(msgs.byTitle)}</MenuItem>
+          <MenuItem value="createdAt" onClick={() => onChange('createdAt')}>
+            {formatMessage(msgs.dateAdded)}{' '}
+          </MenuItem>
+          <MenuItem value="title" onClick={() => onChange('title')}>
+            {formatMessage(msgs.byTitle)}
+          </MenuItem>
         </Select>
+        {direction === 'asc' ? (
+          <KeyboardArrowDown onClick={handleOpen} />
+        ) : (
+          <KeyboardArrowUp onClick={handleOpen} />
+        )}
       </Stack>
     </FormControl>
   )
@@ -65,6 +71,6 @@ export type SortType = 'createdAt' | 'title'
 
 type SortToggleProps = {
   value: SortType
-  onChange: (event: SelectChangeEvent<unknown>, child: ReactNode) => void
+  onChange: (sortValue: SortType) => void
   direction: SortDirectionType
 }
