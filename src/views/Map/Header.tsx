@@ -33,7 +33,7 @@ export const Header = ({}) => {
   }
   return (
     <Grid container columns={12} height="100%">
-      <Grid xs={3} color="white" padding={2} borderRight="1px solid white" height="100%">
+      <Grid xs={4} color="white" padding={2} borderRight="1px solid white" height="100%">
         <Row justifyContent="space-between">
           <Box sx={{ flex: 3 }} display="flex" alignContent="center">
             <Link
@@ -96,7 +96,7 @@ export const Header = ({}) => {
           </Box>
         </Row>
       </Grid>
-      <Grid xs={9} padding={2} height="100%">
+      <Grid xs={8} padding={2} height="100%">
         <Row justifyContent="flex-end">
           <ReachLink to="/">
             <LogoImg src="/svg/logo-w.svg" alt="" />

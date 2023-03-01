@@ -1,25 +1,8 @@
-import { Box, Link, Stack, Typography, useTheme } from '@mui/material'
-import {
-  Link as ReachLink,
-  RouteComponentProps,
-  useParams,
-  useLocation,
-  WindowLocation,
-  navigate,
-} from '@reach/router'
-import Grid from '@mui/material/Unstable_Grid2/Grid2'
+import { RouteComponentProps, useParams } from '@reach/router'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { StackProps } from '@mui/system'
-import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded'
-import CreateIcon from '@mui/icons-material/Create'
-import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined'
-import { useIntl } from 'react-intl'
 
 import { auth } from '../..'
-import { Button } from '../../components/Button'
 import { AuthorisedLayout } from '../../layouts/Authorised'
-import { LogoImg } from '../../components/Header/styles'
-import { msgs } from './messages'
 import { Header } from './Header'
 import { IFrame } from './styles'
 
