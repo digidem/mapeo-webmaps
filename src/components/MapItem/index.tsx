@@ -1,15 +1,5 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  CircularProgress,
-  IconButton,
-  Link,
-  Stack,
-  Tooltip,
-  Typography,
-} from '@mui/material'
-import { collection, FieldValue, Timestamp } from 'firebase/firestore'
+import { Box, Card, CardContent, CircularProgress, Link, Stack, Typography } from '@mui/material'
+import { collection, Timestamp } from 'firebase/firestore'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 import { useIntl } from 'react-intl'
@@ -17,7 +7,7 @@ import { auth, db } from '../..'
 import { msgs } from './messages'
 
 type DateFormatOptionsType = Intl.DateTimeFormatOptions & {
-  dateStyle: 'medium' // This
+  dateStyle: 'medium'
 }
 
 const SHARE_URL_BASE = 'https://maps-public.mapeo.world/groups'
@@ -52,7 +42,8 @@ export const MapItem = ({ id, title, description, createdAt }: MapItemProps) => 
           </Box>
           <Stack direction="row" justifyContent="space-between" alignItems="flex-end">
             <Typography variant="caption">
-              {formatMessage(msgs.createdAtPrefix)} {createdAt ? dateTimeFormat.format(createdAt.toDate()) : <MiniLoader />}
+              {formatMessage(msgs.createdAtPrefix)}{' '}
+              {createdAt ? dateTimeFormat.format(createdAt.toDate()) : <MiniLoader />}
             </Typography>
             <Link underline="hover" fontWeight="bold" href={shareUrl}>
               {formatMessage(msgs.publicLink)}
@@ -74,5 +65,5 @@ type MapItemProps = {
   id: string | number
   title: string
   description?: string
-  createdAt: Timestamp
+  createdAt?: Timestamp
 }
