@@ -7,11 +7,17 @@ type AuthorisedLayoutProps = {
   onClickAddMap: () => void
 }
 
+type AuthorisedCustomHeaderProps = {
+  renderHeader: React.ComponentType
+  children: React.ReactNode
+  onClickAddMap?: () => void
+}
+
 export const AuthorisedLayout = ({
   renderHeader: CustomHeader,
   children,
   onClickAddMap,
-}: AuthorisedLayoutProps) => (
+}: AuthorisedLayoutProps | AuthorisedCustomHeaderProps) => (
   <Box
     sx={{
       minHeight: '100vh',

@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl'
 import { useDropzone } from 'react-dropzone'
 import { useCallback } from 'react'
 
+import { RouteComponentProps } from '@reach/router'
 import { Overlay } from './styles'
 import { messages as msgs } from './messages'
 
@@ -14,7 +15,7 @@ import { AuthorisedLayout } from '../../layouts/Authorised'
 import { ProgressType, useCreateMap } from '../../hooks/useCreateMap'
 import { Container } from '../../components/Container'
 
-export const HomeView = () => {
+export const HomeView = ({}: RouteComponentProps) => {
   const theme = useTheme()
 
   const {
