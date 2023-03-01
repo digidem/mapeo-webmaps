@@ -53,6 +53,9 @@
   "drop_file_message": {
     "message": "Drop the .mapeomap file that you wish to upload here"
   },
+  "edit": {
+    "message": "Edit"
+  },
   "edit_tooltip": {
     "message": "Edit Map details"
   },
@@ -79,6 +82,9 @@
   },
   "forgot_password_link": {
     "message": "Forgot password?"
+  },
+  "goBack": {
+    "message": "Go back"
   },
   "have_account_link": {
     "message": "Already have an account? Sign in"
@@ -130,6 +136,9 @@
   },
   "return_to_login": {
     "message": "Return to login"
+  },
+  "share": {
+    "message": "Share"
   },
   "signup_button": {
     "message": "Create an account"
