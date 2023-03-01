@@ -42,7 +42,8 @@ export const MapItem = ({ id, title, description, createdAt }: MapItemProps) => 
           </Box>
           <Stack direction="row" justifyContent="space-between" alignItems="flex-end">
             <Typography variant="caption">
-              {formatMessage(msgs.createdAtPrefix)} {createdAt ? dateTimeFormat.format(createdAt.toDate()) : <MiniLoader />}
+              {formatMessage(msgs.createdAtPrefix)}{' '}
+              {createdAt ? dateTimeFormat.format(createdAt.toDate()) : <MiniLoader />}
             </Typography>
             <Link underline="hover" fontWeight="bold" href={shareUrl}>
               {formatMessage(msgs.publicLink)}
