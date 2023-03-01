@@ -1,21 +1,40 @@
-import { Typography, Stack, Button, Link, useTheme } from '@mui/material'
+import { Typography, Stack, Link, useTheme, Zoom } from '@mui/material'
 import EastIcon from '@mui/icons-material/East'
-
+import { getAuth, sendPasswordResetEmail } from 'firebase/auth'
 import { useIntl } from 'react-intl'
 import { useState } from 'react'
 import { navigate, RouteComponentProps } from '@reach/router'
+
 import { messages as msgs } from './messages'
 import { IconBadge } from '../../components/IconBadge'
 import { TextInput } from '../../components/TextInput'
 import { AuthScreen } from '../../components/AuthScreen'
+import { validateEmail } from '../../helpers/form'
+import { Button } from '../../components/Button'
 
 export const ForgottenPasswordView = ({}: RouteComponentProps) => {
   const { formatMessage } = useIntl()
   const [email, setEmail] = useState('')
+  const [successfulReset, setSuccessfulReset] = useState(false)
+  const [loading, setLoading] = useState(false)
   const theme = useTheme()
+  const auth = getAuth()
+
+  const validEmail = email && !validateEmail(email)
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value)
+  }
+
+  const sendResetPassword = (event: React.FormEvent<HTMLButtonElement | HTMLFormElement>) => {
+    event.preventDefault()
+    setLoading(true)
+    if (!validEmail) return
+
+    sendPasswordResetEmail(auth, email).then(() => {
+      setSuccessfulReset(true)
+      setLoading(false)
+    })
   }
 
   return (
@@ -28,8 +47,13 @@ export const ForgottenPasswordView = ({}: RouteComponentProps) => {
               {formatMessage(msgs.initialTitle)}
             </Typography>
           </Stack>
-
-          <Typography variant="body1">{formatMessage(msgs.initialDescription)}</Typography>
+          {!successfulReset ? (
+            <Typography variant="body1">{formatMessage(msgs.initialDescription)}</Typography>
+          ) : (
+            <Zoom in={successfulReset} style={{ transitionDelay: '500ms' }}>
+              <Typography variant="body1">{formatMessage(msgs.successDescription, { email })}</Typography>
+            </Zoom>
+          )}
         </Stack>
 
         <Stack spacing={2}>
@@ -43,23 +67,7 @@ export const ForgottenPasswordView = ({}: RouteComponentProps) => {
             value={email}
             onChange={handleEmailChange}
           />
-          <Button
-            data-testid="submit-button"
-            type="submit"
-            // disabled={loading || authorizing}
-            fullWidth
-            size="large"
-            variant="contained"
-            color="primary"
-            sx={{
-              borderRadius: 5,
-              display: 'flex',
-              justifyContent: 'space-between',
-              textTransform: 'none',
-              fontWeight: 600,
-            }}
-            endIcon={<EastIcon />}
-          >
+          <Button disabled={!validEmail} loading={loading} onClick={sendResetPassword}>
             {formatMessage(msgs.resetButton)}
           </Button>
           <Link
