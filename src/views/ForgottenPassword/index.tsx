@@ -27,8 +27,8 @@ export const ForgottenPasswordView = ({}: RouteComponentProps) => {
 
   const sendResetPassword = (event: React.FormEvent<HTMLButtonElement | HTMLFormElement>) => {
     event.preventDefault()
-    setLoading(true)
     if (!validEmail) return
+    setLoading(true)
 
     sendPasswordResetEmail(auth, email).then(() => {
       setSuccessfulReset(true)
