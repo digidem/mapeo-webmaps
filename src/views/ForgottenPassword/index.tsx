@@ -1,5 +1,4 @@
 import { Typography, Stack, Link, useTheme, Zoom } from '@mui/material'
-import EastIcon from '@mui/icons-material/East'
 import { getAuth, sendPasswordResetEmail } from 'firebase/auth'
 import { useIntl } from 'react-intl'
 import { useState } from 'react'
