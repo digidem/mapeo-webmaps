@@ -56,7 +56,7 @@ export const ForgottenPasswordView = ({}: RouteComponentProps) => {
           )}
         </Stack>
 
-        <Stack spacing={2}>
+        <Stack spacing={2} component="form" onSubmit={sendResetPassword}>
           <TextInput
             required
             id="email"
@@ -67,7 +67,7 @@ export const ForgottenPasswordView = ({}: RouteComponentProps) => {
             value={email}
             onChange={handleEmailChange}
           />
-          <Button disabled={!validEmail} loading={loading} onClick={sendResetPassword}>
+          <Button disabled={!validEmail} loading={loading} onSubmit={sendResetPassword}>
             {formatMessage(msgs.resetButton)}
           </Button>
           <Link
