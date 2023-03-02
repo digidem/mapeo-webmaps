@@ -29,4 +29,12 @@ export const messages = defineMessages({
     id: 'return_to_login',
     defaultMessage: 'Return to login',
   },
+  invalid_email: {
+    id: 'invalid_email',
+    defaultMessage: 'Email address is invalid',
+  },
+  email_nonexistant: {
+    id: 'email_nonexistant',
+    defaultMessage: '{email} does not exist, please try another email.',
+  },
 })
