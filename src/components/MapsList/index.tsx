@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
-import { collection, DocumentData, orderBy, query } from 'firebase/firestore'
+import { collection, DocumentData, Timestamp } from 'firebase/firestore'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useCollection } from 'react-firebase-hooks/firestore'
 import { Link, Typography, Stack } from '@mui/material'
@@ -20,12 +20,10 @@ export const MapsList = ({ openDialog, isDragActive }: DragZoneProps) => {
 
   const mapsRef = collection(db, `groups/${user?.uid || ''}/maps`)
 
-  const [mapsCollection = { docs: [] }, mapsLoading] = useCollection(
-    query(mapsRef, orderBy(sort, sortDirection)),
-  )
+  const [mapsCollection = { docs: [] }, mapsLoading] = useCollection(mapsRef)
   const maps = useMemo(() => mapsCollection?.docs.map((map) => ({ ...map?.data(), id: map?.id })), [
     mapsCollection,
-  ]) as DocumentData[]
+  ]) as MapDocument[]
 
   const handleSortChange = (selectValue: SortType) => {
     if (selectValue === sort) {
@@ -35,13 +33,18 @@ export const MapsList = ({ openDialog, isDragActive }: DragZoneProps) => {
     }
   }
 
+  const sortedMaps = useMemo(
+    () => (sort === 'createdAt' ? sortByDate(maps, sortDirection) : sortByTitle(maps, sortDirection)),
+    [maps, sort, sortDirection],
+  )
+
   if (mapsLoading) return <Loader width={100} />
 
-  return maps.length ? (
+  return sortedMaps.length ? (
     <Container alignItems="flex-end">
       <SortToggle value={sort} onChange={handleSortChange} direction={sortDirection} />
       <Stack spacing={3} alignItems="flex-end" mt={0} width="100%" mb={6}>
-        {maps.map((map) => (
+        {sortedMaps.map((map) => (
           <MapItem
             title={map.title}
             description={map.description}
@@ -74,13 +77,39 @@ const NoMaps = ({ openDialog, isDragActive }: DragZoneProps) => {
   )
 }
 
-// type MapsListProps = {
-//   maps: DocumentData[]
-//   progress: {
-//     id?: number
-//     loading?: boolean
-//   }
-// }
+const sortByDate = (data: MapDocument[], order: SortDirectionType) =>
+  data.sort((a, b) => {
+    const aDate = a.createdAt.toMillis()
+    const bDate = b.createdAt.toMillis()
+
+    if (order === 'asc') {
+      return aDate - bDate
+    }
+
+    return bDate - aDate
+  })
+
+const sortByTitle = (data: MapDocument[], order: SortDirectionType) =>
+  data.sort((a, b) => {
+    const titleA = a.title.toLowerCase()
+    const titleB = b.title.toLowerCase()
+
+    if (order === 'asc') {
+      if (titleA < titleB) return -1
+      if (titleA > titleB) return 1
+      return 0
+    }
+    if (titleA < titleB) return 1
+    if (titleA > titleB) return -1
+    return 0
+  })
+
+type MapDocument = DocumentData & {
+  title: string
+  description: string
+  createdAt: Timestamp
+  id: string
+}
 
 type DragZoneProps = {
   openDialog: () => void
