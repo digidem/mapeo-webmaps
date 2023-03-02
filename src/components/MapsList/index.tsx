@@ -41,7 +41,7 @@ export const MapsList = ({ openDialog, isDragActive }: DragZoneProps) => {
   if (mapsLoading) return <Loader width={100} />
 
   return sortedMaps.length ? (
-    <Container alignItems="flex-end">
+    <Container alignItems="flex-end" paddingTop="10vh">
       <SortToggle value={sort} onChange={handleSortChange} direction={sortDirection} />
       <Stack spacing={3} alignItems="flex-end" mt={0} width="100%" mb={6}>
         {sortedMaps.map((map) => (

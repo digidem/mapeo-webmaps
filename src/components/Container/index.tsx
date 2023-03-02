@@ -5,11 +5,13 @@ export const Container = ({
   isDragActive,
   alignItems = 'center',
   spacing = 0,
+  paddingTop = '15vh',
 }: {
   children: React.ReactNode
   isDragActive?: boolean
   alignItems?: React.CSSProperties['alignItems']
   spacing?: number
+  paddingTop?: string
 }) => (
   <Box
     justifyContent="center"
@@ -17,7 +19,7 @@ export const Container = ({
     sx={{
       width: '100%',
       height: 'calc(100vh - 80px)',
-      paddingTop: '15vh',
+      paddingTop,
       opacity: isDragActive ? 0.5 : 1,
       display: 'flex',
     }}
