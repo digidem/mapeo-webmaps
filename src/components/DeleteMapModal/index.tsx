@@ -1,16 +1,27 @@
 import { Dialog, DialogTitle, Stack, Typography, Button, Box } from '@mui/material'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import { useIntl } from 'react-intl'
+import { doc, deleteDoc } from 'firebase/firestore'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth, db } from '../..'
 import { messages as msgs } from './messages'
 
 type DeleteMapModalProps = {
   open: boolean
   mapTitle: string
   closeModal: () => void
+  id: string | number
 }
 
-export const DeleteMapModal = ({ open, mapTitle, closeModal }: DeleteMapModalProps) => {
+export const DeleteMapModal = ({ open, mapTitle, closeModal, id }: DeleteMapModalProps) => {
   const { formatMessage: t } = useIntl()
+  const [user] = useAuthState(auth)
+
+  const deleteMap = async () => {
+    if (!user) return
+    await deleteDoc(doc(db, `groups/${user.uid}/maps`, `${id}`))
+  }
+
   return (
     <Dialog open={open}>
       <Stack display="flex" alignItems="center" justifyContent="center" padding={5} spacing={3}>
@@ -33,7 +44,7 @@ export const DeleteMapModal = ({ open, mapTitle, closeModal }: DeleteMapModalPro
         <Box display="flex" alignItems="space-between" justifyContent="space-between">
           <Button
             color="error"
-            onClick={() => {}}
+            onClick={deleteMap}
             variant="contained"
             sx={{
               borderRadius: 5,
