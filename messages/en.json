@@ -26,6 +26,9 @@
   "auth_title": {
     "message": "Share your Mapeo maps publicly"
   },
+  "byTitle": {
+    "message": "by title"
+  },
   "cannot_undo": {
     "message": "This cannot be undone"
   },
@@ -41,8 +44,17 @@
   "confirm_delete_title": {
     "message": "Delete this map?"
   },
+  "createdAtPrefix": {
+    "message": "Added"
+  },
+  "dateAdded": {
+    "message": "by date added"
+  },
   "delete_button": {
     "message": "Yes, Delete Map"
+  },
+  "delete_map": {
+    "message": "Delete Map"
   },
   "delete_title": {
     "message": "Delete {mapTitle}"
@@ -50,8 +62,14 @@
   "drop_file_message": {
     "message": "Drop the .mapeomap file that you wish to upload here"
   },
+  "edit_tooltip": {
+    "message": "Edit Map details"
+  },
   "email_label": {
     "message": "Email Address"
+  },
+  "email_nonexistant": {
+    "message": "{email} does not exist, please try another email."
   },
   "email_required": {
     "message": "An email address is required"
@@ -77,6 +95,9 @@
   "have_account_link": {
     "message": "Already have an account? Sign in"
   },
+  "invalid_email": {
+    "message": "Email address is invalid"
+  },
   "keep_button": {
     "message": "No, Keep Map"
   },
@@ -97,6 +118,9 @@
   },
   "login_remember": {
     "message": "Remember Me"
+  },
+  "observations": {
+    "message": "observations"
   },
   "password": {
     "message": "Password"
@@ -119,6 +143,9 @@
   "password_reset_title": {
     "message": "Password Reset"
   },
+  "public_link_tooltip": {
+    "message": "See map"
+  },
   "return_to_login": {
     "message": "Return to login"
   },
@@ -127,6 +154,12 @@
   },
   "signup_link": {
     "message": "Don't have an account? Sign Up"
+  },
+  "sort": {
+    "message": "Sort"
+  },
+  "upload_new_data": {
+    "message": "Upload new data"
   },
   "will_be_deleted": {
     "message": "This map will no longer be publicly accesible and all embedded maps will be deleted."
