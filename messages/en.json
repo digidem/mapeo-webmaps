@@ -41,6 +41,9 @@
   "confirm_delete_title": {
     "message": "Delete this map?"
   },
+  "delete_button": {
+    "message": "Yes, Delete Map"
+  },
   "delete_title": {
     "message": "Delete {mapTitle}"
   },
@@ -73,6 +76,9 @@
   },
   "have_account_link": {
     "message": "Already have an account? Sign in"
+  },
+  "keep_button": {
+    "message": "No, Keep Map"
   },
   "learn_more_href": {
     "message": "https://docs.mapeo.app/"
@@ -121,5 +127,8 @@
   },
   "signup_link": {
     "message": "Don't have an account? Sign Up"
+  },
+  "will_be_deleted": {
+    "message": "This map will no longer be publicly accesible and all embedded maps will be deleted."
   }
 }
