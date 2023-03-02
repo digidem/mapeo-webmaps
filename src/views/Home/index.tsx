@@ -1,25 +1,21 @@
-import { Fade, Typography, useTheme } from '@mui/material'
+import { Box, Fade, Link, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
 import { useIntl } from 'react-intl'
-import { useDropzone } from 'react-dropzone'
+import { DropzoneInputProps, useDropzone } from 'react-dropzone'
 import { useCallback } from 'react'
-
-import { Overlay } from './styles'
-import { messages as msgs } from './messages'
-
-import { Loader } from '../../components/Loader'
-import { Button } from '../../components/Button'
-import { MapsList } from '../../components/MapsList'
+import * as React from 'react'
+import { AddMapButton } from '../../components/AddMapButton'
 import { AuthorisedLayout } from '../../layouts/Authorised'
+import { Img, Overlay } from './styles'
+import { messages as msgs } from './messages'
+import { Loader } from '../../components/Loader'
 import { ProgressType, useCreateMap } from '../../hooks/useCreateMap'
-import { Container } from '../../components/Container'
+import { Button } from '../../components/Button'
 
 export const HomeView = () => {
-  const theme = useTheme()
-
   const {
     createMap,
-    progress: { loading: uploading, failedFiles },
+    progress: { loading, failedFiles },
     progress,
   } = useCreateMap()
 
@@ -40,33 +36,22 @@ export const HomeView = () => {
 
   return (
     <AuthorisedLayout onClickAddMap={open}>
-      <Stack
-        sx={{
-          overflowY: 'scroll',
-          '&::-webkit-scrollbar': {
-            width: '10px' /* width of the entire scrollbar */,
-          },
-          '&::-webkit-scrollbar-track': {
-            background: theme.background /* color of the tracking area */,
-          },
-          '&::-webkit-scrollbar-thumb': {
-            backgroundColor: theme.blueDark /* color of the scroll thumb */,
-            borderRadius: 0 /* roundness of the scroll thumb */,
-          },
-        }}
-      >
-        <input {...getInputProps()} />
-        {uploading || failedFiles?.length ? (
-          <Uploading progress={progress} />
-        ) : (
-          <div {...getRootProps({ className: 'dropzone' })}>
-            <DragDropOverlay active={isDragActive} />
-            <MapsList openDialog={open} isDragActive={isDragActive} />
-          </div>
-        )}
-      </Stack>
+      {loading || failedFiles?.length ? (
+        <Uploading progress={progress} />
+      ) : (
+        <div {...getRootProps({ className: 'dropzone' })}>
+          <DragDropOverlay active={isDragActive} />
+          <NoMaps openDialog={open} getInputProps={getInputProps} isDragActive={isDragActive} />
+        </div>
+      )}
     </AuthorisedLayout>
   )
+}
+
+type NoMapsType = {
+  openDialog: () => void
+  getInputProps: (props?: DropzoneInputProps | undefined) => DropzoneInputProps
+  isDragActive: boolean
 }
 
 const DragDropOverlay = ({ active }: { active: boolean }) => {
@@ -84,12 +69,47 @@ const DragDropOverlay = ({ active }: { active: boolean }) => {
   )
 }
 
+const Container = ({ children, isDragActive }: { children: React.ReactNode; isDragActive?: boolean }) => (
+  <Box
+    justifyContent="center"
+    alignItems="center"
+    sx={{
+      width: '100%',
+      height: 'calc(100vh - 80px)',
+      paddingTop: '15vh',
+      opacity: isDragActive ? 0.5 : 1,
+    }}
+  >
+    <Stack direction="column" justifyContent="center" alignItems="center" spacing={5}>
+      {children}
+    </Stack>
+  </Box>
+)
+
+const NoMaps = ({ openDialog, getInputProps, isDragActive }: NoMapsType) => {
+  const { formatMessage } = useIntl()
+  return (
+    <Container isDragActive={isDragActive}>
+      <Img src="/svg/nomap.svg" alt="" />
+      <Typography variant="h3">{formatMessage(msgs.empty_title)}</Typography>
+      <Typography variant="body1" align="center">
+        {formatMessage(msgs.empty_message)}
+        <Link display="block" href={formatMessage(msgs.empty_message_href)}>
+          {formatMessage(msgs.empty_message_link)}
+        </Link>
+      </Typography>
+      <input {...getInputProps()} />
+      <AddMapButton onClick={openDialog} />
+    </Container>
+  )
+}
+
 type UploadingType = {
   progress: ProgressType
 }
 
 const Uploading = ({
-  progress: { completed, loading, error, currentFile, failedFiles, retryFailedFiles },
+  progress: { completed, loading, currentFile, failedFiles, retryFailedFiles },
 }: UploadingType) =>
   failedFiles?.length && !loading ? (
     <>
