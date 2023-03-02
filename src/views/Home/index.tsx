@@ -1,4 +1,4 @@
-import { Fade, Typography, useTheme } from '@mui/material'
+import { Box, Fade, Typography, useTheme } from '@mui/material'
 import { Stack } from '@mui/system'
 import { useIntl } from 'react-intl'
 import { useDropzone } from 'react-dropzone'
@@ -56,7 +56,7 @@ export const HomeView = () => {
         }}
       >
         <input {...getInputProps()} />
-        {uploading || failedFiles?.length ? (
+        {uploading || failedFiles?.length || true ? (
           <Uploading progress={progress} />
         ) : (
           <div {...getRootProps({ className: 'dropzone' })}>
@@ -84,31 +84,47 @@ const DragDropOverlay = ({ active }: { active: boolean }) => {
   )
 }
 
-type UploadingType = {
-  progress: ProgressType
-}
+const Uploading = ({ progress }: { progress: ProgressType }) => {
+  const { formatMessage } = useIntl()
 
-const Uploading = ({
-  progress: { completed, loading, error, currentFile, failedFiles, retryFailedFiles },
-}: UploadingType) =>
-  failedFiles?.length && !loading ? (
-    <>
-      <Button onClick={retryFailedFiles}>Retry</Button>
-      {failedFiles.length ? (
-        <Typography variant="body1">
-          Failed files:{' '}
-          {failedFiles.map((failed) => (
-            <span>{failed}</span>
-          ))}
-        </Typography>
-      ) : null}
-    </>
-  ) : (
+  const { completed, loading, failedFiles, retryFailedFiles } = progress
+
+  if (true) {
+    return (
+      <>
+        <Stack width="100%" display="flex" alignItems="center" paddingTop={2}>
+          <Button
+            onClick={retryFailedFiles}
+            fullWidth={false}
+            color="warning"
+            sx={{
+              borderRadius: 5,
+              display: 'flex',
+              justifyContent: 'space-between',
+              textTransform: 'none',
+              fontWeight: 600,
+            }}
+          >
+            {formatMessage(msgs.retry)}
+          </Button>
+        </Stack>
+        {failedFiles.length ? (
+          <Typography variant="body1">
+            {`${formatMessage(msgs.failedFiles)}:`}&nbsp;
+            {failedFiles.map((failed) => (
+              <span>{failed}</span>
+            ))}
+          </Typography>
+        ) : null}
+      </>
+    )
+  }
+
+  return (
     <>
       <Loader width={100} value={completed} />
       <Container>
         <Typography variant="body1">completed: {completed}</Typography>
-        <Typography variant="body1">currentFile: {currentFile}</Typography>
         {failedFiles.length ? (
           <Typography variant="body1">
             failedFiles:{' '}
@@ -120,3 +136,4 @@ const Uploading = ({
       </Container>
     </>
   )
+}
