@@ -19,7 +19,6 @@ type PointsType = {
 }
 
 export type ProgressType = {
-  currentFile: number
   completed: number
   totalFiles: number
   error: Error | null
@@ -45,7 +44,6 @@ export const useCreateMap = () => {
   const uploadsAsObjRef = useRef<UploadsList>({})
 
   const [totalFiles, setTotalFiles] = useState(0)
-  const [currentFile, setCurrentFile] = useState(0)
   const [failedFiles, setFailedFiles] = useState<string[]>([])
   const [progress, setProgress] = useState(0)
   const [loading, setLoading] = useState(false)
@@ -178,7 +176,6 @@ export const useCreateMap = () => {
         if (cancelRef.current) return // bail if component is unmounted
         current += 1
         try {
-          setCurrentFile(current)
           uploadImage(imageFile, current, imagesLength)
         } catch (e) {
           if (typeof e === 'string') {
@@ -196,7 +193,6 @@ export const useCreateMap = () => {
   const createMap = useCallback(
     async (zipFile: File[]) => {
       setTotalFiles(0)
-      setCurrentFile(0)
       setError(null)
       uploadsAsObjRef.current = {}
       setLoading(true)
@@ -226,7 +222,6 @@ export const useCreateMap = () => {
         (failed) => failedFileHash === failed.hashedName,
       ) as ImageFileType
       current += 1
-      setCurrentFile(current)
       try {
         if (fileToUpload) {
           uploadImage(fileToUpload, current, imagesLength)
@@ -244,7 +239,6 @@ export const useCreateMap = () => {
   return {
     createMap,
     progress: {
-      currentFile,
       completed: progress,
       totalFiles,
       error,

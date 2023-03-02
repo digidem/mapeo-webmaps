@@ -80,6 +80,9 @@
   "empty_title": {
     "message": "No maps to show"
   },
+  "failedFiles": {
+    "message": "Failed Files"
+  },
   "forgot_password_link": {
     "message": "Forgot password?"
   },
@@ -133,6 +136,9 @@
   },
   "public_link_tooltip": {
     "message": "See map"
+  },
+  "retry": {
+    "message": "Retry"
   },
   "return_to_login": {
     "message": "Return to login"

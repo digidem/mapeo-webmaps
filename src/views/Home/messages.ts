@@ -47,4 +47,12 @@ export const messages = defineMessages({
     id: 'confirm_confirm',
     defaultMessage: 'Yes',
   },
+  retry: {
+    id: 'retry',
+    defaultMessage: 'Retry',
+  },
+  failedFiles: {
+    id: 'failedFiles',
+    defaultMessage: 'Failed Files',
+  },
 })
