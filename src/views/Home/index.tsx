@@ -56,7 +56,7 @@ export const HomeView = () => {
         }}
       >
         <input {...getInputProps()} />
-        {uploading || failedFiles?.length || true ? (
+        {uploading || failedFiles?.length ? (
           <Uploading progress={progress} />
         ) : (
           <div {...getRootProps({ className: 'dropzone' })}>
@@ -89,7 +89,7 @@ const Uploading = ({ progress }: { progress: ProgressType }) => {
 
   const { completed, loading, failedFiles, retryFailedFiles } = progress
 
-  if (true) {
+  if (failedFiles?.length && !loading) {
     return (
       <>
         <Stack width="100%" display="flex" alignItems="center" paddingTop={2}>
