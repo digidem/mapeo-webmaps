@@ -1,4 +1,4 @@
-import { Dialog, Stack, Typography, FormHelperText, Button } from '@mui/material'
+import { Dialog, Stack, Typography, FormHelperText, Button, CircularProgress, useTheme } from '@mui/material'
 import { Upload as UploadIcon } from '@mui/icons-material'
 import { ReactNode, useState } from 'react'
 import { useIntl } from 'react-intl'
@@ -6,13 +6,17 @@ import { MapData } from '../../views/Map'
 import { TextInput } from '../TextInput'
 import { msgs } from './messages'
 
+const DEFAULT_MAP_STYLE = 'mapbox://styles/mapbox/outdoors-v11'
+
 export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
   const { formatMessage } = useIntl()
+  const theme = useTheme()
   const [mapTitle, setMapTitle] = useState(map.title)
   const [mapDescription, setMapDescription] = useState(map.description)
   const [mapTerms, setMapTerms] = useState(map.terms)
-  const [mapStyle, setMapStyle] = useState(map.mapStyle)
+  const [mapStyle, setMapStyle] = useState(map.mapStyle || DEFAULT_MAP_STYLE)
   const [accessToken, setAccessToken] = useState(map.accessToken)
+  const [saving, setSaving] = useState(false)
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMapTitle(event.target.value)
@@ -34,9 +38,15 @@ export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
     setMapTitle(map.title)
     setMapDescription(map.description)
     setMapTerms(map.terms)
-    setMapStyle(map.mapStyle)
+    setMapStyle(map.mapStyle || DEFAULT_MAP_STYLE)
     setAccessToken(map.accessToken)
+    setSaving(false)
     onClose()
+  }
+
+  const submit = (event: React.FormEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    setSaving(true)
   }
 
   return (
@@ -62,6 +72,7 @@ export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
           <TextInput
             required
             variant="outlined"
+            disabled={saving}
             id="map-title"
             label={formatMessage(msgs.title)}
             value={mapTitle}
@@ -69,6 +80,7 @@ export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
           />
           <TextInput
             variant="outlined"
+            disabled={saving}
             id="map-description"
             label={formatMessage(msgs.description)}
             value={mapDescription}
@@ -78,6 +90,7 @@ export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
           />
           <TextInput
             variant="outlined"
+            disabled={saving}
             id="map-terms"
             label={formatMessage(msgs.terms)}
             value={mapTerms}
@@ -85,6 +98,7 @@ export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
             renderHelperText={() => <FormHelperText>{formatMessage(msgs.termsHelper)}</FormHelperText>}
           />
           <TextInput
+            disabled={saving}
             variant="outlined"
             id="map-style"
             label={formatMessage(msgs.mapStyle)}
@@ -98,6 +112,7 @@ export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
             )}
           />
           <TextInput
+            disabled={saving}
             variant="outlined"
             id="map-token"
             label={formatMessage(msgs.accessToken)}
@@ -119,6 +134,7 @@ export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
               <Button
                 color="inherit"
                 onClick={handleClickCancel}
+                disabled={saving}
                 sx={{
                   textTransform: 'none',
                   fontWeight: 600,
@@ -128,7 +144,10 @@ export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
                 {formatMessage(msgs.cancel)}
               </Button>
               <Button
+                onSubmit={submit}
+                onClick={submit}
                 variant="contained"
+                disabled={saving}
                 size="large"
                 type="submit"
                 disableElevation
@@ -139,9 +158,13 @@ export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
                   paddingX: 8,
                   paddingY: 2,
                   marginLeft: 4,
+                  '&.Mui-disabled': {
+                    backgroundColor: theme.primary,
+                    opacity: 0.7,
+                  },
                 }}
               >
-                {formatMessage(msgs.save)}
+                {saving ? <CircularProgress sx={{ color: 'white' }} size={26} /> : formatMessage(msgs.save)}
               </Button>
             </Row>
           </Row>
