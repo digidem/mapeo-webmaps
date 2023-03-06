@@ -107,9 +107,11 @@ const sortByTitle = (data: MapDocument[], order: SortDirectionType) =>
 
 type MapDocument = DocumentData & {
   title: string
-  description: string
+  description?: string
+  terms?: string
   createdAt?: Timestamp
   id: string
+  public: boolean
 }
 
 type DragZoneProps = {

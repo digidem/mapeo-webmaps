@@ -103,7 +103,7 @@ const ReadOnlyTextField = ({ value, type }: { value: string; type: 'url' | 'code
 }
 
 type ShareModalProps = {
-  mapTitle: string
+  mapTitle?: string
   shareUrl: string
   onClose: () => void
   open: boolean
