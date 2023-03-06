@@ -7,6 +7,8 @@ import { enableIndexedDbPersistence, Firestore, getFirestore } from 'firebase/fi
 import { App } from './components/App'
 import * as serviceWorker from './serviceWorker'
 
+export const SITE_TITLE = 'Mapeo Webmaps'
+
 type ConfigType = {
   projectId: string
   appId: string
