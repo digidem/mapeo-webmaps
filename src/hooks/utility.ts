@@ -1,17 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 
-
-type UseTimeoutReturnType = [
-  isActive: boolean,
-  activate: () => void
-]
+type UseTimeoutReturnType = [boolean, () => void]
 
 export const useTimeoutState = (delay: number): UseTimeoutReturnType => {
   const [isActive, setIsActive] = useState(false)
   const timeout = useRef<number | null>(null)
 
   useEffect(() => {
-
     if (isActive) {
       timeout.current = window.setTimeout(() => setIsActive(false), delay)
     }
@@ -23,8 +18,5 @@ export const useTimeoutState = (delay: number): UseTimeoutReturnType => {
     }
   }, [isActive, delay])
 
-  return [
-    isActive,
-    () => setIsActive(true),
-  ]
+  return [isActive, () => setIsActive(true)]
 }

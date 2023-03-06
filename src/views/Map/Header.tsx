@@ -18,7 +18,15 @@ const Row = ({ children, ...rest }: StackProps) => (
   </Stack>
 )
 
-export const Header = ({ onClickEdit, onClickShare, mapDataLoading }: { onClickEdit: () => void, onClickShare: () => void, mapDataLoading: boolean }) => {
+export const Header = ({
+  onClickEdit,
+  onClickShare,
+  mapDataLoading,
+}: {
+  onClickEdit: () => void
+  onClickShare: () => void
+  mapDataLoading: boolean
+}) => {
   const location = useLocation() as LocationState
   const { formatMessage } = useIntl()
   const theme = useTheme()
