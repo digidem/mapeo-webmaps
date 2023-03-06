@@ -28,7 +28,7 @@ export const DeleteMapModal = ({ open, mapTitle, closeModal, id }: DeleteMapModa
         <DeleteForeverIcon sx={{ fontSize: 150 }} />
 
         <DialogTitle>
-          <Typography variant="h1" fontSize={32}>
+          <Typography variant="h1" fontSize={32} align="center">
             {t(msgs.delete_title, { mapTitle })}
           </Typography>
         </DialogTitle>
@@ -46,6 +46,7 @@ export const DeleteMapModal = ({ open, mapTitle, closeModal, id }: DeleteMapModa
             color="error"
             onClick={deleteMap}
             variant="contained"
+            disableElevation
             sx={{
               borderRadius: 5,
               display: 'flex',
@@ -55,7 +56,7 @@ export const DeleteMapModal = ({ open, mapTitle, closeModal, id }: DeleteMapModa
               marginRight: 5,
             }}
           >
-            <Typography>{t(msgs.delete_button)}</Typography>
+            {t(msgs.delete_button)}
           </Button>
           <Button
             onClick={closeModal}
