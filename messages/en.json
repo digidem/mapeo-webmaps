@@ -1,4 +1,7 @@
 {
+  "accessToken": {
+    "message": "Access Token"
+  },
   "add_map_button": {
     "message": "Add Map"
   },
@@ -29,6 +32,9 @@
   "byTitle": {
     "message": "by title"
   },
+  "cancel": {
+    "message": "Cancel"
+  },
   "confirm_cancel": {
     "message": "No, Cancel"
   },
@@ -56,14 +62,23 @@
   "dateAdded": {
     "message": "by date added"
   },
+  "deleteMap": {
+    "message": "Delete Map"
+  },
   "delete_map": {
     "message": "Delete Map"
+  },
+  "description": {
+    "message": "Map Description"
   },
   "drop_file_message": {
     "message": "Drop the .mapeomap file that you wish to upload here"
   },
   "edit": {
     "message": "Edit"
+  },
+  "editMapDetails": {
+    "message": "Edit Map Details"
   },
   "edit_tooltip": {
     "message": "Edit Map details"
@@ -128,6 +143,18 @@
   "login_remember": {
     "message": "Remember Me"
   },
+  "mapStyle": {
+    "message": "Map Style"
+  },
+  "mapStyleHelperLink": {
+    "message": "Mapbox Style Url"
+  },
+  "mapStyleHelperText": {
+    "message": "Enter a"
+  },
+  "mapStyleHelperUrl": {
+    "message": "https://docs.mapbox.com/help/glossary/style-url/"
+  },
   "observations": {
     "message": "observations"
   },
@@ -155,8 +182,14 @@
   "public_link_tooltip": {
     "message": "See map"
   },
+  "replaceMapData": {
+    "message": "Replace Map Data"
+  },
   "return_to_login": {
     "message": "Return to login"
+  },
+  "save": {
+    "message": "Save"
   },
   "share": {
     "message": "Share"
@@ -169,6 +202,15 @@
   },
   "sort": {
     "message": "Sort"
+  },
+  "terms": {
+    "message": "Terms & Limitations"
+  },
+  "termsHelper": {
+    "message": "Add terms & limitations about how this data can be used"
+  },
+  "title": {
+    "message": "Map Title"
   },
   "upload_new_data": {
     "message": "Upload new data"
