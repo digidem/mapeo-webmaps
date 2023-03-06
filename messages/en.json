@@ -41,6 +41,15 @@
   "confirm_delete_title": {
     "message": "Delete this map?"
   },
+  "copied": {
+    "message": "Copied to clipboard"
+  },
+  "copyCode": {
+    "message": "Copy Code"
+  },
+  "copyUrl": {
+    "message": "Copy URL"
+  },
   "createdAtPrefix": {
     "message": "Added"
   },
@@ -67,6 +76,12 @@
   },
   "email_required": {
     "message": "An email address is required"
+  },
+  "embedMessage": {
+    "message": "Copy and paste this HTML into your website to show this map."
+  },
+  "embedTitle": {
+    "message": "Embed Code"
   },
   "empty_message": {
     "message": "Export data from Mapeo Desktop to share publicly. Not sure how to add maps?"
@@ -157,5 +172,11 @@
   },
   "upload_new_data": {
     "message": "Upload new data"
+  },
+  "urlMessage": {
+    "message": "Share this link to view the map publicly."
+  },
+  "urlTitle": {
+    "message": "Public Map Url"
   }
 }
