@@ -6,6 +6,7 @@ import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRound
 import CreateIcon from '@mui/icons-material/Create'
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined'
 import { useIntl } from 'react-intl'
+import { DocumentData } from 'firebase/firestore'
 
 import { Button } from '../../components/Button'
 import { LogoImg } from '../../components/Header/styles'
@@ -17,7 +18,7 @@ const Row = ({ children, ...rest }: StackProps) => (
   </Stack>
 )
 
-export const Header = ({}) => {
+export const Header = ({ onClickEdit, onClickShare, mapDataLoading }: { onClickEdit: () => void, onClickShare: () => void, mapDataLoading: boolean }) => {
   const location = useLocation() as LocationState
   const { formatMessage } = useIntl()
   const theme = useTheme()
@@ -65,6 +66,7 @@ export const Header = ({}) => {
 
           <Box>
             <Button
+              disabled={mapDataLoading}
               fullWidth={false}
               icon={CreateIcon}
               iconPosition="start"
@@ -80,16 +82,17 @@ export const Header = ({}) => {
                   color: 'white',
                 },
               }}
-              onClick={() => null}
+              onClick={onClickEdit}
             >
               {formatMessage(msgs.edit)}
             </Button>
             <Button
+              disabled={mapDataLoading}
               fullWidth={false}
               icon={ShareOutlinedIcon}
               iconPosition="start"
               sx={{ color: 'white', flex: 1, textTransform: 'none', borderRadius: 1, display: 'inline-flex' }}
-              onClick={() => null}
+              onClick={onClickShare}
             >
               {formatMessage(msgs.share)}
             </Button>
