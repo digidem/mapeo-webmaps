@@ -13,10 +13,10 @@ import { AuthorisedLayout } from '../../layouts/Authorised'
 import { Header } from './Header'
 import { IFrame } from './styles'
 
-const SHARE_URL_BASE = 'http://localhost:9966' // DEV URL (You'll need to run Webmaps-Public locally on port 9966)
+const SHARE_URL_BASE = 'https://deploy-preview-30--mapeo-webmaps.netlify.app' // DEV URL (You'll need to run Webmaps-Public locally on port 9966)
 // const SHARE_URL_BASE = 'https://maps-public.mapeo.world' // PROD URL
 
-export const MapView = ({}: RouteComponentProps) => {
+export const MapView = ({ }: RouteComponentProps) => {
   const [shareModalOpen, setShareModalOpen] = useState(false)
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [replaceDataModalOpen, setReplaceDataModalOpen] = useState(false)

@@ -14,12 +14,12 @@ import { MapsList } from '../../components/MapsList'
 import { AuthorisedLayout } from '../../layouts/Authorised'
 import { ProgressType, useCreateMap } from '../../hooks/useCreateMap'
 
-export const HomeView = ({}: RouteComponentProps) => {
+export const HomeView = ({ }: RouteComponentProps) => {
   const theme = useTheme()
 
   const {
     createMap,
-    progress: { loading: uploading, failedFiles, mapTitle },
+    progress: { loading: uploading, failedFiles },
     progress,
   } = useCreateMap()
 

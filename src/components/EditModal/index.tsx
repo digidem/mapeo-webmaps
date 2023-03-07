@@ -9,7 +9,6 @@ import { TextInput } from '../TextInput'
 import { msgs } from './messages'
 import { mapboxStyleRegex } from '../../helpers/regex'
 import { auth, db } from '../..'
-import { DeleteMapModal } from '../DeleteMapModal'
 
 const DEFAULT_MAP_STYLE = 'mapbox://styles/mapbox/outdoors-v11'
 const WAIT_BEFORE_CLOSE = 2000
