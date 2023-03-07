@@ -146,8 +146,14 @@
   "mapStyle": {
     "message": "Map Style"
   },
+  "mapStyleHelperError1": {
+    "message": "A valid"
+  },
+  "mapStyleHelperError2": {
+    "message": "is required."
+  },
   "mapStyleHelperLink": {
-    "message": "Mapbox Style Url"
+    "message": "Mapbox style url"
   },
   "mapStyleHelperText": {
     "message": "Enter a"
