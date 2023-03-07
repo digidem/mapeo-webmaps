@@ -79,6 +79,7 @@ const NoMaps = ({ openDialog, isDragActive }: DragZoneProps) => {
 
 const sortByDate = (data: MapDocument[], order: SortDirectionType) =>
   data.sort((a, b) => {
+    if (!a.createdAt || !b.createdAt) return 0
     const aDate = a.createdAt.toMillis()
     const bDate = b.createdAt.toMillis()
 
@@ -107,7 +108,7 @@ const sortByTitle = (data: MapDocument[], order: SortDirectionType) =>
 type MapDocument = DocumentData & {
   title: string
   description: string
-  createdAt: Timestamp
+  createdAt?: Timestamp
   id: string
 }
 
