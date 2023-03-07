@@ -1,24 +1,29 @@
+import { ReactNode, useState } from 'react'
+import { doc, DocumentReference, updateDoc } from 'firebase/firestore'
+import { useAuthState } from 'react-firebase-hooks/auth'
 import { Dialog, Stack, Typography, FormHelperText, Button, CircularProgress, useTheme } from '@mui/material'
 import { Upload as UploadIcon } from '@mui/icons-material'
-import { ReactNode, useState } from 'react'
 import { useIntl } from 'react-intl'
-import * as React from 'react'
 import { MapData } from '../../views/Map'
 import { TextInput } from '../TextInput'
 import { msgs } from './messages'
 import { mapboxStyleRegex } from '../../helpers/regex'
+import { auth, db } from '../..'
 
 const DEFAULT_MAP_STYLE = 'mapbox://styles/mapbox/outdoors-v11'
 
 export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
   const { formatMessage } = useIntl()
   const theme = useTheme()
+  const [user] = useAuthState(auth)
+
   const [mapTitle, setMapTitle] = useState(map.title)
-  const [mapDescription, setMapDescription] = useState(map.description)
-  const [mapTerms, setMapTerms] = useState(map.terms)
+  const [mapDescription, setMapDescription] = useState(map.description || '')
+  const [mapTerms, setMapTerms] = useState(map.terms || '')
   const [mapStyle, setMapStyle] = useState(map.mapStyle || DEFAULT_MAP_STYLE)
+  const [accessToken, setAccessToken] = useState(map.accessToken || '')
+
   const [mapStyleError, setMapStyleError] = useState(false)
-  const [accessToken, setAccessToken] = useState(map.accessToken)
   const [saving, setSaving] = useState(false)
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,22 +47,36 @@ export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
 
   const handleClickCancel = () => {
     setMapTitle(map.title)
-    setMapDescription(map.description)
-    setMapTerms(map.terms)
+    setMapDescription(map.description || '')
+    setMapTerms(map.terms || '')
     setMapStyle(map.mapStyle || DEFAULT_MAP_STYLE)
-    setAccessToken(map.accessToken)
+    setAccessToken(map.accessToken || '')
     setSaving(false)
     onClose()
-  }
-
-  const submit = (event: React.FormEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-    setSaving(true)
   }
 
   const validateMapboxStyle = () => {
     console.log(!mapStyle.match(mapboxStyleRegex))
     setMapStyleError(!mapStyle.match(mapboxStyleRegex))
+  }
+
+  const submit = async (event: React.FormEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    setSaving(true)
+
+    if (!user) return
+
+    const mapDoc = doc(db, `groups/${user.uid}/maps`, map.id)
+    await updateDoc(mapDoc, {
+      description: mapDescription,
+      title: mapTitle,
+      terms: mapTerms,
+      accessToken,
+      mapStyle,
+    })
+
+    setSaving(false)
+    onClose()
   }
 
   return (
@@ -200,7 +219,10 @@ const RenderMapstyleHelperText = ({ hasError }: { hasError: boolean }) => {
         <Typography variant="caption" color="error" component="span">
           {formatMessage(msgs.mapStyleHelperError1)}{' '}
         </Typography>
-        <a href={formatMessage(msgs.mapStyleHelperUrl)}>{formatMessage(msgs.mapStyleHelperLink)}</a>.{' '}
+        <a target="_blank" rel="noreferrer" href={formatMessage(msgs.mapStyleHelperUrl)}>
+          {formatMessage(msgs.mapStyleHelperLink)}
+        </a>
+        .{' '}
         <Typography variant="caption" color="error" component="span">
           {formatMessage(msgs.mapStyleHelperError2)}{' '}
         </Typography>

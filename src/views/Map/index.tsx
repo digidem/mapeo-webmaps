@@ -53,7 +53,7 @@ export const MapView = ({}: RouteComponentProps) => {
             shareUrl={mapUrl}
             onClose={closeShareModal}
           />
-          {mapData && <EditModal open={editModalOpen} map={mapData} onClose={closeEditModal} />}
+          {mapData && <EditModal open={editModalOpen} map={{ ...mapData, id }} onClose={closeEditModal} />}
         </>
       )}
       <AuthorisedLayout
