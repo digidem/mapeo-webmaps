@@ -2,9 +2,11 @@ import { Dialog, Stack, Typography, FormHelperText, Button, CircularProgress, us
 import { Upload as UploadIcon } from '@mui/icons-material'
 import { ReactNode, useState } from 'react'
 import { useIntl } from 'react-intl'
+import * as React from 'react'
 import { MapData } from '../../views/Map'
 import { TextInput } from '../TextInput'
 import { msgs } from './messages'
+import { mapboxStyleRegex } from '../../helpers/regex'
 
 const DEFAULT_MAP_STYLE = 'mapbox://styles/mapbox/outdoors-v11'
 
@@ -15,6 +17,7 @@ export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
   const [mapDescription, setMapDescription] = useState(map.description)
   const [mapTerms, setMapTerms] = useState(map.terms)
   const [mapStyle, setMapStyle] = useState(map.mapStyle || DEFAULT_MAP_STYLE)
+  const [mapStyleError, setMapStyleError] = useState(false)
   const [accessToken, setAccessToken] = useState(map.accessToken)
   const [saving, setSaving] = useState(false)
 
@@ -28,6 +31,9 @@ export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
     setMapTerms(event.target.value)
   }
   const handleStyleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (mapStyleError) {
+      validateMapboxStyle()
+    }
     setMapStyle(event.target.value)
   }
   const handleAccessTokenChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,6 +53,11 @@ export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
   const submit = (event: React.FormEvent<HTMLButtonElement>) => {
     event.preventDefault()
     setSaving(true)
+  }
+
+  const validateMapboxStyle = () => {
+    console.log(!mapStyle.match(mapboxStyleRegex))
+    setMapStyleError(!mapStyle.match(mapboxStyleRegex))
   }
 
   return (
@@ -71,6 +82,7 @@ export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
         <Stack spacing={3}>
           <TextInput
             required
+            requiredColor={theme.palette.error.main}
             variant="outlined"
             disabled={saving}
             id="map-title"
@@ -98,18 +110,16 @@ export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
             renderHelperText={() => <FormHelperText>{formatMessage(msgs.termsHelper)}</FormHelperText>}
           />
           <TextInput
+            required
+            requiredColor={theme.palette.error.main}
             disabled={saving}
             variant="outlined"
             id="map-style"
             label={formatMessage(msgs.mapStyle)}
             value={mapStyle}
             onChange={handleStyleChange}
-            renderHelperText={() => (
-              <FormHelperText>
-                {formatMessage(msgs.mapStyleHelperText)}{' '}
-                <a href={formatMessage(msgs.mapStyleHelperUrl)}>{formatMessage(msgs.mapStyleHelperLink)}</a>
-              </FormHelperText>
-            )}
+            onBlur={validateMapboxStyle}
+            renderHelperText={() => <RenderMapstyleHelperText hasError={mapStyleError} />}
           />
           <TextInput
             disabled={saving}
@@ -147,7 +157,7 @@ export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
                 onSubmit={submit}
                 onClick={submit}
                 variant="contained"
-                disabled={saving}
+                disabled={saving || !mapTitle || mapStyleError}
                 size="large"
                 type="submit"
                 disableElevation
@@ -160,6 +170,7 @@ export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
                   marginLeft: 4,
                   '&.Mui-disabled': {
                     backgroundColor: theme.primary,
+                    color: theme.white,
                     opacity: 0.7,
                   },
                 }}
@@ -179,6 +190,31 @@ const Row = ({ children }: { children: ReactNode }) => (
     {children}
   </Stack>
 )
+
+const RenderMapstyleHelperText = ({ hasError }: { hasError: boolean }) => {
+  const { formatMessage } = useIntl()
+
+  if (hasError) {
+    return (
+      <FormHelperText>
+        <Typography variant="caption" color="error" component="span">
+          {formatMessage(msgs.mapStyleHelperError1)}{' '}
+        </Typography>
+        <a href={formatMessage(msgs.mapStyleHelperUrl)}>{formatMessage(msgs.mapStyleHelperLink)}</a>.{' '}
+        <Typography variant="caption" color="error" component="span">
+          {formatMessage(msgs.mapStyleHelperError2)}{' '}
+        </Typography>
+      </FormHelperText>
+    )
+  }
+
+  return (
+    <FormHelperText>
+      {formatMessage(msgs.mapStyleHelperText)}{' '}
+      <a href={formatMessage(msgs.mapStyleHelperUrl)}>{formatMessage(msgs.mapStyleHelperLink)}</a>.
+    </FormHelperText>
+  )
+}
 
 type ShareModalProps = {
   map: MapData

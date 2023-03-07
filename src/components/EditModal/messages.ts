@@ -29,9 +29,17 @@ export const msgs = defineMessages({
     id: 'mapStyleHelperText',
     defaultMessage: 'Enter a ',
   },
+  mapStyleHelperError1: {
+    id: 'mapStyleHelperError1',
+    defaultMessage: 'A valid',
+  },
+  mapStyleHelperError2: {
+    id: 'mapStyleHelperError2',
+    defaultMessage: 'is required.',
+  },
   mapStyleHelperLink: {
     id: 'mapStyleHelperLink',
-    defaultMessage: 'Mapbox Style Url',
+    defaultMessage: 'Mapbox style url',
   },
   mapStyleHelperUrl: {
     id: 'mapStyleHelperUrl',

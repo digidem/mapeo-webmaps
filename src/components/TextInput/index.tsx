@@ -1,5 +1,5 @@
 import { ComponentType, useRef } from 'react'
-import { FormLabel, Stack, useTheme, TextFieldProps } from '@mui/material'
+import { FormLabel, Stack, useTheme, TextFieldProps, Typography } from '@mui/material'
 import { StyledTextField } from './styles'
 
 type TextInputType = TextFieldProps & {
@@ -7,6 +7,7 @@ type TextInputType = TextFieldProps & {
   required?: boolean
   type?: React.HTMLInputTypeAttribute
   renderHelperText?: ComponentType
+  requiredColor?: React.CSSProperties['color']
 }
 
 export const TextInput = ({
@@ -14,6 +15,7 @@ export const TextInput = ({
   required,
   type,
   variant = 'filled',
+  requiredColor = 'inherit',
   renderHelperText: HelperText,
   ...rest
 }: TextInputType) => {
@@ -36,7 +38,12 @@ export const TextInput = ({
     <Stack spacing={1} onClick={focusInput}>
       <FormLabel sx={{ color: 'inherit' }}>
         {label}
-        {required && ' *'}
+        {required && (
+          <Typography component="span" sx={{ color: requiredColor }}>
+            {' '}
+            *
+          </Typography>
+        )}
       </FormLabel>
       <StyledTextField
         inputRef={inputRef}
