@@ -9,7 +9,6 @@ import { useIntl } from 'react-intl'
 import { useDropzone } from 'react-dropzone'
 import { msgs } from './messages'
 import { useCreateMap } from '../../hooks/useCreateMap'
-import { useTimeout } from '../../hooks/utility'
 import { Loader } from '../Loader'
 
 const WAIT_BEFORE_CLOSE = 3000
@@ -25,18 +24,16 @@ export const ReplaceDataModal = ({ id, mapTitle, onClose, open }: ReplaceDataMod
     progress: { loading: saving, completed: progress, failedFiles, retryFailedFiles },
   } = useCreateMap()
 
-  useEffect(() => {
-    if (progress === 100) {
-      setSaved(true)
-    }
-  }, [progress])
+  const closeWithDelay = () => {
+    setTimeout(() => handleClose(), WAIT_BEFORE_CLOSE)
+  }
 
-  useTimeout(
-    () => {
-      handleClose()
-    },
-    saved ? WAIT_BEFORE_CLOSE : null,
-  )
+  console.log(progress)
+
+  if (progress === 100 && !saved) {
+    setSaved(true)
+    closeWithDelay()
+  }
 
   const clearFile = () => setFile(null)
 
@@ -162,14 +159,17 @@ const UploadButton = ({
   const { formatMessage } = useIntl()
   const theme = useTheme()
 
-  const { getRootProps, getInputProps, open: openFileUpload, isDragActive } = useDropzone({
+  const {
+    getRootProps,
+    getInputProps,
+    open: openFileUpload,
+    isDragActive,
+  } = useDropzone({
     noClick: true,
     noKeyboard: true,
     accept: ['.mapeomap'],
     onDrop: onDropFile,
   })
-
-  console.log({ progress })
 
   return file ? (
     <div>
@@ -185,7 +185,7 @@ const UploadButton = ({
             {file.name}
           </Typography>
         </Stack>
-        <CrossIcon onClick={clearFile} sx={{ cursor: 'pointer' }} />
+        {!saving && <CrossIcon onClick={clearFile} sx={{ cursor: 'pointer' }} />}
       </Box>
       <Loader width={saving || saved ? 100 : 0} value={progress} />
     </div>
