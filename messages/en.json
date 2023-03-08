@@ -35,11 +35,11 @@
   "byTitle": {
     "message": "by title"
   },
-  "cannot_undo": {
-    "message": "This cannot be undone"
-  },
   "cancel": {
     "message": "Cancel"
+  },
+  "cannot_undo": {
+    "message": "This cannot be undone"
   },
   "confirm_cancel": {
     "message": "No, Cancel"
@@ -68,11 +68,11 @@
   "dateAdded": {
     "message": "by date added"
   },
-  "delete_button": {
-    "message": "Yes, Delete Map"
-  },
   "deleteMap": {
     "message": "Delete Map"
+  },
+  "delete_button": {
+    "message": "Yes, Delete Map"
   },
   "delete_map": {
     "message": "Delete Map"
@@ -263,14 +263,14 @@
   "upload_new_data": {
     "message": "Upload new data"
   },
-  "will_be_deleted": {
-    "message": "This map will no longer be publicly accesible and all embedded maps will be deleted."
-  },
   "urlMessage": {
     "message": "Share this link to view the map publicly."
   },
   "urlTitle": {
     "message": "Public Map Url"
+  },
+  "will_be_deleted": {
+    "message": "This map will no longer be publicly accesible and all embedded maps will be deleted."
   },
   "xFailedFiles": {
     "message": "Something went wrong uploading {failed} files, retry?"
