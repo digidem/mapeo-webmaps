@@ -1,4 +1,4 @@
-import { Fade, Typography, useTheme } from '@mui/material'
+import { Dialog, Fade, Typography, useTheme } from '@mui/material'
 import { Stack } from '@mui/system'
 import { useIntl } from 'react-intl'
 import { useDropzone } from 'react-dropzone'
@@ -13,14 +13,13 @@ import { Button } from '../../components/Button'
 import { MapsList } from '../../components/MapsList'
 import { AuthorisedLayout } from '../../layouts/Authorised'
 import { ProgressType, useCreateMap } from '../../hooks/useCreateMap'
-import { Container } from '../../components/Container'
 
 export const HomeView = ({}: RouteComponentProps) => {
   const theme = useTheme()
 
   const {
     createMap,
-    progress: { loading: uploading, failedFiles },
+    progress: { loading: uploading, failedFiles, mapTitle },
     progress,
   } = useCreateMap()
 
@@ -57,7 +56,7 @@ export const HomeView = ({}: RouteComponentProps) => {
         }}
       >
         <input {...getInputProps()} />
-        {uploading || failedFiles?.length ? (
+        {uploading || failedFiles.length ? (
           <Uploading progress={progress} />
         ) : (
           <div {...getRootProps({ className: 'dropzone' })}>
@@ -90,34 +89,33 @@ type UploadingType = {
 }
 
 const Uploading = ({
-  progress: { completed, loading, error, currentFile, failedFiles, retryFailedFiles },
-}: UploadingType) =>
-  failedFiles?.length && !loading ? (
-    <>
-      <Button onClick={retryFailedFiles}>Retry</Button>
-      {failedFiles.length ? (
-        <Typography variant="body1">
-          Failed files:{' '}
-          {failedFiles.map((failed) => (
-            <span>{failed}</span>
-          ))}
+  progress: { completed, loading, failedFiles, mapTitle = '...', retryFailedFiles },
+}: UploadingType) => {
+  const { formatMessage } = useIntl()
+
+  return (
+    <Dialog open maxWidth="sm" fullWidth>
+      <Stack spacing={5} sx={{ padding: 5 }}>
+        <Typography variant="h4" component="h2">
+          {formatMessage(msgs.addingMap, { title: mapTitle })}
         </Typography>
-      ) : null}
-    </>
-  ) : (
-    <>
-      <Loader width={100} value={completed} />
-      <Container>
-        <Typography variant="body1">completed: {completed}</Typography>
-        <Typography variant="body1">currentFile: {currentFile}</Typography>
-        {failedFiles.length ? (
-          <Typography variant="body1">
-            failedFiles:{' '}
-            {failedFiles.map((failed) => (
-              <span>{failed}</span>
-            ))}
-          </Typography>
-        ) : null}
-      </Container>
-    </>
+        {failedFiles?.length && !loading ? (
+          <>
+            {failedFiles.length ? (
+              <Typography variant="body1">
+                {formatMessage(msgs.xFailedFiles, { failed: failedFiles.length })}
+              </Typography>
+            ) : null}
+            <Stack direction="row" justifyContent="center">
+              <Button fullWidth={false} onClick={retryFailedFiles}>
+                {formatMessage(msgs.retryButton)}
+              </Button>
+            </Stack>
+          </>
+        ) : (
+          <Loader width={100} value={completed} />
+        )}
+      </Stack>
+    </Dialog>
   )
+}

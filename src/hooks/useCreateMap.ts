@@ -23,6 +23,7 @@ export type ProgressType = {
   completed: number
   totalFiles: number
   error: Error | null
+  mapTitle?: string
   failedFiles: string[]
   retryFailedFiles: () => void
   loading: boolean
@@ -44,6 +45,7 @@ export const useCreateMap = () => {
   const totalBytesRef = useRef(0)
   const uploadsAsObjRef = useRef<UploadsList>({})
 
+  const [mapTitle, setMapTitle] = useState<string>()
   const [totalFiles, setTotalFiles] = useState(0)
   const [currentFile, setCurrentFile] = useState(0)
   const [failedFiles, setFailedFiles] = useState<string[]>([])
@@ -72,6 +74,7 @@ export const useCreateMap = () => {
       if (!user) throw new Error('Not Authorized')
 
       const metadata = getMetadata(files)
+      setMapTitle(metadata.title)
       const mapsPath = `groups/${user.uid}/maps`
 
       const mapDoc = await addDoc(collection(db, mapsPath), metadata)
@@ -284,6 +287,7 @@ export const useCreateMap = () => {
     createMap,
     updateMapData,
     progress: {
+      mapTitle,
       currentFile,
       completed: progress,
       totalFiles,

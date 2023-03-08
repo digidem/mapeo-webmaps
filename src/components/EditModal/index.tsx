@@ -94,7 +94,7 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData }: ShareModal
   }
 
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+    <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth scroll="body">
       <Stack spacing={5} sx={{ padding: 5 }} component="form">
         <Row>
           <Typography variant="h4" component="h2">
