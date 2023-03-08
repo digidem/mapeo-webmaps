@@ -13,6 +13,7 @@ import { theme } from '../../theme'
 import { HomeView as Home } from '../../views/Home'
 import { firebaseApp } from '../../index'
 import { ForgottenPasswordView as ForgottenPassword } from '../../views/ForgottenPassword'
+import { MapView } from '../../views/Map'
 
 type Translations = {
   es: IntlConfig['messages']
@@ -64,5 +65,10 @@ const Authorized = ({ location }: RouteComponentProps) => {
     })
   }, [isAuthorized, initializing, location])
 
-  return user ? <Home /> : null
+  return user ? (
+    <Router>
+      <Home path="/" />
+      <MapView path="/maps/:id" />
+    </Router>
+  ) : null
 }

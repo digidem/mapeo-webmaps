@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import EastIcon from '@mui/icons-material/East'
 import { ButtonProps, CircularProgress, SvgIconTypeMap } from '@mui/material'
 import { OverridableComponent } from '@mui/material/OverridableComponent'
@@ -9,6 +10,7 @@ type ButtonPropTypesHelper = ButtonProps & {
   loading?: boolean
   disabled?: boolean
   fullWidth?: boolean
+  iconPosition?: 'start' | 'end'
 }
 
 type ButtonPropTypesOnClick = ButtonPropTypesHelper & {
@@ -31,6 +33,8 @@ export const Button = ({
   icon: Icon = EastIcon,
   fullWidth = true,
   color = 'primary',
+  iconPosition = 'end',
+  sx,
   ...rest
 }: ButtonPropTypes) => (
   <StyledButton
@@ -46,8 +50,22 @@ export const Button = ({
       justifyContent: 'space-between',
       textTransform: 'none',
       fontWeight: 600,
+      ...sx,
     }}
-    endIcon={loading ? <CircularProgress sx={{ color: 'white' }} size="1em" /> : <Icon />}
+    endIcon={
+      iconPosition !== 'end' ? null : loading ? (
+        <CircularProgress sx={{ color: 'white' }} size="1em" />
+      ) : (
+        <Icon />
+      )
+    }
+    startIcon={
+      iconPosition !== 'start' ? null : loading ? (
+        <CircularProgress sx={{ color: 'white' }} size="1em" />
+      ) : (
+        <Icon />
+      )
+    }
     onSubmit={onSubmit}
     disabled={disabled || loading}
     disableElevation

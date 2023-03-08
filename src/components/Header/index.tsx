@@ -1,7 +1,7 @@
 import { Stack, Typography } from '@mui/material'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { signOut } from 'firebase/auth'
-import { Box, StackBaseProps } from '@mui/system'
+import { StackBaseProps } from '@mui/system'
 
 import { useIntl } from 'react-intl'
 import { Link } from '@reach/router'
@@ -12,7 +12,7 @@ import { messages as msgs } from './messages'
 
 type HeaderProps = {
   children?: React.ReactNode
-  onClickAddMap: () => void
+  onClickAddMap?: () => void
 }
 
 type JustifyContentProperty = 'space-between' | 'center' | 'flex-start' | 'flex-end'
