@@ -20,9 +20,7 @@ export const MapView = ({}: RouteComponentProps) => {
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [replaceDataModalOpen, setReplaceDataModalOpen] = useState(false)
   const [user] = useAuthState(auth)
-  const params = useParams<{ id: string }>()
-
-  const id = params.id
+  const { id } = useParams<{ id: string }>()
 
   const mapUrl = user && id ? `${SHARE_URL_BASE}/groups/${user.uid}/maps/${id}` : ''
   const mapRef = doc(db, `groups/${user?.uid || ''}/maps`, id)
