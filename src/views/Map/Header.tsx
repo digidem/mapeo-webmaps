@@ -6,7 +6,6 @@ import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRound
 import CreateIcon from '@mui/icons-material/Create'
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined'
 import { useIntl } from 'react-intl'
-import { DocumentData } from 'firebase/firestore'
 
 import { Button } from '../../components/Button'
 import { LogoImg } from '../../components/Header/styles'
