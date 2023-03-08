@@ -1,6 +1,12 @@
 {
+  "accessToken": {
+    "message": "Access Token"
+  },
   "add_map_button": {
     "message": "Add Map"
+  },
+  "addingMap": {
+    "message": "Adding map {title}"
   },
   "app_title": {
     "message": "Webmaps"
@@ -32,6 +38,9 @@
   "cannot_undo": {
     "message": "This cannot be undone"
   },
+  "cancel": {
+    "message": "Cancel"
+  },
   "confirm_cancel": {
     "message": "No, Cancel"
   },
@@ -44,6 +53,15 @@
   "confirm_delete_title": {
     "message": "Delete this map?"
   },
+  "copied": {
+    "message": "Copied to clipboard"
+  },
+  "copyCode": {
+    "message": "Copy Code"
+  },
+  "copyUrl": {
+    "message": "Copy URL"
+  },
   "createdAtPrefix": {
     "message": "Added"
   },
@@ -53,14 +71,26 @@
   "delete_button": {
     "message": "Yes, Delete Map"
   },
+  "deleteMap": {
+    "message": "Delete Map"
+  },
   "delete_map": {
     "message": "Delete Map"
   },
   "delete_title": {
     "message": "Delete {mapTitle}"
   },
+  "description": {
+    "message": "Map Description"
+  },
   "drop_file_message": {
     "message": "Drop the .mapeomap file that you wish to upload here"
+  },
+  "edit": {
+    "message": "Edit"
+  },
+  "editMapDetails": {
+    "message": "Edit Map Details"
   },
   "edit_tooltip": {
     "message": "Edit Map details"
@@ -73,6 +103,12 @@
   },
   "email_required": {
     "message": "An email address is required"
+  },
+  "embedMessage": {
+    "message": "Copy and paste this HTML into your website to show this map."
+  },
+  "embedTitle": {
+    "message": "Embed Code"
   },
   "empty_message": {
     "message": "Export data from Mapeo Desktop to share publicly. Not sure how to add maps?"
@@ -89,8 +125,14 @@
   "empty_title": {
     "message": "No maps to show"
   },
+  "failedFiles": {
+    "message": "There was a problem uploading {number} files"
+  },
   "forgot_password_link": {
     "message": "Forgot password?"
+  },
+  "goBack": {
+    "message": "Go back"
   },
   "have_account_link": {
     "message": "Already have an account? Sign in"
@@ -119,6 +161,24 @@
   "login_remember": {
     "message": "Remember Me"
   },
+  "mapStyle": {
+    "message": "Map Style"
+  },
+  "mapStyleHelperError1": {
+    "message": "A valid"
+  },
+  "mapStyleHelperError2": {
+    "message": "is required."
+  },
+  "mapStyleHelperLink": {
+    "message": "Mapbox style url"
+  },
+  "mapStyleHelperText": {
+    "message": "Enter a"
+  },
+  "mapStyleHelperUrl": {
+    "message": "https://docs.mapbox.com/help/glossary/style-url/"
+  },
   "observations": {
     "message": "observations"
   },
@@ -146,8 +206,35 @@
   "public_link_tooltip": {
     "message": "See map"
   },
+  "replaceDataButton": {
+    "message": "Replace data"
+  },
+  "replaceMapData": {
+    "message": "Replace Map Data"
+  },
+  "replaceMapDataSubtitle": {
+    "message": "Uploading new data will replace current data on {title}"
+  },
+  "replaceMapDataTitle": {
+    "message": "Replace Map Data"
+  },
+  "retry": {
+    "message": "Retry upload"
+  },
+  "retryButton": {
+    "message": "Retry"
+  },
   "return_to_login": {
     "message": "Return to login"
+  },
+  "save": {
+    "message": "Save"
+  },
+  "saved": {
+    "message": "Saved"
+  },
+  "share": {
+    "message": "Share"
   },
   "signup_button": {
     "message": "Create an account"
@@ -158,10 +245,34 @@
   "sort": {
     "message": "Sort"
   },
+  "terms": {
+    "message": "Terms & Limitations"
+  },
+  "termsHelper": {
+    "message": "Add terms & limitations about how this data can be used"
+  },
+  "title": {
+    "message": "Map Title"
+  },
+  "uploadButtonDropLabel": {
+    "message": "Drop file here"
+  },
+  "uploadButtonLabel": {
+    "message": "Browse for file"
+  },
   "upload_new_data": {
     "message": "Upload new data"
   },
   "will_be_deleted": {
     "message": "This map will no longer be publicly accesible and all embedded maps will be deleted."
+  },
+  "urlMessage": {
+    "message": "Share this link to view the map publicly."
+  },
+  "urlTitle": {
+    "message": "Public Map Url"
+  },
+  "xFailedFiles": {
+    "message": "Something went wrong uploading {failed} files, retry?"
   }
 }

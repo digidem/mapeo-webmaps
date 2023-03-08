@@ -5,7 +5,7 @@ import * as md5 from 'js-md5'
 
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getStorage, ref, uploadBytesResumable, UploadTask, UploadTaskSnapshot } from 'firebase/storage'
-import { addDoc, collection, doc, writeBatch } from 'firebase/firestore'
+import { addDoc, collection, doc, writeBatch, getDocs } from 'firebase/firestore'
 import * as stringify from 'json-stable-stringify'
 import { FirebaseError } from 'firebase/app'
 import { FileType, ImageFileType, getImagesFromFiles, getJsonFromFiles, unzip } from '../helpers/file'
@@ -23,6 +23,7 @@ export type ProgressType = {
   completed: number
   totalFiles: number
   error: Error | null
+  mapTitle?: string
   failedFiles: string[]
   retryFailedFiles: () => void
   loading: boolean
@@ -44,6 +45,7 @@ export const useCreateMap = () => {
   const totalBytesRef = useRef(0)
   const uploadsAsObjRef = useRef<UploadsList>({})
 
+  const [mapTitle, setMapTitle] = useState<string>()
   const [totalFiles, setTotalFiles] = useState(0)
   const [currentFile, setCurrentFile] = useState(0)
   const [failedFiles, setFailedFiles] = useState<string[]>([])
@@ -72,6 +74,7 @@ export const useCreateMap = () => {
       if (!user) throw new Error('Not Authorized')
 
       const metadata = getMetadata(files)
+      setMapTitle(metadata.title)
       const mapsPath = `groups/${user.uid}/maps`
 
       const mapDoc = await addDoc(collection(db, mapsPath), metadata)
@@ -193,18 +196,57 @@ export const useCreateMap = () => {
     [uploadImage],
   )
 
+  const deleteAllObservations = useCallback(
+    async (id: string) => {
+      if (!user) return
+      const observationsRef = collection(db, `groups/${user.uid}/maps/${id}/observations`)
+      const observations = await getDocs(observationsRef)
+
+      const batch = writeBatch(db)
+
+      observations.forEach((observation) => {
+        console.log({ observation })
+        batch.delete(observation.ref)
+      })
+
+      await batch.commit()
+    },
+    [user],
+  )
+
   const createMap = useCallback(
-    async (zipFile: File[]) => {
+    async (zipFile: File) => {
+      if (!user) return
+
       setTotalFiles(0)
       setCurrentFile(0)
+      setProgress(0)
       setError(null)
       uploadsAsObjRef.current = {}
       setLoading(true)
-      filesRef.current = await unzip(zipFile[0])
+      filesRef.current = await unzip(zipFile)
       const mapPath = await createMapDoc(filesRef.current)
       await createObservationsDocs(filesRef.current, mapPath)
     },
-    [createMapDoc, createObservationsDocs],
+    [createMapDoc, createObservationsDocs, user],
+  )
+
+  const updateMapData = useCallback(
+    async (zipFile: File, id: string) => {
+      if (!user) return
+
+      setTotalFiles(0)
+      setCurrentFile(0)
+      setProgress(0)
+      setError(null)
+      uploadsAsObjRef.current = {}
+      setLoading(true)
+      filesRef.current = await unzip(zipFile)
+      const mapPath = `groups/${user?.uid}/maps/${id}`
+      await deleteAllObservations(id)
+      await createObservationsDocs(filesRef.current, mapPath)
+    },
+    [deleteAllObservations, createObservationsDocs, user],
   )
 
   function updateProgress(uploads: UploadsList) {
@@ -243,14 +285,15 @@ export const useCreateMap = () => {
 
   return {
     createMap,
+    updateMapData,
     progress: {
+      mapTitle,
       currentFile,
       completed: progress,
       totalFiles,
       error,
       failedFiles,
       retryFailedFiles,
-      // id,
       loading,
     },
   }

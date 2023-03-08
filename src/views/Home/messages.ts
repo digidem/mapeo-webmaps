@@ -1,6 +1,18 @@
 import { defineMessages } from 'react-intl'
 
 export const messages = defineMessages({
+  addingMap: {
+    id: 'addingMap',
+    defaultMessage: 'Adding map {title}',
+  },
+  retryButton: {
+    id: 'retryButton',
+    defaultMessage: 'Retry',
+  },
+  xFailedFiles: {
+    id: 'xFailedFiles',
+    defaultMessage: 'Something went wrong uploading {failed} files, retry?',
+  },
   empty: {
     id: 'empty_state',
     defaultMessage: 'Click "ADD MAP" to publicly share a map from a .mapeomap file exported from Mapeo',

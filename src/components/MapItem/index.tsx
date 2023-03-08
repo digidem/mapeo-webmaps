@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, CircularProgress, Link, Stack, Typography } from '@mui/material'
+import { Box, Card, CardContent, CircularProgress, Stack, Typography } from '@mui/material'
 import { collection, Timestamp } from 'firebase/firestore'
 import { useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
@@ -8,12 +8,11 @@ import { auth, db } from '../..'
 import { Button } from '../Button'
 import { DeleteMapModal } from '../DeleteMapModal'
 import { msgs } from './messages'
+import { StyledLink } from './styles'
 
 type DateFormatOptionsType = Intl.DateTimeFormatOptions & {
   dateStyle: 'medium'
 }
-
-const SHARE_URL_BASE = 'https://maps-public.mapeo.world/groups'
 
 export const MapItem = ({ id, title, description, createdAt }: MapItemProps) => {
   const [user] = useAuthState(auth)
@@ -26,37 +25,35 @@ export const MapItem = ({ id, title, description, createdAt }: MapItemProps) => 
   if (!user) return null
   const dateFormatOptions = { dateStyle: 'medium' } as DateFormatOptionsType
 
-  const shareUrl = `${SHARE_URL_BASE}/${user?.uid}/maps/${id}`
+  const mapUrl = `/maps/${id}`
 
   const dateTimeFormat = new Intl.DateTimeFormat('en-us', dateFormatOptions)
 
   return (
-    <>
-      <Card sx={{ width: '100%' }}>
-        <CardContent>
-          <Stack>
-            <Box mb={6}>
-              <Typography variant="h5">{title}</Typography>
-              <Typography variant="caption">
-                {observationsLoading ? (
-                  <MiniLoader />
-                ) : (
-                  `${observations.length} ${formatMessage(msgs.observations)}`
-                )}
-              </Typography>
-              {description ? <Typography variant="body1">{description}</Typography> : null}
-            </Box>
-            <Stack direction="row" justifyContent="space-between" alignItems="flex-end">
-              <Typography variant="caption">
-                {formatMessage(msgs.createdAtPrefix)}{' '}
-                {createdAt ? dateTimeFormat.format(createdAt.toDate()) : <MiniLoader />}
-              </Typography>
-              <Link underline="hover" fontWeight="bold" href={shareUrl}>
+    <Card sx={{ width: '100%' }}>
+      <CardContent>
+        <Stack>
+          <Box mb={6}>
+            <Typography variant="h5">{title}</Typography>
+            <Typography variant="caption">
+              {observationsLoading ? (
+                <MiniLoader />
+              ) : (
+                `${observations.length} ${formatMessage(msgs.observations)}`
+              )}
+            </Typography>
+            {description ? <Typography variant="body1">{description}</Typography> : null}
+          </Box>
+          <Stack direction="row" justifyContent="space-between" alignItems="flex-end">
+            <Typography variant="caption">
+              {formatMessage(msgs.createdAtPrefix)}{' '}
+              {createdAt ? dateTimeFormat.format(createdAt.toDate()) : <MiniLoader />}
+            </Typography>
+            <StyledLink to={mapUrl} state={{ fromHome: true }}>
+              <Typography variant="body1" fontWeight="bold" color="primary">
                 {formatMessage(msgs.publicLink)}
-              </Link>
-            </Stack>
-            {/* Temporary, just demonstrates delete functionality */}
-            <Button onClick={() => setOpenModal(true)}>Delete Map</Button>
+              </Typography>
+            </StyledLink>
           </Stack>
         </CardContent>
       </Card>
