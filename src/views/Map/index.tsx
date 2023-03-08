@@ -33,25 +33,11 @@ export const MapView = ({}: RouteComponentProps) => {
     DocumentSnapshot<DocumentData> | undefined,
   ]
 
-  const openShareModal = () => {
-    setShareModalOpen(true)
-  }
-  const closeShareModal = () => {
-    setShareModalOpen(false)
-  }
-  const openEditModal = () => {
-    setEditModalOpen(true)
-  }
-  const closeEditModal = () => {
-    setEditModalOpen(false)
-  }
   const openReplaceDataModal = () => {
-    closeEditModal()
+    setEditModalOpen(false)
     setReplaceDataModalOpen(true)
   }
-  const closeReplaceDataModal = () => {
-    setReplaceDataModalOpen(false)
-  }
+
   return (
     <>
       {!loadingMapData && (
@@ -60,13 +46,17 @@ export const MapView = ({}: RouteComponentProps) => {
             open={shareModalOpen}
             mapTitle={mapData?.title}
             shareUrl={mapUrl}
-            onClose={closeShareModal}
+            onClose={() => {
+              setShareModalOpen(false)
+            }}
           />
           {mapData && (
             <EditModal
               open={editModalOpen}
               map={{ ...mapData, id }}
-              onClose={closeEditModal}
+              onClose={() => {
+                setEditModalOpen(false)
+              }}
               onClickReplaceData={openReplaceDataModal}
             />
           )}
@@ -75,7 +65,9 @@ export const MapView = ({}: RouteComponentProps) => {
               open={replaceDataModalOpen}
               id={id}
               mapTitle={mapData.title}
-              onClose={closeReplaceDataModal}
+              onClose={() => {
+                setReplaceDataModalOpen(false)
+              }}
             />
           )}
         </>
@@ -83,7 +75,15 @@ export const MapView = ({}: RouteComponentProps) => {
       <AuthorisedLayout
         title={mapData?.title}
         renderHeader={() => (
-          <Header onClickEdit={openEditModal} onClickShare={openShareModal} mapDataLoading={loadingMapData} />
+          <Header
+            onClickEdit={() => {
+              setEditModalOpen(true)
+            }}
+            onClickShare={() => {
+              setShareModalOpen(true)
+            }}
+            mapDataLoading={loadingMapData}
+          />
         )}
       >
         <IFrame src={mapUrl} title={`User map: ${id}`} />
