@@ -25,6 +25,9 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData }: ShareModal
   const [mapStyle, setMapStyle] = useState(map.mapStyle || DEFAULT_MAP_STYLE)
   const [accessToken, setAccessToken] = useState(map.accessToken || '')
   const [saved, setSaved] = useState(false)
+  const [saving, setSaving] = useState(false)
+
+  const mapStyleError = !mapStyle.match(mapboxStyleRegex)
 
   useTimeout(
     () => {
@@ -39,9 +42,6 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData }: ShareModal
     setSaving(false)
   }
 
-  const [mapStyleError, setMapStyleError] = useState(false)
-  const [saving, setSaving] = useState(false)
-
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMapTitle(event.target.value)
   }
@@ -52,9 +52,6 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData }: ShareModal
     setMapTerms(event.target.value)
   }
   const handleStyleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (mapStyleError) {
-      validateMapboxStyle()
-    }
     setMapStyle(event.target.value)
   }
   const handleAccessTokenChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,10 +65,6 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData }: ShareModal
     setMapStyle(map.mapStyle || DEFAULT_MAP_STYLE)
     setAccessToken(map.accessToken || '')
     handleClose()
-  }
-
-  const validateMapboxStyle = () => {
-    setMapStyleError(!mapStyle.match(mapboxStyleRegex))
   }
 
   const submit = async (event: React.FormEvent<HTMLButtonElement>) => {
@@ -152,7 +145,6 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData }: ShareModal
             label={formatMessage(msgs.mapStyle)}
             value={mapStyle}
             onChange={handleStyleChange}
-            onBlur={validateMapboxStyle}
             renderHelperText={() => <RenderMapstyleHelperText hasError={mapStyleError} />}
           />
           <TextInput
