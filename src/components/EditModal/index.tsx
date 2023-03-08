@@ -1,5 +1,5 @@
 import { ReactNode, useState } from 'react'
-import { doc, DocumentReference, updateDoc } from 'firebase/firestore'
+import { doc, updateDoc } from 'firebase/firestore'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { Dialog, Stack, Typography, FormHelperText, Button, CircularProgress, useTheme } from '@mui/material'
 import { Upload as UploadIcon } from '@mui/icons-material'
