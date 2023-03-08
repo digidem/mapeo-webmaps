@@ -5,6 +5,9 @@
   "add_map_button": {
     "message": "Add Map"
   },
+  "addingMap": {
+    "message": "Adding map {title}"
+  },
   "app_title": {
     "message": "Webmaps"
   },
@@ -206,6 +209,9 @@
   "retry": {
     "message": "Retry upload"
   },
+  "retryButton": {
+    "message": "Retry"
+  },
   "return_to_login": {
     "message": "Return to login"
   },
@@ -250,5 +256,8 @@
   },
   "urlTitle": {
     "message": "Public Map Url"
+  },
+  "xFailedFiles": {
+    "message": "Something went wrong uploading {failed} files, retry?"
   }
 }
