@@ -6,6 +6,7 @@ import { useDocumentData } from 'react-firebase-hooks/firestore'
 
 import { auth, db } from '../..'
 import { EditModal } from '../../components/EditModal'
+import { ReplaceDataModal } from '../../components/ReplaceDataModal'
 import { ShareModal } from '../../components/ShareModal'
 import { AuthorisedLayout } from '../../layouts/Authorised'
 import { Header } from './Header'
@@ -17,6 +18,7 @@ const SHARE_URL_BASE = 'http://localhost:9966' // DEV URL (You'll need to run We
 export const MapView = ({}: RouteComponentProps) => {
   const [shareModalOpen, setShareModalOpen] = useState(false)
   const [editModalOpen, setEditModalOpen] = useState(false)
+  const [replaceDataModalOpen, setReplaceDataModalOpen] = useState(false)
   const [user] = useAuthState(auth)
   const params = useParams()
 
@@ -43,6 +45,13 @@ export const MapView = ({}: RouteComponentProps) => {
   const closeEditModal = () => {
     setEditModalOpen(false)
   }
+  const openReplaceDataModal = () => {
+    closeEditModal()
+    setReplaceDataModalOpen(true)
+  }
+  const closeReplaceDataModal = () => {
+    setReplaceDataModalOpen(false)
+  }
   return (
     <>
       {!loadingMapData && (
@@ -53,7 +62,22 @@ export const MapView = ({}: RouteComponentProps) => {
             shareUrl={mapUrl}
             onClose={closeShareModal}
           />
-          {mapData && <EditModal open={editModalOpen} map={{ ...mapData, id }} onClose={closeEditModal} />}
+          {mapData && (
+            <EditModal
+              open={editModalOpen}
+              map={{ ...mapData, id }}
+              onClose={closeEditModal}
+              onClickReplaceData={openReplaceDataModal}
+            />
+          )}
+          {mapData && (
+            <ReplaceDataModal
+              open={replaceDataModalOpen}
+              id={id}
+              mapTitle={mapData.title}
+              onClose={closeReplaceDataModal}
+            />
+          )}
         </>
       )}
       <AuthorisedLayout

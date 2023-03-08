@@ -9,10 +9,12 @@ import { TextInput } from '../TextInput'
 import { msgs } from './messages'
 import { mapboxStyleRegex } from '../../helpers/regex'
 import { auth, db } from '../..'
+import { useTimeout } from '../../hooks/utility'
 
 const DEFAULT_MAP_STYLE = 'mapbox://styles/mapbox/outdoors-v11'
+const WAIT_BEFORE_CLOSE = 2000
 
-export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
+export const EditModal = ({ map, onClose, open, onClickReplaceData }: ShareModalProps) => {
   const { formatMessage } = useIntl()
   const theme = useTheme()
   const [user] = useAuthState(auth)
@@ -22,6 +24,20 @@ export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
   const [mapTerms, setMapTerms] = useState(map.terms || '')
   const [mapStyle, setMapStyle] = useState(map.mapStyle || DEFAULT_MAP_STYLE)
   const [accessToken, setAccessToken] = useState(map.accessToken || '')
+  const [saved, setSaved] = useState(false)
+
+  useTimeout(
+    () => {
+      handleClose()
+    },
+    saved ? WAIT_BEFORE_CLOSE : null,
+  )
+
+  const handleClose = () => {
+    onClose()
+    setSaved(false)
+    setSaving(false)
+  }
 
   const [mapStyleError, setMapStyleError] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -51,12 +67,10 @@ export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
     setMapTerms(map.terms || '')
     setMapStyle(map.mapStyle || DEFAULT_MAP_STYLE)
     setAccessToken(map.accessToken || '')
-    setSaving(false)
-    onClose()
+    handleClose()
   }
 
   const validateMapboxStyle = () => {
-    console.log(!mapStyle.match(mapboxStyleRegex))
     setMapStyleError(!mapStyle.match(mapboxStyleRegex))
   }
 
@@ -76,11 +90,11 @@ export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
     })
 
     setSaving(false)
-    onClose()
+    setSaved(true)
   }
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+    <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
       <Stack spacing={5} sx={{ padding: 5 }} component="form">
         <Row>
           <Typography variant="h4" component="h2">
@@ -88,6 +102,7 @@ export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
           </Typography>
           <Button
             startIcon={<UploadIcon />}
+            onClick={onClickReplaceData}
             sx={{
               textTransform: 'none',
               fontWeight: 600,
@@ -163,7 +178,7 @@ export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
               <Button
                 color="inherit"
                 onClick={handleClickCancel}
-                disabled={saving}
+                disabled={saving || saved}
                 sx={{
                   textTransform: 'none',
                   fontWeight: 600,
@@ -176,7 +191,7 @@ export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
                 onSubmit={submit}
                 onClick={submit}
                 variant="contained"
-                disabled={saving || !mapTitle || mapStyleError}
+                disabled={saving || !mapTitle || mapStyleError || saved}
                 size="large"
                 type="submit"
                 disableElevation
@@ -190,11 +205,11 @@ export const EditModal = ({ map, onClose, open }: ShareModalProps) => {
                   '&.Mui-disabled': {
                     backgroundColor: theme.primary,
                     color: theme.white,
-                    opacity: 0.7,
+                    opacity: 0.5,
                   },
                 }}
               >
-                {saving ? <CircularProgress sx={{ color: 'white' }} size={26} /> : formatMessage(msgs.save)}
+                <RenderButtonContents saving={saving} saved={saved} />
               </Button>
             </Row>
           </Row>
@@ -238,8 +253,17 @@ const RenderMapstyleHelperText = ({ hasError }: { hasError: boolean }) => {
   )
 }
 
+const RenderButtonContents = ({ saving, saved }: { saving: boolean; saved: boolean }) => {
+  const { formatMessage } = useIntl()
+
+  if (saving) return <CircularProgress sx={{ color: 'white' }} size={26} />
+
+  return saved ? <span>{formatMessage(msgs.saved)}</span> : <span>{formatMessage(msgs.save)}</span>
+}
+
 type ShareModalProps = {
   map: MapData
   onClose: () => void
+  onClickReplaceData: () => void
   open: boolean
 }

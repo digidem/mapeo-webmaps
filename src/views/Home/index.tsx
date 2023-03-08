@@ -27,7 +27,7 @@ export const HomeView = ({}: RouteComponentProps) => {
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       if (!acceptedFiles.length || !acceptedFiles[0].name.match(/.mapeomap$/)) return
-      createMap(acceptedFiles)
+      createMap(acceptedFiles[0])
     },
     [createMap],
   )

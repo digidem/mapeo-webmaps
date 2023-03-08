@@ -61,6 +61,10 @@ export const msgs = defineMessages({
     id: 'save',
     defaultMessage: 'Save',
   },
+  saved: {
+    id: 'saved',
+    defaultMessage: 'Saved',
+  },
   replaceMapData: {
     id: 'replaceMapData',
     defaultMessage: 'Replace Map Data',
