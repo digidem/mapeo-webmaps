@@ -9,7 +9,6 @@ import { TextInput } from '../TextInput'
 import { msgs } from './messages'
 import { mapboxStyleRegex } from '../../helpers/regex'
 import { auth, db } from '../..'
-import { useTimeout } from '../../hooks/utility'
 
 const DEFAULT_MAP_STYLE = 'mapbox://styles/mapbox/outdoors-v11'
 const WAIT_BEFORE_CLOSE = 2000
@@ -24,22 +23,19 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData }: ShareModal
   const [mapTerms, setMapTerms] = useState(map.terms || '')
   const [mapStyle, setMapStyle] = useState(map.mapStyle || DEFAULT_MAP_STYLE)
   const [accessToken, setAccessToken] = useState(map.accessToken || '')
-  const [saved, setSaved] = useState(false)
+  const [buttonText, setButtonText] = useState<{ id: string; defaultMessage: string }>(msgs.save)
   const [saving, setSaving] = useState(false)
 
   const mapStyleError = !mapStyle.match(mapboxStyleRegex)
 
-  useTimeout(
-    () => {
-      handleClose()
-    },
-    saved ? WAIT_BEFORE_CLOSE : null,
-  )
-
   const handleClose = () => {
     onClose()
-    setSaved(false)
     setSaving(false)
+    setButtonText(msgs.save)
+  }
+
+  const closeWithDelay = () => {
+    setTimeout(() => handleClose(), WAIT_BEFORE_CLOSE)
   }
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,7 +79,8 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData }: ShareModal
     })
 
     setSaving(false)
-    setSaved(true)
+    setButtonText(msgs.saved)
+    closeWithDelay()
   }
 
   return (
@@ -170,7 +167,7 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData }: ShareModal
               <Button
                 color="inherit"
                 onClick={handleClickCancel}
-                disabled={saving || saved}
+                disabled={saving}
                 sx={{
                   textTransform: 'none',
                   fontWeight: 600,
@@ -183,7 +180,7 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData }: ShareModal
                 onSubmit={submit}
                 onClick={submit}
                 variant="contained"
-                disabled={saving || !mapTitle || mapStyleError || saved}
+                disabled={saving || !mapTitle || mapStyleError}
                 size="large"
                 type="submit"
                 disableElevation
@@ -201,7 +198,7 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData }: ShareModal
                   },
                 }}
               >
-                <RenderButtonContents saving={saving} saved={saved} />
+                <RenderButtonContents saving={saving} text={buttonText} />
               </Button>
             </Row>
           </Row>
@@ -245,12 +242,18 @@ const RenderMapstyleHelperText = ({ hasError }: { hasError: boolean }) => {
   )
 }
 
-const RenderButtonContents = ({ saving, saved }: { saving: boolean; saved: boolean }) => {
+const RenderButtonContents = ({
+  saving,
+  text,
+}: {
+  saving: boolean
+  text: { id: string; defaultMessage: string }
+}) => {
   const { formatMessage } = useIntl()
 
   if (saving) return <CircularProgress sx={{ color: 'white' }} size={26} />
 
-  return saved ? <span>{formatMessage(msgs.saved)}</span> : <span>{formatMessage(msgs.save)}</span>
+  return <span>{formatMessage(text)}</span>
 }
 
 type ShareModalProps = {
