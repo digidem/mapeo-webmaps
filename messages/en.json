@@ -113,6 +113,9 @@
   "empty_title": {
     "message": "No maps to show"
   },
+  "failedFiles": {
+    "message": "There was a problem uploading {number} files"
+  },
   "forgot_password_link": {
     "message": "Forgot password?"
   },
@@ -188,14 +191,29 @@
   "public_link_tooltip": {
     "message": "See map"
   },
+  "replaceDataButton": {
+    "message": "Replace data"
+  },
   "replaceMapData": {
     "message": "Replace Map Data"
+  },
+  "replaceMapDataSubtitle": {
+    "message": "Uploading new data will replace current data on {title}"
+  },
+  "replaceMapDataTitle": {
+    "message": "Replace Map Data"
+  },
+  "retry": {
+    "message": "Retry upload"
   },
   "return_to_login": {
     "message": "Return to login"
   },
   "save": {
     "message": "Save"
+  },
+  "saved": {
+    "message": "Saved"
   },
   "share": {
     "message": "Share"
@@ -217,6 +235,12 @@
   },
   "title": {
     "message": "Map Title"
+  },
+  "uploadButtonDropLabel": {
+    "message": "Drop file here"
+  },
+  "uploadButtonLabel": {
+    "message": "Browse for file"
   },
   "upload_new_data": {
     "message": "Upload new data"
