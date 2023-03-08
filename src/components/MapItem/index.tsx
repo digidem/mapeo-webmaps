@@ -1,12 +1,9 @@
 import { Box, Card, CardContent, CircularProgress, Stack, Typography } from '@mui/material'
 import { collection, Timestamp } from 'firebase/firestore'
-import { useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 import { useIntl } from 'react-intl'
 import { auth, db } from '../..'
-import { Button } from '../Button'
-import { DeleteMapModal } from '../DeleteMapModal'
 import { msgs } from './messages'
 import { StyledLink } from './styles'
 
@@ -16,11 +13,9 @@ type DateFormatOptionsType = Intl.DateTimeFormatOptions & {
 
 export const MapItem = ({ id, title, description, createdAt }: MapItemProps) => {
   const [user] = useAuthState(auth)
-  const { formatMessage } = useIntl()
-  const [openModal, setOpenModal] = useState(false)
-
   const observationsRef = user ? collection(db, `groups/${user.uid}/maps/${id}/observations`) : null
   const [observations = [], observationsLoading] = useCollectionData(observationsRef)
+  const { formatMessage } = useIntl()
 
   if (!user) return null
   const dateFormatOptions = { dateStyle: 'medium' } as DateFormatOptionsType
@@ -55,10 +50,9 @@ export const MapItem = ({ id, title, description, createdAt }: MapItemProps) => 
               </Typography>
             </StyledLink>
           </Stack>
-        </CardContent>
-      </Card>
-      <DeleteMapModal mapTitle={title} closeModal={() => setOpenModal(false)} open={openModal} id={id} />
-    </>
+        </Stack>
+      </CardContent>
+    </Card>
   )
 }
 
