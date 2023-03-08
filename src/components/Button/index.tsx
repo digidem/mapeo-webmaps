@@ -53,18 +53,18 @@ export const Button = ({
       ...sx,
     }}
     endIcon={
-      iconPosition === 'end' && loading ? (
+      iconPosition !== 'end' ? null : loading ? (
         <CircularProgress sx={{ color: 'white' }} size="1em" />
-      ) : iconPosition === 'end' ? (
+      ) : (
         <Icon />
-      ) : null
+      )
     }
     startIcon={
-      iconPosition === 'start' && loading ? (
+      iconPosition !== 'start' ? null : loading ? (
         <CircularProgress sx={{ color: 'white' }} size="1em" />
-      ) : iconPosition === 'start' ? (
+      ) : (
         <Icon />
-      ) : null
+      )
     }
     onSubmit={onSubmit}
     disabled={disabled || loading}
