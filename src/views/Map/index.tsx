@@ -5,6 +5,7 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { useDocumentData } from 'react-firebase-hooks/firestore'
 
 import { auth, db } from '../..'
+import { DeleteMapModal } from '../../components/DeleteMapModal'
 import { EditModal } from '../../components/EditModal'
 import { ReplaceDataModal } from '../../components/ReplaceDataModal'
 import { ShareModal } from '../../components/ShareModal'
@@ -19,6 +20,8 @@ export const MapView = ({}: RouteComponentProps) => {
   const [shareModalOpen, setShareModalOpen] = useState(false)
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [replaceDataModalOpen, setReplaceDataModalOpen] = useState(false)
+  const [deleteModelOpen, setDeleteModalOpen] = useState(false)
+
   const [user] = useAuthState(auth)
   const { id } = useParams<{ id: string }>()
 
@@ -34,6 +37,13 @@ export const MapView = ({}: RouteComponentProps) => {
   const openReplaceDataModal = () => {
     setEditModalOpen(false)
     setReplaceDataModalOpen(true)
+    if (deleteModelOpen) setDeleteModalOpen(false)
+  }
+
+  const openDeleteMapModal = () => {
+    setEditModalOpen(false)
+    setDeleteModalOpen(true)
+    if (replaceDataModalOpen) setReplaceDataModalOpen(false)
   }
 
   return (
@@ -49,24 +59,31 @@ export const MapView = ({}: RouteComponentProps) => {
             }}
           />
           {mapData && (
-            <EditModal
-              open={editModalOpen}
-              map={{ ...mapData, id }}
-              onClose={() => {
-                setEditModalOpen(false)
-              }}
-              onClickReplaceData={openReplaceDataModal}
-            />
-          )}
-          {mapData && (
-            <ReplaceDataModal
-              open={replaceDataModalOpen}
-              id={id}
-              mapTitle={mapData.title}
-              onClose={() => {
-                setReplaceDataModalOpen(false)
-              }}
-            />
+            <>
+              <EditModal
+                open={editModalOpen}
+                map={{ ...mapData, id }}
+                onClose={() => {
+                  setEditModalOpen(false)
+                }}
+                onClickReplaceData={openReplaceDataModal}
+                onClickDeleteMap={openDeleteMapModal}
+              />
+              <ReplaceDataModal
+                open={replaceDataModalOpen}
+                id={id}
+                mapTitle={mapData.title}
+                onClose={() => {
+                  setReplaceDataModalOpen(false)
+                }}
+              />
+              <DeleteMapModal
+                open={deleteModelOpen}
+                id={id}
+                mapTitle={mapData.title}
+                closeModal={() => setDeleteModalOpen(false)}
+              />
+            </>
           )}
         </>
       )}

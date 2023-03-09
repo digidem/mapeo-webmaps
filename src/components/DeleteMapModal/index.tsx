@@ -3,6 +3,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import { useIntl } from 'react-intl'
 import { doc, deleteDoc } from 'firebase/firestore'
 import { useAuthState } from 'react-firebase-hooks/auth'
+import { navigate } from '@reach/router'
 import { auth, db } from '../..'
 import { messages as msgs } from './messages'
 
@@ -20,6 +21,7 @@ export const DeleteMapModal = ({ open, mapTitle, closeModal, id }: DeleteMapModa
   const deleteMap = async () => {
     if (!user) return
     await deleteDoc(doc(db, `groups/${user.uid}/maps`, `${id}`))
+    navigate('/')
   }
 
   return (
