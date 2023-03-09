@@ -1,56 +1,32 @@
-## Get started
+# How to contribute to Mapeo Web Maps
 
-You will need [Node v12 or later](https://nodejs.org/en/) installed, then clone this repo and change into the folder you have cloned into:
+First of all thank you for your interest in contributing to this repository!
 
-```sh
-git clone https://github.com/digidem/mapeo-webmaps.git
-cd mapeo-webmaps
-```
+## 🪱 Found a bug?
 
-Then install dependencies with `npm` (npm is installed with Node)
+- **Ensure the bug was not already reported** by searching on GitHub under [Issues](https://github.com/digidem/mapeo-webmaps/issues).
 
-```sh
-npm install
-```
+- If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/digidem/mapeo-webmaps/issues/new). Be sure to include a **title and clear description**, as much relevant information as possible. When relevant you should also include screenshots demonstrating the expected behavior that is not occurring.
 
-## Start Dev server
+- 
 
-### 1. Start the Firebase emulators
+## 🛠️ Did you write a patch that fixes a bug?
 
-In a terminal window, run:
+1. Create a feature branch for your work
+  > Note: If you are contributing from outside the Digital Democracy GitHub org, you should instead create a fork of the repository.
+2. Commit your code following the [Semantic Commit Messages](https://sparkbox.com/foundry/semantic_commit_messages) convention.
+3. Open a new GitHub pull request with the patch.
 
-```sh
-npm run start:emulators
-```
+- Ensure the PR description clearly describes the problem and solution. Include the relevant issue number if applicable.
+- Before submitting, please ensure all tests pass and your code is sufficiently tested and runs correctly.
+- Assign the PR to @gmaclennan or @ErikSin.
 
-### 2. Start the web app
+## ✨ Do you wish to propose a new feature or wish to add a new feature yourself?
 
-Open a new terminal window, run:
+[ TODO: Process for suggesting new features ]
 
-```sh
-npm start
-```
+## ❓ Do you have questions about the code or the project?
 
-This will open a browser window for the app. Note that the emulator command above will also serve the app on port 4000, but this is based on the static build in the `build` folder. The server on port 3000 is from `react-scripts` and will update based on code in `src`, and does not need to be built on every change.
+[ TODO: Add process for asking assistance ]
 
-## Testing
-
-To run all tests:
-
-```sh
-npm test
-```
-
-To run frontend tests in watch mode (tests will re-run when you edit code):
-
-```sh
-npm run test:frontend
-```
-
-## Deploy to firebase
-
-In a terminal window, run:
-
-```sh
-npm run deploy
-```
+Thanks!!
