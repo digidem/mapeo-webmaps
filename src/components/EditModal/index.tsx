@@ -9,11 +9,12 @@ import { TextInput } from '../TextInput'
 import { msgs } from './messages'
 import { mapboxStyleRegex } from '../../helpers/regex'
 import { auth, db } from '../..'
+import { DeleteMapModal } from '../DeleteMapModal'
 
 const DEFAULT_MAP_STYLE = 'mapbox://styles/mapbox/outdoors-v11'
 const WAIT_BEFORE_CLOSE = 2000
 
-export const EditModal = ({ map, onClose, open, onClickReplaceData }: ShareModalProps) => {
+export const EditModal = ({ map, onClose, open, onClickReplaceData, onClickDeleteMap }: ShareModalProps) => {
   const { formatMessage } = useIntl()
   const theme = useTheme()
   const [user] = useAuthState(auth)
@@ -160,6 +161,7 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData }: ShareModal
                 textTransform: 'none',
                 fontWeight: 600,
               }}
+              onClick={onClickDeleteMap}
             >
               {formatMessage(msgs.deleteMap)}
             </Button>
@@ -261,4 +263,5 @@ type ShareModalProps = {
   onClose: () => void
   onClickReplaceData: () => void
   open: boolean
+  onClickDeleteMap: () => void
 }

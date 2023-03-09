@@ -38,6 +38,9 @@
   "cancel": {
     "message": "Cancel"
   },
+  "cannot_undo": {
+    "message": "This cannot be undone"
+  },
   "confirm_cancel": {
     "message": "No, Cancel"
   },
@@ -68,8 +71,14 @@
   "deleteMap": {
     "message": "Delete Map"
   },
+  "delete_button": {
+    "message": "Yes, Delete Map"
+  },
   "delete_map": {
     "message": "Delete Map"
+  },
+  "delete_title": {
+    "message": "Delete {mapTitle}"
   },
   "description": {
     "message": "Map Description"
@@ -130,6 +139,9 @@
   },
   "invalid_email": {
     "message": "Email address is invalid"
+  },
+  "keep_button": {
+    "message": "No, Keep Map"
   },
   "learn_more_href": {
     "message": "https://docs.mapeo.app/"
@@ -256,6 +268,9 @@
   },
   "urlTitle": {
     "message": "Public Map Url"
+  },
+  "will_be_deleted": {
+    "message": "This map will no longer be publicly accesible and all embedded maps will be deleted."
   },
   "xFailedFiles": {
     "message": "Something went wrong uploading {failed} files, retry?"
