@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl'
 import { collection, DocumentData, Timestamp } from 'firebase/firestore'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useCollection } from 'react-firebase-hooks/firestore'
-import { Link, Typography, Stack } from '@mui/material'
+import { Link, Typography, Stack, Grow } from '@mui/material'
 import { MapItem } from '../MapItem'
 import { Loader } from '../Loader'
 import { SortToggle, SortDirectionType, SortType } from '../SortToggle'
@@ -44,14 +44,18 @@ export const MapsList = ({ openDialog, isDragActive }: DragZoneProps) => {
     <Container alignItems="flex-end" paddingTop="10vh">
       <SortToggle value={sort} onChange={handleSortChange} direction={sortDirection} />
       <Stack spacing={3} alignItems="flex-end" mt={0} width="100%" mb={6}>
-        {sortedMaps.map((map) => (
-          <MapItem
-            title={map.title}
-            description={map.description}
-            createdAt={map.createdAt}
-            id={map.id}
-            key={map.id}
-          />
+        {sortedMaps.map((map, index) => (
+          <Grow in timeout={index * 600}>
+            <span style={{ width: '100%' }}>
+              <MapItem
+                title={map.title}
+                description={map.description}
+                createdAt={map.createdAt}
+                id={map.id}
+                key={map.id}
+              />
+            </span>
+          </Grow>
         ))}
       </Stack>
     </Container>
