@@ -11,7 +11,7 @@ export const messages = defineMessages({
   },
   learn_more_title: {
     id: 'learn_more_title',
-    defaultMessage: 'Learn more about ',
+    defaultMessage: 'Learn more about',
   },
   learn_more_link: {
     id: 'learn_more_link',
