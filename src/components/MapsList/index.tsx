@@ -18,7 +18,7 @@ export const MapsList = ({ openDialog, isDragActive }: DragZoneProps) => {
   const [sort, setSort] = useState<SortType>('createdAt')
   const [sortDirection, setSortDirection] = useState<SortDirectionType>('asc')
 
-  const mapsRef = collection(db, `groups/${user?.uid || ''}/maps`)
+  const mapsRef = user ? collection(db, `groups/${user?.uid || ''}/maps`) : null
 
   const [mapsCollection = { docs: [] }, mapsLoading] = useCollection(mapsRef)
   const maps = useMemo(() => mapsCollection?.docs.map((map) => ({ ...map?.data(), id: map?.id })), [
