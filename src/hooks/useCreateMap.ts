@@ -69,6 +69,18 @@ export const useCreateMap = () => {
     [],
   )
 
+  const reset = () => {
+    totalBytesRef.current = 0
+    uploadsAsObjRef.current = {}
+    setMapTitle('')
+    setTotalFiles(0)
+    setCurrentFile(0)
+    setFailedFiles([])
+    setProgress(0)
+    setLoading(false)
+    setError(null)
+  }
+
   const createMapDoc = useCallback(
     async (files: FileType[]) => {
       if (!user) throw new Error('Not Authorized')
@@ -296,5 +308,6 @@ export const useCreateMap = () => {
       retryFailedFiles,
       loading,
     },
+    reset,
   }
 }

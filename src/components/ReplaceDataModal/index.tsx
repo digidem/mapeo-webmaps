@@ -22,6 +22,7 @@ export const ReplaceDataModal = ({ id, mapTitle, onClose, open }: ReplaceDataMod
   const {
     updateMapData,
     progress: { loading: saving, completed: progress, failedFiles, retryFailedFiles },
+    reset,
   } = useCreateMap()
 
   const closeWithDelay = () => {
@@ -32,6 +33,7 @@ export const ReplaceDataModal = ({ id, mapTitle, onClose, open }: ReplaceDataMod
 
   if (progress === 100 && !saved) {
     setSaved(true)
+    reset()
     closeWithDelay()
   }
 
@@ -187,7 +189,7 @@ const UploadButton = ({
         </Stack>
         {!saving && <CrossIcon onClick={clearFile} sx={{ cursor: 'pointer' }} />}
       </Box>
-      <Loader width={saving || saved ? 100 : 0} value={progress} />
+      <Loader width={saving ? 100 : 0} value={progress} />
     </div>
   ) : (
     <div {...getRootProps({ className: 'dropzone' })}>
