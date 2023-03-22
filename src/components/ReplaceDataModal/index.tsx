@@ -37,6 +37,11 @@ export const ReplaceDataModal = ({ id, mapTitle, onClose, open }: ReplaceDataMod
 
   const clearFile = () => setFile(null)
 
+  const handleCloseDialog = (event?: Record<string, never>, reason?: 'escapeKeyDown' | 'backdropClick') => {
+    if (reason === 'backdropClick' || reason === 'escapeKeyDown') return
+    handleClose()
+  }
+
   const handleClose = () => {
     onClose()
     clearFile()
@@ -55,7 +60,7 @@ export const ReplaceDataModal = ({ id, mapTitle, onClose, open }: ReplaceDataMod
   }, [])
 
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+    <Dialog open={open} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
       <Stack spacing={5} sx={{ padding: 5 }} component="form">
         <Typography variant="h4" component="h2">
           {formatMessage(msgs.replaceMapDataTitle)}
@@ -159,12 +164,7 @@ const UploadButton = ({
   const { formatMessage } = useIntl()
   const theme = useTheme()
 
-  const {
-    getRootProps,
-    getInputProps,
-    open: openFileUpload,
-    isDragActive,
-  } = useDropzone({
+  const { getRootProps, getInputProps, open: openFileUpload, isDragActive } = useDropzone({
     noClick: true,
     noKeyboard: true,
     accept: ['.mapeomap'],

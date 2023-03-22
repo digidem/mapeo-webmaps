@@ -4,6 +4,7 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { Dialog, Stack, Typography, FormHelperText, Button, CircularProgress, useTheme } from '@mui/material'
 import { Upload as UploadIcon } from '@mui/icons-material'
 import { useIntl } from 'react-intl'
+import * as React from 'react'
 import { MapData } from '../../views/Map'
 import { TextInput } from '../TextInput'
 import { msgs } from './messages'
@@ -28,8 +29,10 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData, onClickDelet
 
   const mapStyleError = !mapStyle.match(mapboxStyleRegex)
 
-  const handleClose = () => {
+  const handleClose = (event?: Record<string, never>, reason?: 'escapeKeyDown' | 'backdropClick') => {
+    if (reason === 'backdropClick' || reason === 'escapeKeyDown') return
     onClose()
+
     setSaving(false)
     setButtonText(msgs.save)
   }
