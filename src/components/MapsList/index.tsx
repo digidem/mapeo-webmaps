@@ -45,7 +45,7 @@ export const MapsList = ({ openDialog, isDragActive }: DragZoneProps) => {
       <SortToggle value={sort} onChange={handleSortChange} direction={sortDirection} />
       <Stack spacing={3} alignItems="flex-end" mt={0} width="100%" mb={6}>
         {sortedMaps.map((map, index) => (
-          <Grow in timeout={index * 600}>
+          <Grow in timeout={index * 600} key={map.id}>
             <span style={{ width: '100%' }}>
               <MapItem
                 title={map.title}
