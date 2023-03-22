@@ -74,12 +74,12 @@
     "build:js": "react-scripts build",
     "build:translations": "formatjs compile-folder --format crowdin --ast messages src/translations",
     "build:storybook": "build-storybook -s public",
-    "deploy": "firebase deploy -P staging",
+    "deploy": "npm run build && firebase deploy -P staging",
     "storybook": "start-storybook -p 9009 -s public",
     "extract-messages": "formatjs extract --format crowdin 'src/**/*.ts*' --out-file messages/en.json",
     "prepare": "husky install",
     "lint": "eslint ./src",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint ./src --fix"
   },
   "keywords": [
     "firebase",
