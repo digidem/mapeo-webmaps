@@ -54,6 +54,6 @@ export const getImagesFromFiles = (files: FileType[], validExtensions: string[] 
       ({ name }) => name.startsWith('images') && validExtensions.includes(path.extname(name).toLowerCase()),
     )
     .map((file) => {
-      file.hashedName = md5(file.data) + path.extname(file.name)
+      file.hashedName = `${md5(file.data)}${path.extname(file.name)}`
       return file
     }) as ImageFileType[]

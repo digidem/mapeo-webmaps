@@ -69,6 +69,18 @@ export const useCreateMap = () => {
     [],
   )
 
+  const reset = () => {
+    totalBytesRef.current = 0
+    uploadsAsObjRef.current = {}
+    setMapTitle('')
+    setTotalFiles(0)
+    setCurrentFile(0)
+    setFailedFiles([])
+    setProgress(0)
+    setLoading(false)
+    setError(null)
+  }
+
   const createMapDoc = useCallback(
     async (files: FileType[]) => {
       if (!user) throw new Error('Not Authorized')
@@ -141,7 +153,12 @@ export const useCreateMap = () => {
       const pointsJson = getJsonFromFiles(files, 'points.json') as PointsType
       const images = getImagesFromFiles(files)
 
-      totalBytesRef.current = images.reduce((acc, file) => acc + file.data.byteLength, 0)
+      totalBytesRef.current = images
+        .filter(
+          // Remove duplicate images before counting file size
+          (value, index, self) => index === self.findIndex((image) => value.hashedName === image.hashedName),
+        )
+        .reduce((acc, file) => acc + file.data.byteLength, 0)
 
       const points = pointsJson.features.map((feature) => {
         const image = images.find((file) => path.basename(file.name) === feature.properties?.image)
@@ -205,7 +222,6 @@ export const useCreateMap = () => {
       const batch = writeBatch(db)
 
       observations.forEach((observation) => {
-        console.log({ observation })
         batch.delete(observation.ref)
       })
 
@@ -254,6 +270,7 @@ export const useCreateMap = () => {
 
     const transferred = sumMapValue(uploads)
     const currentProgress = Math.ceil((transferred / totalBytesRef.current) * 100)
+    console.log({ transferred, currentProgress, totalBytesRef: totalBytesRef.current })
     setProgress(currentProgress)
   }
 
@@ -296,5 +313,6 @@ export const useCreateMap = () => {
       retryFailedFiles,
       loading,
     },
+    reset,
   }
 }

@@ -91,7 +91,7 @@ export const AuthScreen = ({ children }: { children: React.ReactNode }) => {
                   {formatMessage(msgs.auth_title)}
                 </Typography>
                 <Typography variant="h6" component="p" sx={{}}>
-                  {formatMessage(msgs.learn_more_title)}
+                  {formatMessage(msgs.learn_more_title)}{' '}
                   <Link href={formatMessage(msgs.learn_more_href)} fontWeight={600} underline="hover">
                     {formatMessage(msgs.learn_more_link)}
                   </Link>

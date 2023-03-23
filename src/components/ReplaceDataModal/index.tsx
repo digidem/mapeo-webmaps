@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import {
   UploadFile as UploadFileIcon,
   Description as FileIcon,
@@ -22,6 +22,7 @@ export const ReplaceDataModal = ({ id, mapTitle, onClose, open }: ReplaceDataMod
   const {
     updateMapData,
     progress: { loading: saving, completed: progress, failedFiles, retryFailedFiles },
+    reset,
   } = useCreateMap()
 
   const closeWithDelay = () => {
@@ -32,10 +33,16 @@ export const ReplaceDataModal = ({ id, mapTitle, onClose, open }: ReplaceDataMod
 
   if (progress === 100 && !saved) {
     setSaved(true)
+    reset()
     closeWithDelay()
   }
 
   const clearFile = () => setFile(null)
+
+  const handleCloseDialog = (event?: Record<string, never>, reason?: 'escapeKeyDown' | 'backdropClick') => {
+    if (reason === 'backdropClick' || reason === 'escapeKeyDown') return
+    handleClose()
+  }
 
   const handleClose = () => {
     onClose()
@@ -55,7 +62,7 @@ export const ReplaceDataModal = ({ id, mapTitle, onClose, open }: ReplaceDataMod
   }, [])
 
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+    <Dialog open={open} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
       <Stack spacing={5} sx={{ padding: 5 }} component="form">
         <Typography variant="h4" component="h2">
           {formatMessage(msgs.replaceMapDataTitle)}
@@ -159,12 +166,7 @@ const UploadButton = ({
   const { formatMessage } = useIntl()
   const theme = useTheme()
 
-  const {
-    getRootProps,
-    getInputProps,
-    open: openFileUpload,
-    isDragActive,
-  } = useDropzone({
+  const { getRootProps, getInputProps, open: openFileUpload, isDragActive } = useDropzone({
     noClick: true,
     noKeyboard: true,
     accept: ['.mapeomap'],
@@ -187,7 +189,7 @@ const UploadButton = ({
         </Stack>
         {!saving && <CrossIcon onClick={clearFile} sx={{ cursor: 'pointer' }} />}
       </Box>
-      <Loader width={saving || saved ? 100 : 0} value={progress} />
+      <Loader width={saving ? 100 : 0} value={progress} />
     </div>
   ) : (
     <div {...getRootProps({ className: 'dropzone' })}>

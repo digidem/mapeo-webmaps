@@ -9,7 +9,7 @@ import {
   Tooltip,
 } from '@mui/material'
 import { useIntl } from 'react-intl'
-import { CopyAll, Check } from '@mui/icons-material'
+import { CopyAll, Check, CloseRounded } from '@mui/icons-material'
 import { msgs } from './messages'
 import { useTimeoutState } from '../../hooks/utility'
 
@@ -22,9 +22,24 @@ export const ShareModal = ({ mapTitle, shareUrl, onClose, open }: ShareModalProp
   return (
     <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
       <Stack spacing={5} sx={{ padding: 5 }}>
-        <Typography variant="h4" component="h2">
-          {mapTitle}
-        </Typography>
+        <Stack direction="row" justifyContent="space-between">
+          <Typography variant="h4" component="h2">
+            {mapTitle}
+          </Typography>
+
+          <CloseRounded
+            fontSize="large"
+            sx={{
+              opacity: 0.5,
+              cursor: 'pointer',
+              transition: '0.2s opacity ease-in-out',
+              '&:hover': {
+                opacity: 1,
+              },
+            }}
+            onClick={onClose}
+          />
+        </Stack>
 
         <Stack spacing={1}>
           <Typography variant="h6" fontWeight="bold" component="h3">
