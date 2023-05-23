@@ -14,7 +14,15 @@ import { auth, db } from '../..'
 const DEFAULT_MAP_STYLE = 'mapbox://styles/mapbox/outdoors-v11'
 const WAIT_BEFORE_CLOSE = 2000
 
-export const EditModal = ({ map, onClose, open, onClickReplaceData, onClickDeleteMap }: ShareModalProps) => {
+export const EditModal = ({
+  map,
+  onClose,
+  open,
+  onClickReplaceData,
+  onClickDeleteMap,
+  refreshIframe,
+  setMapLoading,
+}: ShareModalProps) => {
   const { formatMessage } = useIntl()
   const theme = useTheme()
   const [user] = useAuthState(auth)
@@ -24,8 +32,8 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData, onClickDelet
   const [mapTerms, setMapTerms] = useState(map.terms || '')
   const [mapStyle, setMapStyle] = useState(map.mapStyle || DEFAULT_MAP_STYLE)
   const [accessToken, setAccessToken] = useState(map.accessToken || '')
-  const [buttonText, setButtonText] = useState<{ id: string; defaultMessage: string }>(msgs.save)
   const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
 
   const mapStyleError = !mapStyle.match(mapboxStyleRegex)
 
@@ -34,7 +42,7 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData, onClickDelet
     onClose()
 
     setSaving(false)
-    setButtonText(msgs.save)
+    setSaved(false)
   }
 
   const closeWithDelay = () => {
@@ -73,6 +81,7 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData, onClickDelet
     if (!user) return
 
     const mapDoc = doc(db, `groups/${user.uid}/maps`, map.id)
+    setMapLoading(true)
     await updateDoc(mapDoc, {
       description: mapDescription,
       title: mapTitle,
@@ -80,9 +89,10 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData, onClickDelet
       accessToken,
       mapStyle,
     })
+    refreshIframe()
 
     setSaving(false)
-    setButtonText(msgs.saved)
+    setSaved(true)
     closeWithDelay()
   }
 
@@ -111,7 +121,7 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData, onClickDelet
             required
             requiredColor={theme.palette.error.main}
             variant="outlined"
-            disabled={saving}
+            disabled={saving || saved}
             id="map-title"
             label={formatMessage(msgs.title)}
             value={mapTitle}
@@ -119,7 +129,7 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData, onClickDelet
           />
           <TextInput
             variant="outlined"
-            disabled={saving}
+            disabled={saving || saved}
             id="map-description"
             label={formatMessage(msgs.description)}
             value={mapDescription}
@@ -129,7 +139,7 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData, onClickDelet
           />
           <TextInput
             variant="outlined"
-            disabled={saving}
+            disabled={saving || saved}
             id="map-terms"
             label={formatMessage(msgs.terms)}
             value={mapTerms}
@@ -139,7 +149,7 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData, onClickDelet
           <TextInput
             required
             requiredColor={theme.palette.error.main}
-            disabled={saving}
+            disabled={saving || saved}
             variant="outlined"
             id="map-style"
             label={formatMessage(msgs.mapStyle)}
@@ -148,7 +158,7 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData, onClickDelet
             renderHelperText={() => <RenderMapstyleHelperText hasError={mapStyleError} />}
           />
           <TextInput
-            disabled={saving}
+            disabled={saving || saved}
             variant="outlined"
             id="map-token"
             label={formatMessage(msgs.accessToken)}
@@ -171,7 +181,7 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData, onClickDelet
               <Button
                 color="inherit"
                 onClick={handleClickCancel}
-                disabled={saving}
+                disabled={saving || saved}
                 sx={{
                   textTransform: 'none',
                   fontWeight: 600,
@@ -184,7 +194,7 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData, onClickDelet
                 onSubmit={submit}
                 onClick={submit}
                 variant="contained"
-                disabled={saving || !mapTitle || mapStyleError}
+                disabled={saving || saved || !mapTitle || mapStyleError}
                 size="large"
                 type="submit"
                 disableElevation
@@ -202,7 +212,7 @@ export const EditModal = ({ map, onClose, open, onClickReplaceData, onClickDelet
                   },
                 }}
               >
-                <RenderButtonContents saving={saving} text={buttonText} />
+                <RenderButtonContents saving={saving} saved={saved} />
               </Button>
             </Row>
           </Row>
@@ -246,18 +256,12 @@ const RenderMapstyleHelperText = ({ hasError }: { hasError: boolean }) => {
   )
 }
 
-const RenderButtonContents = ({
-  saving,
-  text,
-}: {
-  saving: boolean
-  text: { id: string; defaultMessage: string }
-}) => {
+const RenderButtonContents = ({ saving, saved }: { saving: boolean; saved: boolean }) => {
   const { formatMessage } = useIntl()
 
   if (saving) return <CircularProgress sx={{ color: 'white' }} size={26} />
 
-  return <span>{formatMessage(text)}</span>
+  return <span>{saved ? formatMessage(msgs.saved) : formatMessage(msgs.save)}</span>
 }
 
 type ShareModalProps = {
@@ -266,4 +270,6 @@ type ShareModalProps = {
   onClickReplaceData: () => void
   open: boolean
   onClickDeleteMap: () => void
+  refreshIframe: () => void
+  setMapLoading: React.Dispatch<React.SetStateAction<boolean>>
 }

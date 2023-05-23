@@ -21,6 +21,10 @@ export const msgs = defineMessages({
     id: 'cancel',
     defaultMessage: 'Cancel',
   },
+  ok: {
+    id: 'ok',
+    defaultMessage: 'Ok',
+  },
   replaceDataButton: {
     id: 'replaceDataButton',
     defaultMessage: 'Replace data',
@@ -36,5 +40,13 @@ export const msgs = defineMessages({
   retry: {
     id: 'retry',
     defaultMessage: 'Retry upload',
+  },
+  successTitle: {
+    id: 'successTitle',
+    defaultMessage: 'Success',
+  },
+  successMessage: {
+    id: 'successMessage',
+    defaultMessage: 'Map data was successfully updated.',
   },
 })

@@ -5,15 +5,14 @@ import {
   ClearRounded as CrossIcon,
 } from '@mui/icons-material'
 import { Dialog, Stack, Typography, Button, CircularProgress, useTheme, Box } from '@mui/material'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { useIntl } from 'react-intl'
 import { useDropzone } from 'react-dropzone'
 import { msgs } from './messages'
 import { useCreateMap } from '../../hooks/useCreateMap'
 import { Loader } from '../Loader'
 
-const WAIT_BEFORE_CLOSE = 3000
-
-export const ReplaceDataModal = ({ id, mapTitle, onClose, open }: ReplaceDataModalProps) => {
+export const ReplaceDataModal = ({ id, mapTitle, onClose, open, refreshIframe }: ReplaceDataModalProps) => {
   const { formatMessage } = useIntl()
   const theme = useTheme()
   const [file, setFile] = useState<File | null>(null)
@@ -25,16 +24,10 @@ export const ReplaceDataModal = ({ id, mapTitle, onClose, open }: ReplaceDataMod
     reset,
   } = useCreateMap()
 
-  const closeWithDelay = () => {
-    setTimeout(() => handleClose(), WAIT_BEFORE_CLOSE)
-  }
-
-  console.log(progress)
-
   if (progress === 100 && !saved) {
     setSaved(true)
     reset()
-    closeWithDelay()
+    refreshIframe()
   }
 
   const clearFile = () => setFile(null)
@@ -45,6 +38,7 @@ export const ReplaceDataModal = ({ id, mapTitle, onClose, open }: ReplaceDataMod
   }
 
   const handleClose = () => {
+    console.log('closing')
     onClose()
     clearFile()
     setSaved(false)
@@ -63,66 +57,93 @@ export const ReplaceDataModal = ({ id, mapTitle, onClose, open }: ReplaceDataMod
 
   return (
     <Dialog open={open} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
-      <Stack spacing={5} sx={{ padding: 5 }} component="form">
-        <Typography variant="h4" component="h2">
-          {formatMessage(msgs.replaceMapDataTitle)}
-        </Typography>
-
-        <Stack spacing={3}>
-          <Typography variant="h6" component="label" align="center">
-            {formatMessage(msgs.replaceMapDataSubtitle, { title: mapTitle })}
+      {!saved ? (
+        <Stack spacing={5} sx={{ padding: 5 }} component="form">
+          <Typography variant="h4" component="h2">
+            {formatMessage(msgs.replaceMapDataTitle)}
           </Typography>
 
-          <UploadButton
-            onDropFile={onDropFile}
-            file={file}
-            clearFile={clearFile}
-            progress={progress}
-            saving={saving}
-            saved={saved}
-          />
+          <Stack spacing={3}>
+            <Typography variant="h6" component="label" align="center">
+              {formatMessage(msgs.replaceMapDataSubtitle, { title: mapTitle })}
+            </Typography>
 
-          <Stack direction="row" justifyContent="flex-end">
-            <Button
-              color="inherit"
-              onClick={handleClose}
-              disabled={saving}
-              sx={{
-                textTransform: 'none',
-                fontWeight: 600,
-                opacity: 0.8,
-              }}
-            >
-              {formatMessage(msgs.cancel)}
-            </Button>
-            <Button
-              onSubmit={failedFiles.length ? retryFailedFiles : submit}
-              onClick={submit}
-              variant="contained"
-              disabled={!file || saving || saved}
-              size="large"
-              type="submit"
-              disableElevation
-              sx={{
-                borderRadius: 8,
-                textTransform: 'none',
-                fontWeight: 600,
-                paddingX: 8,
-                paddingY: 2,
-                marginLeft: 4,
-                '&.Mui-disabled': {
-                  backgroundColor: theme.primary,
-                  color: theme.white,
-                  opacity: 0.5,
-                },
-              }}
-            >
-              <RenderButtonContents saving={saving} saved={saved} failedFiles={failedFiles} />
-            </Button>
+            <UploadButton
+              onDropFile={onDropFile}
+              file={file}
+              clearFile={clearFile}
+              progress={progress}
+              saving={saving}
+              saved={saved}
+            />
+
+            <Stack direction="row" justifyContent="flex-end">
+              <Button
+                color="inherit"
+                onClick={handleClose}
+                disabled={saving}
+                sx={{
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  opacity: 0.8,
+                }}
+              >
+                {formatMessage(msgs.cancel)}
+              </Button>
+              <Button
+                onSubmit={failedFiles.length ? retryFailedFiles : submit}
+                onClick={submit}
+                variant="contained"
+                disabled={!file || saving || saved}
+                size="large"
+                type="submit"
+                disableElevation
+                sx={{
+                  borderRadius: 8,
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  paddingX: 8,
+                  paddingY: 2,
+                  marginLeft: 4,
+                  '&.Mui-disabled': {
+                    backgroundColor: theme.primary,
+                    color: theme.white,
+                    opacity: 0.5,
+                  },
+                }}
+              >
+                <RenderButtonContents saving={saving} saved={saved} failedFiles={failedFiles} />
+              </Button>
+            </Stack>
           </Stack>
         </Stack>
-      </Stack>
+      ) : (
+        <SuccessContents onClose={handleClose} />
+      )}
     </Dialog>
+  )
+}
+
+const SuccessContents = ({ onClose }: { onClose: () => void }) => {
+  const { formatMessage } = useIntl()
+
+  return (
+    <Stack alignItems="center" spacing={4} sx={{ padding: 5 }}>
+      <CheckCircleIcon color="success" sx={{ height: 100, width: 100 }} />
+      <Stack spacing={2}>
+        <Typography variant="h3" align="center">
+          {formatMessage(msgs.successTitle)}
+        </Typography>
+        <Typography variant="body1" align="center">
+          {formatMessage(msgs.successMessage)}
+        </Typography>
+      </Stack>
+      <Stack direction="row" justifyContent="flex-end" alignSelf="flex-end">
+        <Button variant="text" onClick={onClose}>
+          {formatMessage(msgs.ok)}
+        </Button>
+      </Stack>
+    </Stack>
   )
 }
 
@@ -154,7 +175,6 @@ const UploadButton = ({
   clearFile,
   progress,
   saving,
-  saved,
 }: {
   onDropFile: (acceptedFiles: File[]) => void
   file: File | null
@@ -166,7 +186,12 @@ const UploadButton = ({
   const { formatMessage } = useIntl()
   const theme = useTheme()
 
-  const { getRootProps, getInputProps, open: openFileUpload, isDragActive } = useDropzone({
+  const {
+    getRootProps,
+    getInputProps,
+    open: openFileUpload,
+    isDragActive,
+  } = useDropzone({
     noClick: true,
     noKeyboard: true,
     accept: ['.mapeomap'],
@@ -227,5 +252,6 @@ type ReplaceDataModalProps = {
   mapTitle: string
   id: string
   onClose: () => void
+  refreshIframe: () => void
   open: boolean
 }

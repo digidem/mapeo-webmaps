@@ -105,7 +105,8 @@ export const useCreateMap = () => {
 
       const handleLastUpload = () => {
         // If we on the last file, either on-success or on-error we want to unset loading state
-        if (current === total) {
+        if (current + 1 === total) {
+          console.log('progress is:', progress)
           setLoading(false)
           filesRef.current = null
         }
@@ -270,7 +271,6 @@ export const useCreateMap = () => {
 
     const transferred = sumMapValue(uploads)
     const currentProgress = Math.ceil((transferred / totalBytesRef.current) * 100)
-    console.log({ transferred, currentProgress, totalBytesRef: totalBytesRef.current })
     setProgress(currentProgress)
   }
 

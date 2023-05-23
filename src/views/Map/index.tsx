@@ -12,15 +12,17 @@ import { ShareModal } from '../../components/ShareModal'
 import { AuthorisedLayout } from '../../layouts/Authorised'
 import { Header } from './Header'
 import { IFrame } from './styles'
+import { Loader } from '../../components/Loader'
 
 const SHARE_URL_BASE = 'https://deploy-preview-30--mapeo-webmaps.netlify.app' // DEV URL (You'll need to run Webmaps-Public locally on port 9966)
 // const SHARE_URL_BASE = 'https://maps-public.mapeo.world' // PROD URL
 
-export const MapView = ({ }: RouteComponentProps) => {
+export const MapView = ({}: RouteComponentProps) => {
   const [shareModalOpen, setShareModalOpen] = useState(false)
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [replaceDataModalOpen, setReplaceDataModalOpen] = useState(false)
   const [deleteModelOpen, setDeleteModalOpen] = useState(false)
+  const [iframeLoading, setIframeLoading] = useState(false)
 
   const [user] = useAuthState(auth)
   const { id } = useParams<{ id: string }>()
@@ -46,6 +48,14 @@ export const MapView = ({ }: RouteComponentProps) => {
     if (replaceDataModalOpen) setReplaceDataModalOpen(false)
   }
 
+  const refreshIframe = () => {
+    setIframeLoading(true)
+    setTimeout(() => {
+      // setIframeKey((key) => key + 1)
+      setIframeLoading(false)
+    }, 1000)
+  }
+
   return (
     <>
       {!loadingMapData && (
@@ -68,6 +78,8 @@ export const MapView = ({ }: RouteComponentProps) => {
                 }}
                 onClickReplaceData={openReplaceDataModal}
                 onClickDeleteMap={openDeleteMapModal}
+                refreshIframe={refreshIframe}
+                setMapLoading={setIframeLoading}
               />
               <ReplaceDataModal
                 open={replaceDataModalOpen}
@@ -76,6 +88,7 @@ export const MapView = ({ }: RouteComponentProps) => {
                 onClose={() => {
                   setReplaceDataModalOpen(false)
                 }}
+                refreshIframe={refreshIframe}
               />
               <DeleteMapModal
                 open={deleteModelOpen}
@@ -101,7 +114,14 @@ export const MapView = ({ }: RouteComponentProps) => {
           />
         )}
       >
-        <IFrame src={mapUrl} title={`User map: ${id}`} />
+        {iframeLoading ? (
+          <>
+            <Loader width={100} />
+            <IFrame src={mapUrl} title={`User map: ${id}`} hidden />
+          </>
+        ) : (
+          <IFrame src={mapUrl} title={`User map: ${id}`} />
+        )}
       </AuthorisedLayout>
     </>
   )
