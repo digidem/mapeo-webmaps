@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
   UploadFile as UploadFileIcon,
   Description as FileIcon,
@@ -17,6 +17,7 @@ export const ReplaceDataModal = ({ id, mapTitle, onClose, open, refreshIframe }:
   const theme = useTheme()
   const [file, setFile] = useState<File | null>(null)
   const [saved, setSaved] = useState(false)
+  let clearTimer: NodeJS.Timeout | undefined
 
   const {
     updateMapData,
@@ -40,8 +41,11 @@ export const ReplaceDataModal = ({ id, mapTitle, onClose, open, refreshIframe }:
   const handleClose = () => {
     console.log('closing')
     onClose()
-    clearFile()
-    setSaved(false)
+
+    clearTimer = setTimeout(() => {
+      clearFile()
+      setSaved(false)
+    }, 500)
   }
 
   const submit = async (event: React.FormEvent<HTMLButtonElement>) => {
@@ -54,6 +58,15 @@ export const ReplaceDataModal = ({ id, mapTitle, onClose, open, refreshIframe }:
     if (!acceptedFiles.length || !acceptedFiles[0].name.match(/.mapeomap$/)) return
     setFile(acceptedFiles[0])
   }, [])
+
+  // eslint-disable-next-line arrow-body-style
+  useEffect(() => {
+    return () => {
+      if (clearTimer) {
+        clearTimeout(clearTimer)
+      }
+    }
+  })
 
   return (
     <Dialog open={open} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
