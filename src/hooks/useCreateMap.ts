@@ -104,9 +104,10 @@ export const useCreateMap = () => {
       uploadsAsObjRef.current = { ...uploadsAsObjRef.current, [file.hashedName]: upload }
 
       const handleLastUpload = () => {
+        console.log({ current, total })
+
         // If we on the last file, either on-success or on-error we want to unset loading state
         if (current + 1 === total) {
-          console.log('progress is:', progress)
           setLoading(false)
           filesRef.current = null
         }
@@ -191,13 +192,12 @@ export const useCreateMap = () => {
         batch.set(pointRef, point)
       })
 
-      let current = 0
       const imagesLength = images.length
       setTotalFiles(imagesLength)
 
-      images.forEach((imageFile) => {
+      images.forEach((imageFile, current) => {
         if (cancelRef.current) return // bail if component is unmounted
-        current += 1
+
         try {
           setCurrentFile(current)
           uploadImage(imageFile, current, imagesLength)

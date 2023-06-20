@@ -26,7 +26,7 @@ export const MapItem = ({ id, title, description, createdAt }: MapItemProps) => 
   const dateTimeFormat = new Intl.DateTimeFormat('en-us', dateFormatOptions)
 
   return (
-    <StyledLink to={mapUrl}>
+    <StyledLink to={mapUrl} state={{ fromHome: true }}>
       <Card
         sx={{
           width: '100%',
@@ -53,11 +53,9 @@ export const MapItem = ({ id, title, description, createdAt }: MapItemProps) => 
                 {formatMessage(msgs.createdAtPrefix)}{' '}
                 {createdAt ? dateTimeFormat.format(createdAt.toDate()) : <MiniLoader />}
               </Typography>
-              <StyledLink to={mapUrl} state={{ fromHome: true }}>
-                <Typography variant="body1" fontWeight="bold" color="primary">
-                  {formatMessage(msgs.publicLink)}
-                </Typography>
-              </StyledLink>
+              <Typography variant="body1" fontWeight="bold" color="primary">
+                {formatMessage(msgs.publicLink)}
+              </Typography>
             </Stack>
           </Stack>
         </CardContent>

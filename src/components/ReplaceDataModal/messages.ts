@@ -47,6 +47,6 @@ export const msgs = defineMessages({
   },
   successMessage: {
     id: 'successMessage',
-    defaultMessage: 'Map data was successfully updated.',
+    defaultMessage: 'The map data was successfully updated.',
   },
 })

@@ -14,14 +14,16 @@ import { MapsList } from '../../components/MapsList'
 import { AuthorisedLayout } from '../../layouts/Authorised'
 import { ProgressType, useCreateMap } from '../../hooks/useCreateMap'
 
-export const HomeView = ({ }: RouteComponentProps) => {
+export const HomeView = ({}: RouteComponentProps) => {
   const theme = useTheme()
 
   const {
     createMap,
-    progress: { loading: uploading, failedFiles },
+    progress: { loading: uploading, completed, failedFiles },
     progress,
   } = useCreateMap()
+
+  console.log({ uploading, completed })
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -90,9 +92,9 @@ type UploadingType = {
 
 const Uploading = ({
   progress: { completed, loading, failedFiles, mapTitle = '...', retryFailedFiles },
+  progress,
 }: UploadingType) => {
   const { formatMessage } = useIntl()
-
   return (
     <Dialog open maxWidth="sm" fullWidth>
       <Stack spacing={5} sx={{ padding: 5 }}>

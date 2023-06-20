@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   UploadFile as UploadFileIcon,
   Description as FileIcon,
@@ -17,7 +17,6 @@ export const ReplaceDataModal = ({ id, mapTitle, onClose, open, refreshIframe }:
   const theme = useTheme()
   const [file, setFile] = useState<File | null>(null)
   const [saved, setSaved] = useState(false)
-  let clearTimer: NodeJS.Timeout | undefined
 
   const {
     updateMapData,
@@ -26,8 +25,8 @@ export const ReplaceDataModal = ({ id, mapTitle, onClose, open, refreshIframe }:
   } = useCreateMap()
 
   if (progress === 100 && !saved) {
+    console.log('setting saved')
     setSaved(true)
-    reset()
     refreshIframe()
   }
 
@@ -42,11 +41,16 @@ export const ReplaceDataModal = ({ id, mapTitle, onClose, open, refreshIframe }:
     console.log('closing')
     onClose()
 
-    clearTimer = setTimeout(() => {
+    setTimeout(() => {
+      console.log('clearing file')
       clearFile()
+      reset()
+
       setSaved(false)
     }, 500)
   }
+
+  console.log({ saved, progress, saving })
 
   const submit = async (event: React.FormEvent<HTMLButtonElement>) => {
     event.preventDefault()
@@ -58,15 +62,6 @@ export const ReplaceDataModal = ({ id, mapTitle, onClose, open, refreshIframe }:
     if (!acceptedFiles.length || !acceptedFiles[0].name.match(/.mapeomap$/)) return
     setFile(acceptedFiles[0])
   }, [])
-
-  // eslint-disable-next-line arrow-body-style
-  useEffect(() => {
-    return () => {
-      if (clearTimer) {
-        clearTimeout(clearTimer)
-      }
-    }
-  })
 
   return (
     <Dialog open={open} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
