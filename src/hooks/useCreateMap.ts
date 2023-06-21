@@ -69,6 +69,12 @@ export const useCreateMap = () => {
     [],
   )
 
+  useEffect(() => {
+    if (progress === 100 && loading) {
+      setLoading(false)
+    }
+  }, [progress, loading])
+
   const reset = () => {
     totalBytesRef.current = 0
     uploadsAsObjRef.current = {}
@@ -104,11 +110,8 @@ export const useCreateMap = () => {
       uploadsAsObjRef.current = { ...uploadsAsObjRef.current, [file.hashedName]: upload }
 
       const handleLastUpload = () => {
-        console.log({ current, total })
-
         // If we on the last file, either on-success or on-error we want to unset loading state
         if (current + 1 === total) {
-          setLoading(false)
           filesRef.current = null
         }
       }

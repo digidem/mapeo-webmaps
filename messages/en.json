@@ -249,7 +249,7 @@
     "message": "Sort"
   },
   "successMessage": {
-    "message": "Map data was successfully updated."
+    "message": "The map data was successfully updated."
   },
   "successTitle": {
     "message": "Success"

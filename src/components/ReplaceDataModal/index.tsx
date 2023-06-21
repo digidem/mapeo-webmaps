@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
   UploadFile as UploadFileIcon,
   Description as FileIcon,
@@ -24,11 +24,13 @@ export const ReplaceDataModal = ({ id, mapTitle, onClose, open, refreshIframe }:
     reset,
   } = useCreateMap()
 
-  if (progress === 100 && !saved) {
-    console.log('setting saved')
-    setSaved(true)
-    refreshIframe()
-  }
+  useEffect(() => {
+    if (progress === 100 && !saved) {
+      console.log('setting saved')
+      setSaved(true)
+      refreshIframe()
+    }
+  }, [progress, saved, refreshIframe])
 
   const clearFile = () => setFile(null)
 
