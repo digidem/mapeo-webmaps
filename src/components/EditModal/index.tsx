@@ -14,6 +14,8 @@ import { auth, db } from '../..'
 const DEFAULT_MAP_STYLE = 'mapbox://styles/mapbox/outdoors-v11'
 const WAIT_BEFORE_CLOSE = 2000
 
+type ModalState = 'default' | 'saving' | 'saved'
+
 export const EditModal = ({
   map,
   onClose,
@@ -32,17 +34,16 @@ export const EditModal = ({
   const [mapTerms, setMapTerms] = useState(map.terms || '')
   const [mapStyle, setMapStyle] = useState(map.mapStyle || DEFAULT_MAP_STYLE)
   const [accessToken, setAccessToken] = useState(map.accessToken || '')
-  const [saving, setSaving] = useState(false)
-  const [saved, setSaved] = useState(false)
+  const [modalState, setModalState] = useState<ModalState>('default')
+
+  const disableForm = modalState === 'saving' || modalState === 'saved'
 
   const mapStyleError = !mapStyle.match(mapboxStyleRegex)
 
   const handleClose = (event?: Record<string, never>, reason?: 'escapeKeyDown' | 'backdropClick') => {
     if (reason === 'backdropClick' || reason === 'escapeKeyDown') return
     onClose()
-
-    setSaving(false)
-    setSaved(false)
+    setModalState('default')
   }
 
   const closeWithDelay = () => {
@@ -74,26 +75,25 @@ export const EditModal = ({
     handleClose()
   }
 
-  const submit = async (event: React.FormEvent<HTMLButtonElement>) => {
+  const submit = (event: React.FormEvent<HTMLButtonElement>) => {
     event.preventDefault()
-    setSaving(true)
+    setModalState('saving')
 
     if (!user) return
 
     const mapDoc = doc(db, `groups/${user.uid}/maps`, map.id)
     setMapLoading(true)
-    await updateDoc(mapDoc, {
+    updateDoc(mapDoc, {
       description: mapDescription,
       title: mapTitle,
       terms: mapTerms,
       accessToken,
       mapStyle,
+    }).then(() => {
+      refreshIframe()
+      setModalState('saved')
+      closeWithDelay()
     })
-    refreshIframe()
-
-    setSaving(false)
-    setSaved(true)
-    closeWithDelay()
   }
 
   return (
@@ -121,7 +121,7 @@ export const EditModal = ({
             required
             requiredColor={theme.palette.error.main}
             variant="outlined"
-            disabled={saving || saved}
+            disabled={disableForm}
             id="map-title"
             label={formatMessage(msgs.title)}
             value={mapTitle}
@@ -129,7 +129,7 @@ export const EditModal = ({
           />
           <TextInput
             variant="outlined"
-            disabled={saving || saved}
+            disabled={disableForm}
             id="map-description"
             label={formatMessage(msgs.description)}
             value={mapDescription}
@@ -139,7 +139,7 @@ export const EditModal = ({
           />
           <TextInput
             variant="outlined"
-            disabled={saving || saved}
+            disabled={disableForm}
             id="map-terms"
             label={formatMessage(msgs.terms)}
             value={mapTerms}
@@ -149,7 +149,7 @@ export const EditModal = ({
           <TextInput
             required
             requiredColor={theme.palette.error.main}
-            disabled={saving || saved}
+            disabled={disableForm}
             variant="outlined"
             id="map-style"
             label={formatMessage(msgs.mapStyle)}
@@ -158,7 +158,7 @@ export const EditModal = ({
             renderHelperText={() => <RenderMapstyleHelperText hasError={mapStyleError} />}
           />
           <TextInput
-            disabled={saving || saved}
+            disabled={disableForm}
             variant="outlined"
             id="map-token"
             label={formatMessage(msgs.accessToken)}
@@ -181,7 +181,7 @@ export const EditModal = ({
               <Button
                 color="inherit"
                 onClick={handleClickCancel}
-                disabled={saving || saved}
+                disabled={disableForm}
                 sx={{
                   textTransform: 'none',
                   fontWeight: 600,
@@ -194,7 +194,7 @@ export const EditModal = ({
                 onSubmit={submit}
                 onClick={submit}
                 variant="contained"
-                disabled={saving || saved || !mapTitle || mapStyleError}
+                disabled={disableForm || !mapTitle || mapStyleError}
                 size="large"
                 type="submit"
                 disableElevation
@@ -212,7 +212,7 @@ export const EditModal = ({
                   },
                 }}
               >
-                <RenderButtonContents saving={saving} saved={saved} />
+                <RenderButtonContents modalState={modalState} />
               </Button>
             </Row>
           </Row>
@@ -256,12 +256,12 @@ const RenderMapstyleHelperText = ({ hasError }: { hasError: boolean }) => {
   )
 }
 
-const RenderButtonContents = ({ saving, saved }: { saving: boolean; saved: boolean }) => {
+const RenderButtonContents = ({ modalState }: { modalState: ModalState }) => {
   const { formatMessage } = useIntl()
 
-  if (saving) return <CircularProgress sx={{ color: 'white' }} size={26} />
+  if (modalState === 'saving') return <CircularProgress sx={{ color: 'white' }} size={26} />
 
-  return <span>{saved ? formatMessage(msgs.saved) : formatMessage(msgs.save)}</span>
+  return <span>{modalState === 'saved' ? formatMessage(msgs.saved) : formatMessage(msgs.save)}</span>
 }
 
 type ShareModalProps = {
