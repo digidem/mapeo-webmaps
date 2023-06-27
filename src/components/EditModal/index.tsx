@@ -13,6 +13,7 @@ import { auth, db } from '../..'
 
 const DEFAULT_MAP_STYLE = 'mapbox://styles/mapbox/outdoors-v11'
 const WAIT_BEFORE_CLOSE = 2000
+type ModalState = 'default' | 'saving' | 'saved'
 
 export const EditModal = ({
   map,
@@ -32,8 +33,9 @@ export const EditModal = ({
   const [mapTerms, setMapTerms] = useState(map.terms || '')
   const [mapStyle, setMapStyle] = useState(map.mapStyle || DEFAULT_MAP_STYLE)
   const [accessToken, setAccessToken] = useState(map.accessToken || '')
-  const [saving, setSaving] = useState(false)
-  const [saved, setSaved] = useState(false)
+  const [modalState, setModalState] = useState<ModalState>('default')
+
+  const formDisabled = modalState !== 'default'
 
   const mapStyleError = !mapStyle.match(mapboxStyleRegex)
 
@@ -41,8 +43,7 @@ export const EditModal = ({
     if (reason === 'backdropClick' || reason === 'escapeKeyDown') return
     onClose()
 
-    setSaving(false)
-    setSaved(false)
+    setModalState('default')
   }
 
   const closeWithDelay = () => {
@@ -76,7 +77,7 @@ export const EditModal = ({
 
   const submit = async (event: React.FormEvent<HTMLButtonElement>) => {
     event.preventDefault()
-    setSaving(true)
+    setModalState('saving')
 
     if (!user) return
 
@@ -91,8 +92,7 @@ export const EditModal = ({
     })
     refreshIframe()
 
-    setSaving(false)
-    setSaved(true)
+    setModalState('saved')
     closeWithDelay()
   }
 
@@ -121,7 +121,7 @@ export const EditModal = ({
             required
             requiredColor={theme.palette.error.main}
             variant="outlined"
-            disabled={saving || saved}
+            disabled={formDisabled}
             id="map-title"
             label={formatMessage(msgs.title)}
             value={mapTitle}
@@ -129,7 +129,7 @@ export const EditModal = ({
           />
           <TextInput
             variant="outlined"
-            disabled={saving || saved}
+            disabled={formDisabled}
             id="map-description"
             label={formatMessage(msgs.description)}
             value={mapDescription}
@@ -139,7 +139,7 @@ export const EditModal = ({
           />
           <TextInput
             variant="outlined"
-            disabled={saving || saved}
+            disabled={formDisabled}
             id="map-terms"
             label={formatMessage(msgs.terms)}
             value={mapTerms}
@@ -149,7 +149,7 @@ export const EditModal = ({
           <TextInput
             required
             requiredColor={theme.palette.error.main}
-            disabled={saving || saved}
+            disabled={formDisabled}
             variant="outlined"
             id="map-style"
             label={formatMessage(msgs.mapStyle)}
@@ -158,7 +158,7 @@ export const EditModal = ({
             renderHelperText={() => <RenderMapstyleHelperText hasError={mapStyleError} />}
           />
           <TextInput
-            disabled={saving || saved}
+            disabled={formDisabled}
             variant="outlined"
             id="map-token"
             label={formatMessage(msgs.accessToken)}
@@ -181,7 +181,7 @@ export const EditModal = ({
               <Button
                 color="inherit"
                 onClick={handleClickCancel}
-                disabled={saving || saved}
+                disabled={formDisabled}
                 sx={{
                   textTransform: 'none',
                   fontWeight: 600,
@@ -194,7 +194,7 @@ export const EditModal = ({
                 onSubmit={submit}
                 onClick={submit}
                 variant="contained"
-                disabled={saving || saved || !mapTitle || mapStyleError}
+                disabled={formDisabled || !mapTitle || mapStyleError}
                 size="large"
                 type="submit"
                 disableElevation
@@ -212,7 +212,7 @@ export const EditModal = ({
                   },
                 }}
               >
-                <RenderButtonContents saving={saving} saved={saved} />
+                <RenderButtonContents saving={modalState === 'saving'} saved={modalState === 'saved'} />
               </Button>
             </Row>
           </Row>

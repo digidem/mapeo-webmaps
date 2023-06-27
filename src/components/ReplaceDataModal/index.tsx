@@ -12,25 +12,24 @@ import { msgs } from './messages'
 import { useCreateMap } from '../../hooks/useCreateMap'
 import { Loader } from '../Loader'
 
+type ModalState = 'default' | 'saving' | 'saved'
+
 export const ReplaceDataModal = ({ id, mapTitle, onClose, open, refreshIframe }: ReplaceDataModalProps) => {
   const { formatMessage } = useIntl()
   const theme = useTheme()
   const [file, setFile] = useState<File | null>(null)
-  const [saved, setSaved] = useState(false)
+  const [modalState, setModalState] = useState<ModalState>('default')
 
   const {
     updateMapData,
-    progress: { loading: saving, completed: progress, failedFiles, retryFailedFiles },
+    progress: { completed: progress, failedFiles, retryFailedFiles },
     reset,
   } = useCreateMap()
 
-  useEffect(() => {
-    if (progress === 100 && !saved) {
-      console.log('setting saved')
-      setSaved(true)
-      refreshIframe()
-    }
-  }, [progress, saved, refreshIframe])
+  if (progress === 100 && modalState !== 'saved') {
+    setModalState('saved')
+    refreshIframe()
+  }
 
   const clearFile = () => setFile(null)
 
@@ -40,22 +39,19 @@ export const ReplaceDataModal = ({ id, mapTitle, onClose, open, refreshIframe }:
   }
 
   const handleClose = () => {
-    console.log('closing')
     onClose()
 
     setTimeout(() => {
-      console.log('clearing file')
       clearFile()
       reset()
 
-      setSaved(false)
+      setModalState('default')
     }, 500)
   }
 
-  console.log({ saved, progress, saving })
-
   const submit = async (event: React.FormEvent<HTMLButtonElement>) => {
     event.preventDefault()
+    setModalState('saving')
     if (!file) return
     await updateMapData(file, id)
   }
@@ -67,7 +63,7 @@ export const ReplaceDataModal = ({ id, mapTitle, onClose, open, refreshIframe }:
 
   return (
     <Dialog open={open} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
-      {!saved ? (
+      {modalState !== 'saved' ? (
         <Stack spacing={5} sx={{ padding: 5 }} component="form">
           <Typography variant="h4" component="h2">
             {formatMessage(msgs.replaceMapDataTitle)}
@@ -83,15 +79,14 @@ export const ReplaceDataModal = ({ id, mapTitle, onClose, open, refreshIframe }:
               file={file}
               clearFile={clearFile}
               progress={progress}
-              saving={saving}
-              saved={saved}
+              saving={modalState === 'saving'}
             />
 
             <Stack direction="row" justifyContent="flex-end">
               <Button
                 color="inherit"
                 onClick={handleClose}
-                disabled={saving}
+                disabled={modalState === 'saving'}
                 sx={{
                   textTransform: 'none',
                   fontWeight: 600,
@@ -104,7 +99,7 @@ export const ReplaceDataModal = ({ id, mapTitle, onClose, open, refreshIframe }:
                 onSubmit={failedFiles.length ? retryFailedFiles : submit}
                 onClick={submit}
                 variant="contained"
-                disabled={!file || saving || saved}
+                disabled={!file || modalState === 'saving'}
                 size="large"
                 type="submit"
                 disableElevation
@@ -122,7 +117,7 @@ export const ReplaceDataModal = ({ id, mapTitle, onClose, open, refreshIframe }:
                   },
                 }}
               >
-                <RenderButtonContents saving={saving} saved={saved} failedFiles={failedFiles} />
+                <RenderButtonContents saving={modalState === 'saving'} failedFiles={failedFiles} />
               </Button>
             </Stack>
           </Stack>
@@ -157,26 +152,14 @@ const SuccessContents = ({ onClose }: { onClose: () => void }) => {
   )
 }
 
-const RenderButtonContents = ({
-  saving,
-  saved,
-  failedFiles,
-}: {
-  saving: boolean
-  saved: boolean
-  failedFiles: string[]
-}) => {
+const RenderButtonContents = ({ saving, failedFiles }: { saving: boolean; failedFiles: string[] }) => {
   const { formatMessage } = useIntl()
 
   if (saving) return <CircularProgress sx={{ color: 'white' }} size={26} />
 
   if (failedFiles.length) return <span>{formatMessage(msgs.retry)}</span>
 
-  return saved ? (
-    <span>{formatMessage(msgs.saved)}</span>
-  ) : (
-    <span>{formatMessage(msgs.replaceDataButton)}</span>
-  )
+  return <span>{formatMessage(msgs.replaceDataButton)}</span>
 }
 
 const UploadButton = ({
@@ -191,7 +174,6 @@ const UploadButton = ({
   clearFile: () => void
   progress: number
   saving: boolean
-  saved: boolean
 }) => {
   const { formatMessage } = useIntl()
   const theme = useTheme()

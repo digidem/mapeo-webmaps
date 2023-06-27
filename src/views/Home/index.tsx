@@ -19,11 +19,9 @@ export const HomeView = ({}: RouteComponentProps) => {
 
   const {
     createMap,
-    progress: { loading: uploading, completed, failedFiles },
+    progress: { loading: uploading, failedFiles },
     progress,
   } = useCreateMap()
-
-  console.log({ uploading, completed })
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
