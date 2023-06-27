@@ -69,11 +69,9 @@ export const useCreateMap = () => {
     [],
   )
 
-  useEffect(() => {
-    if (progress === 100 && loading) {
-      setLoading(false)
-    }
-  }, [progress, loading])
+  if (progress === 100 && loading) {
+    setLoading(false)
+  }
 
   const reset = () => {
     totalBytesRef.current = 0

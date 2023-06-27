@@ -90,7 +90,6 @@ type UploadingType = {
 
 const Uploading = ({
   progress: { completed, loading, failedFiles, mapTitle = '...', retryFailedFiles },
-  progress,
 }: UploadingType) => {
   const { formatMessage } = useIntl()
   return (
