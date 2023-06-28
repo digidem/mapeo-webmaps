@@ -1,5 +1,4 @@
 import { Box, Card, CardContent, CircularProgress, Stack, Typography } from '@mui/material'
-import { Link } from '@reach/router'
 import { collection, Timestamp } from 'firebase/firestore'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
