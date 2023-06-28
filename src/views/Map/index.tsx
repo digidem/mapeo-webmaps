@@ -51,7 +51,6 @@ export const MapView = ({}: RouteComponentProps) => {
   const refreshIframe = () => {
     setIframeLoading(true)
     setTimeout(() => {
-      // setIframeKey((key) => key + 1)
       setIframeLoading(false)
     }, 1000)
   }
