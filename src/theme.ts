@@ -9,10 +9,7 @@ declare module '@mui/material/styles' {
     black: React.CSSProperties['color']
     orange: React.CSSProperties['color']
     white: React.CSSProperties['color']
-    limeGreen: {
-      main: React.CSSProperties['color']
-      light: React.CSSProperties['color']
-    }
+    limeGreen: React.CSSProperties['color']
   }
   // allow configuration using `createTheme`
   interface ThemeOptions {
@@ -23,10 +20,7 @@ declare module '@mui/material/styles' {
     black: React.CSSProperties['color']
     orange: React.CSSProperties['color']
     white: React.CSSProperties['color']
-    limeGreen: {
-      main: React.CSSProperties['color']
-      light: React.CSSProperties['color']
-    }
+    limeGreen: React.CSSProperties['color']
   }
 }
 
@@ -36,10 +30,7 @@ const MAPEO_ORANGE = '#EA7913'
 const DARK_BLUE = '#000033'
 const WARNING_RED = '#D92222'
 const WHITE = '#FFFFFF'
-const LIME_GREEN = {
-  main: '#C4FFD5',
-  light: '#E5FFE5',
-}
+const LIME_GREEN = '#3fe56f'
 const BACKGROUND_LIGHT = '#F4F4FF'
 
 export const theme = createTheme({
@@ -66,6 +57,7 @@ export const theme = createTheme({
   limeGreen: LIME_GREEN,
   palette: {
     primary: { main: MAPEO_BLUE },
+    success: { main: LIME_GREEN },
   },
   components: {
     MuiButtonBase: {

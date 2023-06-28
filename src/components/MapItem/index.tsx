@@ -1,4 +1,5 @@
 import { Box, Card, CardContent, CircularProgress, Stack, Typography } from '@mui/material'
+import { Link } from '@reach/router'
 import { collection, Timestamp } from 'firebase/firestore'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
@@ -25,34 +26,41 @@ export const MapItem = ({ id, title, description, createdAt }: MapItemProps) => 
   const dateTimeFormat = new Intl.DateTimeFormat('en-us', dateFormatOptions)
 
   return (
-    <Card sx={{ width: '100%' }}>
-      <CardContent>
-        <Stack>
-          <Box mb={6}>
-            <Typography variant="h5">{title}</Typography>
-            <Typography variant="caption">
-              {observationsLoading ? (
-                <MiniLoader />
-              ) : (
-                `${observations.length} ${formatMessage(msgs.observations)}`
-              )}
-            </Typography>
-            {description ? <Typography variant="body1">{description}</Typography> : null}
-          </Box>
-          <Stack direction="row" justifyContent="space-between" alignItems="flex-end">
-            <Typography variant="caption">
-              {formatMessage(msgs.createdAtPrefix)}{' '}
-              {createdAt ? dateTimeFormat.format(createdAt.toDate()) : <MiniLoader />}
-            </Typography>
-            <StyledLink to={mapUrl} state={{ fromHome: true }}>
+    <StyledLink to={mapUrl} state={{ fromHome: true }}>
+      <Card
+        sx={{
+          width: '100%',
+          '&:hover': {
+            boxShadow: 3,
+          },
+        }}
+      >
+        <CardContent>
+          <Stack>
+            <Box mb={6}>
+              <Typography variant="h5">{title}</Typography>
+              <Typography variant="caption">
+                {observationsLoading ? (
+                  <MiniLoader />
+                ) : (
+                  `${observations.length} ${formatMessage(msgs.observations)}`
+                )}
+              </Typography>
+              {description ? <Typography variant="body1">{description}</Typography> : null}
+            </Box>
+            <Stack direction="row" justifyContent="space-between" alignItems="flex-end">
+              <Typography variant="caption">
+                {formatMessage(msgs.createdAtPrefix)}{' '}
+                {createdAt ? dateTimeFormat.format(createdAt.toDate()) : <MiniLoader />}
+              </Typography>
               <Typography variant="body1" fontWeight="bold" color="primary">
                 {formatMessage(msgs.publicLink)}
               </Typography>
-            </StyledLink>
+            </Stack>
           </Stack>
-        </Stack>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </StyledLink>
   )
 }
 

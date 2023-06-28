@@ -14,7 +14,7 @@ import { MapsList } from '../../components/MapsList'
 import { AuthorisedLayout } from '../../layouts/Authorised'
 import { ProgressType, useCreateMap } from '../../hooks/useCreateMap'
 
-export const HomeView = ({ }: RouteComponentProps) => {
+export const HomeView = ({}: RouteComponentProps) => {
   const theme = useTheme()
 
   const {
@@ -92,7 +92,6 @@ const Uploading = ({
   progress: { completed, loading, failedFiles, mapTitle = '...', retryFailedFiles },
 }: UploadingType) => {
   const { formatMessage } = useIntl()
-
   return (
     <Dialog open maxWidth="sm" fullWidth>
       <Stack spacing={5} sx={{ padding: 5 }}>

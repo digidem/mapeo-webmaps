@@ -43,7 +43,6 @@ export const SignUpForm = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const { user } = userCredential
-        console.log({ user })
       })
       .catch(({ code: errorCode }: FirebaseError) => {
         setLoading(false)
