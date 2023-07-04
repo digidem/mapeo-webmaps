@@ -41,9 +41,6 @@ export const SignUpForm = () => {
     event.preventDefault()
     setLoading(true)
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const { user } = userCredential
-      })
       .catch(({ code: errorCode }: FirebaseError) => {
         setLoading(false)
         const isEmailError =

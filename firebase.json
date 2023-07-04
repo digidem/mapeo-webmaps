@@ -16,10 +16,6 @@
   "storage": {
     "rules": "storage.rules"
   },
-  "functions": {
-    "predeploy": [],
-    "source": "functions"
-  },
   "emulators": {
     "auth": {
       "port": 9099
