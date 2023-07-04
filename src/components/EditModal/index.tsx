@@ -251,7 +251,10 @@ const RenderMapstyleHelperText = ({ hasError }: { hasError: boolean }) => {
   return (
     <FormHelperText>
       {formatMessage(msgs.mapStyleHelperText)}{' '}
-      <a href={formatMessage(msgs.mapStyleHelperUrl)}>{formatMessage(msgs.mapStyleHelperLink)}</a>.
+      <a target="_blank" rel="noreferrer" href={formatMessage(msgs.mapStyleHelperUrl)}>
+        {formatMessage(msgs.mapStyleHelperLink)}
+      </a>
+      .
     </FormHelperText>
   )
 }
