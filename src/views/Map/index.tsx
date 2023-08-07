@@ -14,8 +14,8 @@ import { Header } from './Header'
 import { IFrame } from './styles'
 import { Loader } from '../../components/Loader'
 
-const SHARE_URL_BASE = 'https://deploy-preview-30--mapeo-webmaps.netlify.app' // DEV URL (You'll need to run Webmaps-Public locally on port 9966)
-// const SHARE_URL_BASE = 'https://maps-public.mapeo.world' // PROD URL
+// const SHARE_URL_BASE = 'https://deploy-preview-30--mapeo-webmaps.netlify.app' // DEV URL
+const SHARE_URL_BASE = 'https://maps-public.mapeo.world' // PROD URL
 
 export const MapView = ({}: RouteComponentProps) => {
   const [shareModalOpen, setShareModalOpen] = useState(false)
